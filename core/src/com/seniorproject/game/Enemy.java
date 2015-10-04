@@ -12,14 +12,24 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class Enemy extends GameActor {
 	
-	Texture texture = new Texture(Gdx.files.internal("enemy.png"));
-	Sprite enemySprite = new Sprite(texture);
+	private int health = 100;
+	private Texture texture = new Texture(Gdx.files.internal("enemy.png"));
+	private Sprite enemySprite = new Sprite(texture);
+	
 	
 	public Enemy(World world) {
 		super(world);
 		collisionData.setActorType("Enemy");
 	}
 	
+	
+	public void act(float delta) {
+		super.act(delta);
+		
+		if(health <= 0) {
+			setDead(true);
+		}
+	}
 	
 	public void draw(Batch batch, float alpha) {
 		enemySprite.draw(batch);
@@ -75,7 +85,8 @@ public class Enemy extends GameActor {
 			shape.dispose();
 		}
 		else if(getStage() != null && isDead()) {
-			
+			body.destroyFixture(fixture);
+			this.remove();
 		}
 	}
 	
@@ -84,4 +95,9 @@ public class Enemy extends GameActor {
 		return "Enemy";
 	}
 	
+	public void lowerHealth(int damage) {
+		health -= damage;
+	}
+	
+
 }

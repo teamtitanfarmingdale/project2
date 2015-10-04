@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 
 public class Bullet extends GameActor {
 
+	private int damage = 10;
+	
 	private Texture bulletTexture = new Texture(Gdx.files.internal("bullet.png"));
 	private Sprite bulletSprite = new Sprite(bulletTexture);
 	private Enemy collidedEnemy;
@@ -115,6 +117,7 @@ public class Bullet extends GameActor {
 	}
 	
 	public void setCollidedEnemy(Enemy enemy) {
+		enemy.lowerHealth(damage);
 		collidedEnemy = enemy;
 	}
 	
@@ -122,5 +125,8 @@ public class Bullet extends GameActor {
 		return collidedEnemy;
 	}
 	
+	public int getDamage() {
+		return damage;
+	}
 	
 }
