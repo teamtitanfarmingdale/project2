@@ -7,8 +7,8 @@ import com.seniorproject.game.ShooterGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 640;
-		config.height = 800;
+		config.width = ShooterGame.GAME_WIDTH;
+		config.height = ShooterGame.GAME_HEIGHT;
 		new LwjglApplication(new ShooterGame(), config);
 	}
 }

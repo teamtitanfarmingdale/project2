@@ -13,10 +13,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.sun.scenario.effect.impl.Renderer;
 
 public class Level extends Stage {
 
+	public static float WORLD_STEP = (1/300f);
+	
 	private Ship ship;
 	private LevelBackground background;
 	private EnemySpawner enemySpawner;
@@ -26,30 +27,55 @@ public class Level extends Stage {
 	private OrthographicCamera camera;
 	private ArrayList<GameActor> collisionList;
 	
+	protected String enemySpriteFile = "enemy.png";
+	
+	
 	public Level() {
 		super(new ScreenViewport());	
-		 
-		world = new World(new Vector2(0,0), true);
-		camera = new OrthographicCamera(640, 800);
-		camera.position.set(640/2, 800/2, 0f);
 		
+		// world is used for collisions, I believe its constructor sets the gravity in our game using the Vector2 object
+		// Since we don't need actual gravity in the game, its set to 0 here
+		world = new World(new Vector2(0,0), true);	
+		
+		// The camera is used mostly for debugging the world to help show the boxes around the sprites
+		camera = new OrthographicCamera(ShooterGame.GAME_WIDTH, ShooterGame.GAME_HEIGHT);
+		camera.position.set(ShooterGame.GAME_WIDTH/2, ShooterGame.GAME_HEIGHT/2, 0f);
+
+		/* 
+		 * Group of actors for the stage
+		 * They are grouped because you can only set one actor to take in keyboard input
+		 * By grouping them, it lets you allow all the actors in the group to take keyboard input
+		 */
 		Group gameObjects = new Group();
 		
-		enemySpawner = new EnemySpawner(world);
+		// Used to generate enemies onto the screen
+		enemySpawner = new EnemySpawner(world, enemySpriteFile);
+		
+		// The background
 		background = new LevelBackground();
+		
+		// The player's ship
 		ship = new Ship(world);
 		
+		// Used for debugging, shows the boxes around the sprites
 		renderer = new Box2DDebugRenderer();
 		
+		
+		// Add the actors to the group
 		gameObjects.addActor(enemySpawner);
 		gameObjects.addActor(background);
 		gameObjects.addActor(ship);
 		
+		// Add the group to the stage
 		addActor(gameObjects);
+
+		// This allows the actors in the gameObjects group to take keyboard input
 		setKeyboardFocus(gameObjects);
 		
+		// Used to keep track of the bullets that have hit enemies
 		collisionList = new ArrayList<GameActor>();
 		
+		// Sets up the collision detection
 		collisionDetection();
 		
 	}
@@ -59,20 +85,21 @@ public class Level extends Stage {
 	public void act(float delta) {
 		super.act(delta);
 		
+		// World stepper?
+		// Not sure exactly what this does, but it has something to do with how the engine deals with collisions
 		accumulator += delta;
-				
 		while(accumulator >= delta) {
-			world.step(1/300f, 6, 2);
-			accumulator -= (1/300f);
+			world.step(WORLD_STEP, 6, 2);
+			accumulator -= WORLD_STEP;
 		}
 		
+		// Sets bullets to being "dead" that collided into enemies
 		if(!collisionList.isEmpty()) {
 			for(GameActor actor : collisionList) {
-				actor.setDead(true);
+				if(!actor.isDead()) {
+					actor.setDead(true);
+				}
 			}
-			
-			collisionList.clear();
-			
 		}
 		
 	}
@@ -82,6 +109,7 @@ public class Level extends Stage {
 	public void draw() {
 		super.draw();
 		
+		// Comment this out to remove the boxes around the sprites
 		renderer.render(world, camera.combined);
 		
 	}
@@ -98,16 +126,34 @@ public class Level extends Stage {
 			@Override
 			public void beginContact(Contact contact) {
 				// TODO Auto-generated method stub
-				//System.out.println(contact.getFixtureA().getUserData());
-				//System.out.println(contact.getFixtureB().getUserData());
+				System.out.println("contact!");
 				
+				// CollisionData contains the actual object that was collided.
+				CollisionData collisionDataA = (CollisionData) contact.getFixtureA().getUserData();
+				CollisionData collisionDataB = (CollisionData) contact.getFixtureB().getUserData();
 				
+				if(collisionDataA.getActorType() == "Enemy" && collisionDataB.getActorType() == "Enemy") {
+					// MOVE ENEMIES THAT WERE COLLIDED
+					
+					GameActor gameActorA = collisionDataA.getActor();
+					GameActor gameActorB = collisionDataB.getActor();
+					
+					Enemy enemyA = (Enemy) gameActorA;
+					Enemy enemyB = (Enemy) gameActorB;
+					
+					System.out.println(enemyA.getX() + " - " + enemyA.getY());
+					System.out.println(enemyB.getX() + " - " + enemyB.getY());
+					enemyB.reposition();
+					
+				}
+			
 			}
 
 			@Override
 			public void endContact(Contact contact) {
 				// TODO Auto-generated method stub
 				
+				// CollisionData contains the actual object that was collided.
 				CollisionData collisionDataA = (CollisionData) contact.getFixtureA().getUserData();
 				CollisionData collisionDataB = (CollisionData) contact.getFixtureB().getUserData();
 				
@@ -115,24 +161,37 @@ public class Level extends Stage {
 				GameActor gameActorA = collisionDataA.getActor();
 				GameActor gameActorB = collisionDataB.getActor();
 				
-				if(collisionDataA.getActorType() == "Enemy" && collisionDataB.getActorType() == "Bullet") {
+				
+				/*
+				 * Handles collisions between Bullets and Enemies
+				 * 
+				 * When a collision event happens we are passed in a Contact object that has the 2 collided objects in 
+				 * FixtureA and FixtureB
+				 * 
+				 * Depending on the order in which the collision happens the bullet and enemy can be either FixtureA or FixtureB
+				 * So the two if statements below handle either scenario
+				 * 
+				 */
+				if(collisionDataA.getActorType() == "Enemy" && collisionDataB.getActorType() == "Bullet" && !collisionList.contains(gameActorB)) {
 					Bullet bullet = (Bullet) gameActorB;
+					
+					// Tell the bullet which enemy object it hit
 					bullet.setCollidedEnemy((Enemy) gameActorA);
+					
+					// Add the bullet to the collision list to be removed from the screen
 					collisionList.add(gameActorB);
 					
-					//gameActorB.getBody().destroyFixture(gameActorB.getFixture());
-					//gameActorB.remove();
-					System.out.println("BULLET COLLISION!!!");
+					System.out.println("BULLET COLLISION1!!!");
 				}
-				else if(collisionDataA.getActorType() == "Bullet" && collisionDataB.getActorType() == "Enemy") {
+				else if(collisionDataA.getActorType() == "Bullet" && collisionDataB.getActorType() == "Enemy" && !collisionList.contains(gameActorA)) {
 					Bullet bullet = (Bullet) gameActorA;
 					bullet.setCollidedEnemy((Enemy) gameActorB);
-					
 					collisionList.add(gameActorA);
-					//gameActorA.getBody().destroyFixture(gameActorA.getFixture());
-					//gameActorA.remove();
-					System.out.println("BULLET COLLISION!!!");
+					System.out.println("BULLET COLLISION2!!!");
 				}
+				
+				
+				
 				
 			}
 

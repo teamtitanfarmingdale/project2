@@ -9,16 +9,23 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 
 public class Enemy extends GameActor {
 	
 	private int health = 100;
-	private Texture texture = new Texture(Gdx.files.internal("enemy.png"));
-	private Sprite enemySprite = new Sprite(texture);
+	private int randomX;
+	Double randomNumber;
+	private boolean reposition = false;
 	
+	private float movementDistance = 3f;
+	private float movementSpeed = .01f;
 	
-	public Enemy(World world) {
+	public Enemy(World world, String spriteFile) {
 		super(world);
+		
+		setupSprite(spriteFile);
 		collisionData.setActorType("Enemy");
 	}
 	
@@ -29,10 +36,26 @@ public class Enemy extends GameActor {
 		if(health <= 0) {
 			setDead(true);
 		}
+		else if(reposition) {
+			
+			MoveByAction mba = new MoveByAction();
+			mba.setAmount(movementDistance, 0f);
+			mba.setDuration(movementSpeed);
+			addAction(mba);
+			reposition = false;
+		}
+		else {
+			
+			MoveByAction mba = new MoveByAction();
+			mba.setAmount(0f, -movementDistance);
+			mba.setDuration(movementSpeed);
+			addAction(mba);
+			
+		}
 	}
 	
 	public void draw(Batch batch, float alpha) {
-		enemySprite.draw(batch);
+		getSprite().draw(batch);
 	}
 	
 	
@@ -42,62 +65,30 @@ public class Enemy extends GameActor {
 		
 		if(stage != null) {
 			
-			setBounds(0, (stage.getHeight()-(enemySprite.getHeight()+10)), enemySprite.getWidth(), enemySprite.getHeight());
+			randomNumber = (Math.random()*(stage.getWidth()-getSprite().getWidth()));
+			randomX = randomNumber.intValue();
+			
+			// Spawns the enemy at a random X location at the top of the screen
+			setBounds(randomX, (stage.getHeight()-(getSprite().getHeight()-100)), getSprite().getWidth(), getSprite().getHeight());
 			
 		}
 		
 	}
 	
-	
 	@Override
 	protected void positionChanged() {
-		enemySprite.setPosition(getX(), getY());
+		getSprite().setPosition(getX(), getY());
 		createBody();
 		super.positionChanged();
 	}
 
-
-	@Override
-	public void createBody() {
-
-		if(getStage() != null && !isDead()) {
-			float bodyXOffset = (getParent().getStage().getWidth()/2)-(enemySprite.getWidth()/2);
-			float bodyYOffset = (getParent().getStage().getHeight()/2)-(enemySprite.getHeight()/2);
-			
-			// DESTROY THE CURRENT BODY IF THERE IS ONE
-			if(body != null) {
-				body.destroyFixture(fixture);
-			}
-			
-			// CREATE A NEW BODY
-			bodyDef = new BodyDef();
-			bodyDef.type = BodyDef.BodyType.DynamicBody;
-			bodyDef.position.set(enemySprite.getX()-bodyXOffset, enemySprite.getY()-bodyYOffset);
-			
-			shape = new PolygonShape();
-			shape.setAsBox(enemySprite.getWidth()/2, enemySprite.getHeight()/2);
-			
-			
-			body = getWorld().createBody(bodyDef);
-			fixture = body.createFixture(shape, 0f);
-			fixture.setUserData(collisionData);
-			body.resetMassData();
-			shape.dispose();
-		}
-		else if(getStage() != null && isDead()) {
-			body.destroyFixture(fixture);
-			this.remove();
-		}
-	}
-	
-	@Override
-	public String toString() {
-		return "Enemy";
-	}
-	
 	public void lowerHealth(int damage) {
 		health -= damage;
+		System.out.println(health);
 	}
 	
+	public void reposition() {
+		reposition = true;
+	}
 
 }

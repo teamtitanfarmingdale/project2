@@ -17,8 +17,12 @@ public class Bullet extends GameActor {
 	
 	private Texture bulletTexture = new Texture(Gdx.files.internal("bullet.png"));
 	private Sprite bulletSprite = new Sprite(bulletTexture);
+	
+	// THE ENEMY THAT THE BULLET COLLIDED WITH
 	private Enemy collidedEnemy;
 	
+	
+	// ACTUAL WIDTH OF BULLET WITHIN IMAGE
 	private float actualWidth = 10f;
 	
 	
@@ -27,6 +31,7 @@ public class Bullet extends GameActor {
 	
 	public Bullet(World world) {
 		super(world);
+
 		collisionData.setActorType("Bullet");
 	}
 	

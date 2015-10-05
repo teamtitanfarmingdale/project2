@@ -1,5 +1,8 @@
 package com.seniorproject.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -15,7 +18,11 @@ public abstract class GameActor extends Actor {
 	protected PolygonShape shape; 
 	protected Fixture fixture;
 	protected boolean dead;
+	protected Sprite sprite;
+	protected Texture texture;
+	
 	public CollisionData collisionData;
+	
 	
 	public GameActor(World world) {
 		actorWorld = world;
@@ -23,7 +30,37 @@ public abstract class GameActor extends Actor {
 		dead = false;
 	}
 	
-	abstract public void createBody();
+	public void createBody() {
+
+		if(getStage() != null && !isDead()) {
+			float bodyXOffset = (getParent().getStage().getWidth()/2)-(sprite.getWidth()/2);
+			float bodyYOffset = (getParent().getStage().getHeight()/2)-(sprite.getHeight()/2);
+			
+			// DESTROY THE CURRENT BODY IF THERE IS ONE
+			if(body != null) {
+				body.destroyFixture(fixture);
+			}
+			
+			// CREATE A NEW BODY
+			bodyDef = new BodyDef();
+			bodyDef.type = BodyDef.BodyType.DynamicBody;
+			bodyDef.position.set(sprite.getX()-bodyXOffset, sprite.getY()-bodyYOffset);
+			
+			shape = new PolygonShape();
+			shape.setAsBox(sprite.getWidth()/2, sprite.getHeight()/2);
+			
+			
+			body = getWorld().createBody(bodyDef);
+			fixture = body.createFixture(shape, 0f);
+			fixture.setUserData(collisionData);
+			body.resetMassData();
+			shape.dispose();
+		}
+		else if(getStage() != null && isDead()) {
+			body.destroyFixture(fixture);
+			this.remove();
+		}
+	}
 	
 	@Override
 	public void act(float delta) {
@@ -58,6 +95,29 @@ public abstract class GameActor extends Actor {
 	
 	public boolean isDead() {
 		return dead;
+	}
+	
+	public Sprite getSprite() {
+		return sprite;
+	}
+	
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
+	
+	public Texture getTexture() {
+		return texture;
+	}
+	
+	public void setTexture(Texture texture) {
+		this.texture = texture;
+	}
+	
+	public void setupSprite(String spriteImageFile) {
+		
+		texture = new Texture(Gdx.files.internal(spriteImageFile));
+		sprite = new Sprite(texture);
+		
 	}
 	
 }

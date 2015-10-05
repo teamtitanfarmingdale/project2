@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.GL20;
 public class ShooterGame extends ApplicationAdapter {
 	
 	Level stage;
-
+	public static int GAME_WIDTH = 560;
+	public static int GAME_HEIGHT = 700;
+	
 	@Override
 	public void create () {
 		

@@ -20,9 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class Ship extends GameActor {
 
-	Texture shipTexture = new Texture(Gdx.files.internal("ship.png"));
-	Sprite shipSprite = new Sprite(shipTexture);
-	
 	boolean rightKeyPressed = false;
 	boolean leftKeyPressed = false;
 	
@@ -36,14 +33,17 @@ public class Ship extends GameActor {
 	
 	public Ship(World world) {
 		super(world);
+		
+		setupSprite("ship.png");
+		
 		collisionData.setActorType("Ship");
-		setBounds(shipSprite.getX(), 10, shipSprite.getWidth(), shipSprite.getHeight());
+		setBounds(getSprite().getX(), 10, getSprite().getWidth(), getSprite().getHeight());
 		setTouchable(Touchable.enabled);
 	}
 	
 	@Override
 	public void draw(Batch batch, float alpha) {
-		shipSprite.draw(batch);
+		getSprite().draw(batch);
 	}
 	
 	
@@ -53,24 +53,15 @@ public class Ship extends GameActor {
 
 		if(rightKeyPressed && getX() < maxX) {
 			MoveByAction mba = new MoveByAction();
-			float bodyXOffset = (getParent().getStage().getWidth()/2)-(shipSprite.getWidth()/2);
-			float bodyYOffset = (getParent().getStage().getHeight()/2)-(shipSprite.getHeight()/2);
-			
 			mba.setAmount(movementDistance,  0f);
 			mba.setDuration(movementSpeed);
-			//createBody();
 			addAction(mba);
 			
 		}
 		else if(leftKeyPressed && getX() > minX) {
 			MoveByAction mba = new MoveByAction();
-			float bodyXOffset = (getParent().getStage().getWidth()/2)-(shipSprite.getWidth()/2);
-			float bodyYOffset = (getParent().getStage().getHeight()/2)-(shipSprite.getHeight()/2);
-			
-			
 			mba.setAmount(movementDistance*-1,  0f);
 			mba.setDuration(movementSpeed);
-			//createBody();
 			addAction(mba);
 		}
 		
@@ -79,7 +70,7 @@ public class Ship extends GameActor {
 	
 	@Override
 	protected void positionChanged() {
-		shipSprite.setPosition(getX(), getY());
+		getSprite().setPosition(getX(), getY());
 		createBody();
 		super.positionChanged();
 	}
@@ -165,34 +156,6 @@ public class Ship extends GameActor {
 			
 		}
 	}
-	
-	public void createBody() {
-
-		if(getStage() != null) {
-			float bodyXOffset = (getParent().getStage().getWidth()/2)-(shipSprite.getWidth()/2);
-			float bodyYOffset = (getParent().getStage().getHeight()/2)-(shipSprite.getHeight()/2);
-			
-			// DESTROY THE CURRENT BODY IF THERE IS ONE
-			if(body != null) {
-				body.destroyFixture(fixture);
-			}
-			
-			// CREATE A NEW BODY
-			bodyDef = new BodyDef();
-			bodyDef.type = BodyDef.BodyType.DynamicBody;
-			bodyDef.position.set(shipSprite.getX()-bodyXOffset, shipSprite.getY()-bodyYOffset);
-			
-			shape = new PolygonShape();
-			shape.setAsBox(shipSprite.getWidth()/2, shipSprite.getHeight()/2);
-			
-			
-			body = getWorld().createBody(bodyDef);
-			fixture = body.createFixture(shape, 0f);
-			fixture.setUserData(collisionData);
-			body.resetMassData();
-			shape.dispose();
-		}
-	}
-	
+		
 	
 }
