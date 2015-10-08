@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class EnemySpawner extends Actor {
 
-	private int maxEnemies = 10;
+	private int maxEnemies = 30;
 	private int totalEnemies = 0;
 	private String enemySpriteFile;
 	private World world;
@@ -13,7 +13,7 @@ public class EnemySpawner extends Actor {
 	private static final int ONE_BILLION = 1000000000;
 	
 	// Time between each enemy spawning
-	private int spawnRate = 5;
+	private int spawnRate = 3;
 	
 	// Time the last enemy was spawned
 	private long lastSpawnTime = 0;

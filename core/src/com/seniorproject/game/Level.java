@@ -110,7 +110,7 @@ public class Level extends Stage {
 		super.draw();
 		
 		// Comment this out to remove the boxes around the sprites
-		renderer.render(world, camera.combined);
+		//renderer.render(world, camera.combined);
 		
 	}
 	

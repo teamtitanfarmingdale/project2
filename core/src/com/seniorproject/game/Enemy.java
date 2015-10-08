@@ -50,8 +50,16 @@ public class Enemy extends GameActor {
 			mba.setAmount(0f, -movementDistance);
 			mba.setDuration(movementSpeed);
 			addAction(mba);
-			
 		}
+		
+		
+		if(getY()+getHeight() < 0) {
+			this.remove();
+			this.body.destroyFixture(this.fixture);
+			System.out.println("removed enemy!");
+		}
+		
+		
 	}
 	
 	public void draw(Batch batch, float alpha) {
