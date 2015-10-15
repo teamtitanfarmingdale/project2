@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Align;
 
 public class LevelTitle {
 
@@ -30,19 +31,19 @@ public class LevelTitle {
 	
 	public LevelTitle(String title, int fontSize) {
 		
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		// Skin is needed for the label
+		skin = new Skin();
 		
 		setupFont(fontSize);
 		
-		skin.add("default-font",  font, BitmapFont.class);
+		labelStyle = new LabelStyle(font, Color.WHITE);
+		
+		skin.add("default-font",  font);
+		skin.add("default", labelStyle);
 		
 		label = new Label(title, skin);
-		
-		labelStyle = new LabelStyle(skin.getFont("default-font"), Color.WHITE);
-		label.setStyle(labelStyle);
-		
 		label.setHeight((float) (fontSize*POINTS_TO_PIXELS_MULTIPLIER));
-		
+
 	}
 	
 	public LevelTitle() {
@@ -65,15 +66,15 @@ public class LevelTitle {
 	public void setPosition(Level level) {
 		// Set to top center
 		
-		float x = (level.getWidth()/2) - (label.getWidth()/2);
 		float y = level.getHeight() - label.getHeight();
-		label.setPosition(x, y);
+		label.setPosition(0, y);
 		
-		//label.setWidth(level.getWidth());
-		
+		label.setWidth(level.getWidth());
+		label.setAlignment(Align.center);
 	}
 	
 	private void setupFont(int fontSize) {
+		// Creates a Bitmap font from the .ttf font file
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_FILE));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = fontSize;
