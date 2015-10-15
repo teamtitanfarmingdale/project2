@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -26,7 +27,8 @@ public class Level extends Stage {
 	private Box2DDebugRenderer renderer;
 	private OrthographicCamera camera;
 	private ArrayList<GameActor> collisionList;
-	
+	private LevelTitle levelTitle;
+	private Group gameObjects;
 	protected String enemySpriteFile = "enemy.png";
 	
 	
@@ -46,7 +48,7 @@ public class Level extends Stage {
 		 * They are grouped because you can only set one actor to take in keyboard input
 		 * By grouping them, it lets you allow all the actors in the group to take keyboard input
 		 */
-		Group gameObjects = new Group();
+		gameObjects = new Group();
 		
 		// Used to generate enemies onto the screen
 		enemySpawner = new EnemySpawner(world, enemySpriteFile);
@@ -56,7 +58,10 @@ public class Level extends Stage {
 		
 		// The player's ship
 		ship = new Ship(world);
-		
+
+		levelTitle = new LevelTitle("Level 1", 20);
+		levelTitle.setPosition(this);
+
 		// Used for debugging, shows the boxes around the sprites
 		renderer = new Box2DDebugRenderer();
 		
@@ -65,6 +70,9 @@ public class Level extends Stage {
 		gameObjects.addActor(enemySpawner);
 		gameObjects.addActor(background);
 		gameObjects.addActor(ship);
+		gameObjects.addActor(levelTitle.getLabel());
+		
+		
 		
 		// Add the group to the stage
 		addActor(gameObjects);
@@ -80,10 +88,16 @@ public class Level extends Stage {
 		
 	}
 	
+	public void addGameObject(Actor actor) {
+		gameObjects.addActor(actor);
+	}
 	
 	@Override
 	public void act(float delta) {
 		super.act(delta);
+		
+		// Bring the level title to the top so there is no overlap
+		levelTitle.getLabel().toFront();
 		
 		// World stepper?
 		// Not sure exactly what this does, but it has something to do with how the engine deals with collisions

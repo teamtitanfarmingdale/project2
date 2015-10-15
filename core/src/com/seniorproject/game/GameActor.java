@@ -20,6 +20,7 @@ public abstract class GameActor extends Actor {
 	protected boolean dead;
 	protected Sprite sprite;
 	protected Texture texture;
+	protected Level level;
 	
 	public CollisionData collisionData;
 	
@@ -33,6 +34,9 @@ public abstract class GameActor extends Actor {
 	public void createBody() {
 
 		if(getStage() != null && !isDead()) {
+			
+			level = (Level) getStage();
+			
 			float bodyXOffset = (getParent().getStage().getWidth()/2)-(sprite.getWidth()/2);
 			float bodyYOffset = (getParent().getStage().getHeight()/2)-(sprite.getHeight()/2);
 			

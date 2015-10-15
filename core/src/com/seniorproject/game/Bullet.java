@@ -4,11 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 
 public class Bullet extends GameActor {
@@ -83,6 +81,9 @@ public class Bullet extends GameActor {
 	public void createBody() {
 
 		if(getStage() != null && !isDead()) {
+			
+			level = (Level) getStage();
+			
 			float bodyXOffset = (getParent().getStage().getWidth()/2)-(bulletSprite.getWidth()/2);
 			float bodyYOffset = (getParent().getStage().getHeight()/2)-(bulletSprite.getHeight()/2);
 			

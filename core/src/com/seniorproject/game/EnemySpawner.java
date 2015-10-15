@@ -9,6 +9,7 @@ public class EnemySpawner extends Actor {
 	private int totalEnemies = 0;
 	private String enemySpriteFile;
 	private World world;
+	private Level level;
 	
 	private static final int ONE_BILLION = 1000000000;
 	
@@ -27,6 +28,7 @@ public class EnemySpawner extends Actor {
 	public EnemySpawner(World world, String enemySpriteFile) {
 		this.world = world;
 		this.enemySpriteFile = enemySpriteFile;
+		
 	}
 	
 	@Override
@@ -42,8 +44,13 @@ public class EnemySpawner extends Actor {
 		
 		// Adds enemies to the stage
 		if(getStage() != null && totalEnemies < maxEnemies && enemiesToSpawnEachInterval > enemySpawnIntervalCount) {
+
+			level = (Level) getStage();
+
+			
 			Enemy enemy = new Enemy(world, enemySpriteFile);
-			this.getParent().getStage().addActor(enemy);
+			//this.getParent().getStage().addActor(enemy);
+			level.addGameObject(enemy);
 			totalEnemies++;
 			enemySpawnIntervalCount++;
 			lastSpawnTime = getSeconds();
