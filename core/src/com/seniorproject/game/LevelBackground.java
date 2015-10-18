@@ -21,6 +21,8 @@ public class LevelBackground extends Actor {
 	
 	public LevelBackground() {
 		
+		// test
+		
 		background = new Texture(Gdx.files.internal("starsbg1.png"));
 		background.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 		bgSprite = new Sprite(background);
