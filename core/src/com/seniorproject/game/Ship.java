@@ -36,6 +36,7 @@ public class Ship extends GameActor {
 	@Override
 	public void draw(Batch batch, float alpha) {
 		getSprite().draw(batch);
+		createBody();
 	}
 	
 	
@@ -63,7 +64,7 @@ public class Ship extends GameActor {
 	@Override
 	protected void positionChanged() {
 		getSprite().setPosition(getX(), getY());
-		createBody();
+		
 		super.positionChanged();
 	}
 	

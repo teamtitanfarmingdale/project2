@@ -10,8 +10,8 @@ public class ShooterGame extends ApplicationAdapter {
 	
 	private Level stage;
 	
-	public static int GAME_WIDTH = 560;
-	public static int GAME_HEIGHT = 700;
+	public static int GAME_WIDTH = 1200;
+	public static int GAME_HEIGHT = 720;
 	
 	BitmapFont myFont;
 	
