@@ -35,9 +35,6 @@ public class Level extends Stage {
 	public Level() {
 		super(new ScreenViewport());	
 		
-		
-		// test
-		
 		// world is used for collisions, I believe its constructor sets the gravity in our game using the Vector2 object
 		// Since we don't need actual gravity in the game, its set to 0 here
 		world = new World(new Vector2(0,0), true);	
