@@ -1,21 +1,17 @@
 package com.seniorproject.game;
 
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class EnemySpawner extends Spawner {
+public class AsteroidSpawner extends Spawner {
 
-	public EnemySpawner(World world, String enemySpriteFile) {
-		super(world, enemySpriteFile);
-		this.world = world;
-		this.enemySpriteFile = enemySpriteFile;
+	public AsteroidSpawner(World world, String enemyAsteroidFile) {
+		super(world, enemyAsteroidFile);
 		
-		
-		maxEnemies = 30;
+		maxEnemies = 8;
 		totalEnemies = 0;
-		spawnRate = 3;
-		lastSpawnTime = 0;
-		enemiesToSpawnEachInterval = 2;
+		spawnRate = 4;
+		lastSpawnTime = 2;
+		enemiesToSpawnEachInterval = 4;
 		enemySpawnIntervalCount = 0;
 	}
 	
@@ -33,8 +29,8 @@ public class EnemySpawner extends Spawner {
 		// Adds enemies to the stage
 		if(getStage() != null && totalEnemies < maxEnemies && enemiesToSpawnEachInterval > enemySpawnIntervalCount) {
 			level = (Level) getStage();
-			Enemy enemy = new Enemy(world, enemySpriteFile);
-			level.addGameObject(enemy);
+			Asteroid asteroid = new Asteroid(world, enemySpriteFile);
+			level.addGameObject(asteroid);
 			totalEnemies++;
 			enemySpawnIntervalCount++;
 			lastSpawnTime = getSeconds();

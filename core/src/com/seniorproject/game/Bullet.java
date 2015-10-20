@@ -135,4 +135,8 @@ public class Bullet extends GameActor {
 		return damage;
 	}
 	
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
+	
 }

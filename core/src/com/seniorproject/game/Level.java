@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.seniorproject.game.hud.*;
 
 public class Level extends Stage {
 
@@ -22,6 +23,7 @@ public class Level extends Stage {
 	private Ship ship;
 	private LevelBackground background;
 	private EnemySpawner enemySpawner;
+	private AsteroidSpawner asteroidSpawner;
 	private World world;
 	private float accumulator = 0f;
 	private Box2DDebugRenderer renderer;
@@ -29,8 +31,12 @@ public class Level extends Stage {
 	private ArrayList<GameActor> collisionList;
 	private LevelTitle levelTitle;
 	private Group gameObjects;
-	protected String enemySpriteFile = "enemy.png";
+	protected String enemySpriteFile = "enemy2.png";
+	protected String asteroidSpriteFile = "asteroid.png";
 	
+	public Score score;
+	public Health healthBar;
+	public Armor armorBar;
 	
 	public Level() {
 		super(new ScreenViewport());	
@@ -53,6 +59,8 @@ public class Level extends Stage {
 		// Used to generate enemies onto the screen
 		enemySpawner = new EnemySpawner(world, enemySpriteFile);
 		
+		asteroidSpawner = new AsteroidSpawner(world, asteroidSpriteFile);
+		
 		// The background
 		background = new LevelBackground();
 		
@@ -65,14 +73,27 @@ public class Level extends Stage {
 		// Used for debugging, shows the boxes around the sprites
 		renderer = new Box2DDebugRenderer();
 		
+		healthBar = new Health();
+		armorBar = new Armor();
+		score = new Score();
+		
+		healthBar.setPositionXOffsetWidth(score.getBGWidth());
+		healthBar.setPositionYOffsetHeight(score.getBGHeight());
+		armorBar.setPositionXOffsetWidth(score.getBGWidth());
+		armorBar.setPositionYOffsetHeight(score.getBGHeight());
 		
 		// Add the actors to the group
 		gameObjects.addActor(enemySpawner);
+		gameObjects.addActor(asteroidSpawner);
 		gameObjects.addActor(background);
 		gameObjects.addActor(ship);
-		gameObjects.addActor(levelTitle.getLabel());
+		//gameObjects.addActor(levelTitle.getLabel());
+		gameObjects.addActor(healthBar);
+		gameObjects.addActor(armorBar);
+		gameObjects.addActor(score);
 		
 		
+		//health.setHealth(300);
 		
 		// Add the group to the stage
 		addActor(gameObjects);
@@ -97,7 +118,7 @@ public class Level extends Stage {
 		super.act(delta);
 		
 		// Bring the level title to the top so there is no overlap
-		levelTitle.getLabel().toFront();
+		//levelTitle.getLabel().toFront();
 		
 		// World stepper?
 		// Not sure exactly what this does, but it has something to do with how the engine deals with collisions
@@ -124,7 +145,7 @@ public class Level extends Stage {
 		super.draw();
 		
 		// Comment this out to remove the boxes around the sprites
-		renderer.render(world, camera.combined);
+		//renderer.render(world, camera.combined);
 		
 	}
 	
@@ -139,9 +160,7 @@ public class Level extends Stage {
 
 			@Override
 			public void beginContact(Contact contact) {
-				// TODO Auto-generated method stub
-				System.out.println("contact!");
-				
+
 				// CollisionData contains the actual object that was collided.
 				CollisionData collisionDataA = (CollisionData) contact.getFixtureA().getUserData();
 				CollisionData collisionDataB = (CollisionData) contact.getFixtureB().getUserData();
@@ -149,18 +168,52 @@ public class Level extends Stage {
 				if(collisionDataA.getActorType() == "Enemy" && collisionDataB.getActorType() == "Enemy") {
 					// MOVE ENEMIES THAT WERE COLLIDED
 					
-					GameActor gameActorA = collisionDataA.getActor();
+					//GameActor gameActorA = collisionDataA.getActor();
 					GameActor gameActorB = collisionDataB.getActor();
 					
-					Enemy enemyA = (Enemy) gameActorA;
+					//Enemy enemyA = (Enemy) gameActorA;
 					Enemy enemyB = (Enemy) gameActorB;
-					
-					System.out.println(enemyA.getX() + " - " + enemyA.getY());
-					System.out.println(enemyB.getX() + " - " + enemyB.getY());
+
 					enemyB.reposition();
 					
 				}
-			
+				else if(collisionDataA.getActorType() == "Asteroid" && collisionDataB.getActorType() == "Asteroid") {
+					// MOVE ENEMIES THAT WERE COLLIDED
+					
+					//GameActor gameActorA = collisionDataA.getActor();
+					GameActor gameActorB = collisionDataB.getActor();
+					
+					//Asteroid enemyA = (Asteroid) gameActorA;
+					Asteroid enemyB = (Asteroid) gameActorB;
+					
+					enemyB.reposition();
+					
+				}
+				else if(collisionDataA.getActorType() == "Asteroid" && collisionDataB.getActorType() == "Enemy") {
+					// MOVE ENEMIES THAT WERE COLLIDED
+					
+					//GameActor gameActorA = collisionDataA.getActor();
+					GameActor gameActorB = collisionDataB.getActor();
+					
+					//Asteroid enemyA = (Asteroid) gameActorA;
+					Enemy enemyB = (Enemy) gameActorB;
+
+					enemyB.reposition();
+					
+				}
+				else if(collisionDataA.getActorType() == "Enemy" && collisionDataB.getActorType() == "Asteroid") {
+					// MOVE ENEMIES THAT WERE COLLIDED
+					
+					//GameActor gameActorA = collisionDataA.getActor();
+					GameActor gameActorB = collisionDataB.getActor();
+					
+					//Enemy enemyA = (Enemy) gameActorA;
+					Asteroid enemyB = (Asteroid) gameActorB;
+
+					enemyB.reposition();
+					
+				}
+				
 			}
 
 			@Override
@@ -195,13 +248,71 @@ public class Level extends Stage {
 					// Add the bullet to the collision list to be removed from the screen
 					collisionList.add(gameActorB);
 					
-					System.out.println("BULLET COLLISION1!!!");
+					//System.out.println("BULLET COLLISION1!!!");
 				}
 				else if(collisionDataA.getActorType() == "Bullet" && collisionDataB.getActorType() == "Enemy" && !collisionList.contains(gameActorA)) {
 					Bullet bullet = (Bullet) gameActorA;
 					bullet.setCollidedEnemy((Enemy) gameActorB);
 					collisionList.add(gameActorA);
-					System.out.println("BULLET COLLISION2!!!");
+					//System.out.println("BULLET COLLISION2!!!");
+				}
+				
+				
+				
+				// HANDLE COLLISIONS BETWEEN PLAYER AND ENEMY
+				
+				if(collisionDataA.getActorType() == "Enemy" && collisionDataB.getActorType() == "Ship") {
+					
+					Ship collidedShip = (Ship) gameActorB;
+					
+					if(!collidedShip.hasCollidedWith(gameActorA)) {
+						
+						Enemy collidedEnemy = (Enemy) gameActorA;
+						
+						collidedShip.hit(collidedEnemy.getCollisionDamage());
+						collidedShip.addCollidedObject(gameActorA);
+					}
+					
+				}
+				else if(collisionDataA.getActorType() == "Ship" && collisionDataB.getActorType() == "Enemy") {
+					
+					Ship collidedShip = (Ship) gameActorA;
+					
+					if(!collidedShip.hasCollidedWith(gameActorB)) {
+						
+						Enemy collidedEnemy = (Enemy) gameActorB;
+						
+						collidedShip.hit(collidedEnemy.getCollisionDamage());
+						collidedShip.addCollidedObject(gameActorB);
+					}
+				}
+				
+				
+				// HANDLE COLLISIONS BETWEEN PLAYER AND ASTEROID
+				if(collisionDataA.getActorType() == "Asteroid" && collisionDataB.getActorType() == "Ship") {
+					
+					Ship collidedShip = (Ship) gameActorB;
+					
+					if(!collidedShip.hasCollidedWith(gameActorA)) {
+						
+						Asteroid collidedEnemy = (Asteroid) gameActorA;
+						
+						collidedShip.hit(collidedEnemy.getCollisionDamage());
+						collidedShip.addCollidedObject(gameActorA);
+					}
+					
+				}
+				else if(collisionDataA.getActorType() == "Ship" && collisionDataB.getActorType() == "Asteroid") {
+					
+					Ship collidedShip = (Ship) gameActorA;
+					
+					if(!collidedShip.hasCollidedWith(gameActorB)) {
+						
+						Asteroid collidedEnemy = (Asteroid) gameActorB;
+						
+						collidedShip.hit(collidedEnemy.getCollisionDamage());
+						collidedShip.addCollidedObject(gameActorB);
+					}
 				}
 				
 				

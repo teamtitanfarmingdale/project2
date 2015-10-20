@@ -1,5 +1,7 @@
 package com.seniorproject.game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.World;
@@ -22,6 +24,11 @@ public class Ship extends GameActor {
 	float minX = 0;
 	float maxX = 0;
 		
+	float health = 100;
+	float armor = 100;
+	
+	ArrayList<GameActor> collidedObjects;
+	
 	
 	public Ship(World world) {
 		super(world);
@@ -31,7 +38,42 @@ public class Ship extends GameActor {
 		collisionData.setActorType("Ship");
 		setBounds(getSprite().getX(), 10, getSprite().getWidth(), getSprite().getHeight());
 		setTouchable(Touchable.enabled);
+		
+		collidedObjects = new ArrayList<GameActor>();
+		
 	}
+	
+	public void hit(float damage) {
+		
+		if(armor > 0) {
+			armor -= damage;
+			
+			// Lower health by remaining damage
+			if(armor < 0) {
+				health += armor;
+				armor = 0;
+			}
+			
+		}
+		else {
+			health -= damage;
+		}
+		
+		level.armorBar.setHealth(armor);
+		level.healthBar.setHealth(health);
+	}
+	
+	public void addCollidedObject(GameActor actor) {
+		if(collidedObjects.indexOf(actor) == -1) {
+			collidedObjects.add(actor);
+		}
+	}
+	
+	public boolean hasCollidedWith(GameActor actor) {
+		boolean returnVal = (collidedObjects.indexOf(actor) != -1);
+		return returnVal;
+	}
+	
 	
 	@Override
 	public void draw(Batch batch, float alpha) {
@@ -94,6 +136,8 @@ public class Ship extends GameActor {
 						bullet.setY(Ship.this.getY()+(Ship.this.getHeight()/2));
 
 						level.addGameObject(bullet);
+						
+						//level.healthBar.setHealth(300);
 						
 						createBody();				
 					}
