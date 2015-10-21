@@ -19,13 +19,6 @@ public class Armor extends BasicHealthBar {
 	//sentinel value to keep the position from reassigning
 	int i =0;
 	
-	// Positioning Variables
-	float parentWidth;
-	float parentHeight;
-	float positionYOffsetHeight = 0;
-	float positionXOffsetWidth = 0;
-	
-	
 	public Armor() {
 		setHealthBarSprite(armorbar);
 	}
@@ -58,12 +51,5 @@ public class Armor extends BasicHealthBar {
 		wings.draw(batch);
 	}
 	
-	public void setPositionYOffsetHeight(float offset) {
-		positionYOffsetHeight = offset;
-	}
-	
-	public void setPositionXOffsetWidth(float offset) {
-		positionXOffsetWidth = offset;
-	}
 	
 }

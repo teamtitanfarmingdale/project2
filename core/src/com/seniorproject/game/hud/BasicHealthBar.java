@@ -3,7 +3,7 @@ package com.seniorproject.game.hud;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class BasicHealthBar extends Actor {
+public class BasicHealthBar extends BaseHUD {
 
 	private static final int MAX_HEALTH = 100;
 	

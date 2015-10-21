@@ -48,10 +48,12 @@ public class Score extends Actor {
 			float y = (getParent().getStage().getHeight()-(backgroundSprite.getHeight()));
 			Level level = (Level) getParent().getStage();
 			
+			float parentHeight = getParent().getStage().getHeight();
+			
 			
 			backgroundSprite.setPosition(x, y);
 			
-			labelHelper.getLabel().setPosition(x, y+(labelHelper.getLabel().getHeight()+15));
+			labelHelper.getLabel().setPosition(x, y+labelHelper.getLabel().getHeight()-(backgroundSprite.getHeight()/10));
 			
 			level.addGameObject(labelHelper.getLabel());
 			

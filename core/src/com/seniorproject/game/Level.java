@@ -67,8 +67,7 @@ public class Level extends Stage {
 		// The player's ship
 		ship = new Ship(world);
 
-		levelTitle = new LevelTitle("Level 1", 20);
-		levelTitle.setPosition(this);
+		levelTitle = new LevelTitle("Level 1");
 
 		// Used for debugging, shows the boxes around the sprites
 		renderer = new Box2DDebugRenderer();
@@ -79,19 +78,27 @@ public class Level extends Stage {
 		
 		healthBar.setPositionXOffsetWidth(score.getBGWidth());
 		healthBar.setPositionYOffsetHeight(score.getBGHeight());
+		System.out.println("health");
+		
 		armorBar.setPositionXOffsetWidth(score.getBGWidth());
 		armorBar.setPositionYOffsetHeight(score.getBGHeight());
+		System.out.println("armor");
+		
+		levelTitle.setPositionXOffsetWidth(score.getBGWidth());
+		levelTitle.setPositionYOffsetHeight(score.getBGHeight());
+		System.out.println("level");
 		
 		// Add the actors to the group
 		gameObjects.addActor(enemySpawner);
 		gameObjects.addActor(asteroidSpawner);
 		gameObjects.addActor(background);
 		gameObjects.addActor(ship);
-		//gameObjects.addActor(levelTitle.getLabel());
+		gameObjects.addActor(levelTitle);
+		
 		gameObjects.addActor(healthBar);
 		gameObjects.addActor(armorBar);
 		gameObjects.addActor(score);
-		
+		gameObjects.addActor(levelTitle.getLabel());
 		
 		//health.setHealth(300);
 		
@@ -118,8 +125,7 @@ public class Level extends Stage {
 		super.act(delta);
 		
 		// Bring the level title to the top so there is no overlap
-		//levelTitle.getLabel().toFront();
-		
+
 		// World stepper?
 		// Not sure exactly what this does, but it has something to do with how the engine deals with collisions
 		accumulator += delta;

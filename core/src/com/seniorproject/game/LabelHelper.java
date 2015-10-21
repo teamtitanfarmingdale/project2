@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 public class LabelHelper {
 	
 	private final static String FONT_FILE = "play.ttf";
-	private final static double POINTS_TO_PIXELS_MULTIPLIER = 1.35;
+	private final static double POINTS_TO_PIXELS_MULTIPLIER = 2;
 	
 	private Skin skin;
 	private Label label;

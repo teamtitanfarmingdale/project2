@@ -47,7 +47,6 @@ public class Health extends BasicHealthBar {
 	
 	// Positioning Variables
 	float halfParentWidth;
-	float parentHeight;
 	
 	float topLeftWingX;
 	float topLeftWingY;
@@ -62,11 +61,6 @@ public class Health extends BasicHealthBar {
 	float bottomLeftWingY;
 	
 	private boolean positionSet = false;
-	
-	// The width/height of the score circle
-	// Used to determine where to place the wings
-	float positionYOffsetHeight = 0;
-	float positionXOffsetWidth = 0;
 	
 	
 	public Health() {
@@ -173,15 +167,6 @@ public class Health extends BasicHealthBar {
 		bottomLeftWingSprite.draw(batch);
 		lifeSprite.draw(batch);
 
-	}
-
-	
-	public void setPositionYOffsetHeight(float offset) {
-		positionYOffsetHeight = offset;
-	}
-	
-	public void setPositionXOffsetWidth(float offset) {
-		positionXOffsetWidth = offset;
 	}
 	
 }
