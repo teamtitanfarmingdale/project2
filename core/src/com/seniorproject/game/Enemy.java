@@ -13,7 +13,7 @@ public class Enemy extends GameActor {
 	Double randomNumber; // Used for random position
 	private boolean reposition = false;
 	
-	private int collisionDamage = 5;
+	private int collisionDamage = 25;
 	private int hitAwardPoints = 5;
 	private int killAwardPoints = 25;
 	

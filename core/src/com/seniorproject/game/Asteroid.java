@@ -15,7 +15,10 @@ public class Asteroid extends GameActor {
 	private float movementDistance = 2f;
 	private float movementSpeed = .005f;
 	
-	private int collisionDamage = 10;
+	private int collisionDamage = 35;
+	
+	private int killAwardPoints = 25;
+	private int hitAwardPoints = 10;
 	
 	public Asteroid(World world, String spriteFile) {
 		super(world);
@@ -33,6 +36,7 @@ public class Asteroid extends GameActor {
 		super.act(delta);
 		
 		if(health <= 0) {
+			level.score.addToScore(killAwardPoints);
 			setDead(true);
 		}
 		else if(reposition) {
@@ -91,7 +95,7 @@ public class Asteroid extends GameActor {
 
 	public void lowerHealth(int damage) {
 		health -= damage;
-		System.out.println(health);
+		level.score.addToScore(hitAwardPoints);
 	}
 	
 	public void reposition() {

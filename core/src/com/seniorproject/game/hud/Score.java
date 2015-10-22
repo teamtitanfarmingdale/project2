@@ -55,7 +55,7 @@ public class Score extends Actor {
 			
 			labelHelper.getLabel().setPosition(x, y+labelHelper.getLabel().getHeight()-(backgroundSprite.getHeight()/10));
 			
-			level.addGameObject(labelHelper.getLabel());
+			level.addHUDObject(labelHelper.getLabel());
 			
 		}
 		

@@ -17,7 +17,7 @@ public class Bullet extends GameActor {
 	private Sprite bulletSprite = new Sprite(bulletTexture);
 	
 	// THE ENEMY THAT THE BULLET COLLIDED WITH
-	private Enemy collidedEnemy;
+	private GameActor collidedEnemy;
 	
 	
 	// ACTUAL WIDTH OF BULLET WITHIN IMAGE
@@ -122,12 +122,21 @@ public class Bullet extends GameActor {
 		return "Bullet";
 	}
 	
-	public void setCollidedEnemy(Enemy enemy) {
-		enemy.lowerHealth(damage);
+	public void setCollidedEnemy(GameActor enemy) {
+		
+		if(enemy.getCollisionData().getActorType() == "Enemy") {
+			Enemy tempEnemy = (Enemy) enemy;
+			tempEnemy.lowerHealth(damage);
+		}
+		else if(enemy.getCollisionData().getActorType() == "Asteroid") {
+			Asteroid tempAsteroid = (Asteroid) enemy;
+			tempAsteroid.lowerHealth(damage);
+		}
+		
 		collidedEnemy = enemy;
 	}
 	
-	public Enemy getCollidedEnemy() {
+	public GameActor getCollidedEnemy() {
 		return collidedEnemy;
 	}
 	

@@ -38,6 +38,8 @@ public class Level extends Stage {
 	public Health healthBar;
 	public Armor armorBar;
 	
+	private Group hudObjects;
+	
 	public Level() {
 		super(new ScreenViewport());	
 		
@@ -78,29 +80,34 @@ public class Level extends Stage {
 		
 		healthBar.setPositionXOffsetWidth(score.getBGWidth());
 		healthBar.setPositionYOffsetHeight(score.getBGHeight());
-		System.out.println("health");
 		
 		armorBar.setPositionXOffsetWidth(score.getBGWidth());
 		armorBar.setPositionYOffsetHeight(score.getBGHeight());
-		System.out.println("armor");
 		
 		levelTitle.setPositionXOffsetWidth(score.getBGWidth());
 		levelTitle.setPositionYOffsetHeight(score.getBGHeight());
-		System.out.println("level");
+		
+		hudObjects = new Group();
+		hudObjects.addActor(healthBar);
+		hudObjects.addActor(armorBar);
+		hudObjects.addActor(levelTitle);
+		hudObjects.addActor(score);
+		hudObjects.addActor(levelTitle.getLabel());
+		
 		
 		// Add the actors to the group
 		gameObjects.addActor(enemySpawner);
 		gameObjects.addActor(asteroidSpawner);
 		gameObjects.addActor(background);
 		gameObjects.addActor(ship);
-		gameObjects.addActor(levelTitle);
+		//gameObjects.addActor(levelTitle);
+		gameObjects.addActor(hudObjects);
+		//gameObjects.addActor(healthBar);
+		//gameObjects.addActor(armorBar);
+		//gameObjects.addActor(score);
+		//gameObjects.addActor(levelTitle.getLabel());
+		//gameObjects.addActor(lifeManager);
 		
-		gameObjects.addActor(healthBar);
-		gameObjects.addActor(armorBar);
-		gameObjects.addActor(score);
-		gameObjects.addActor(levelTitle.getLabel());
-		
-		//health.setHealth(300);
 		
 		// Add the group to the stage
 		addActor(gameObjects);
@@ -120,12 +127,17 @@ public class Level extends Stage {
 		gameObjects.addActor(actor);
 	}
 	
+	public void addHUDObject(Actor actor) {
+		hudObjects.addActor(actor);
+	}
+	
 	@Override
 	public void act(float delta) {
 		super.act(delta);
 		
 		// Bring the level title to the top so there is no overlap
-
+		hudObjects.toFront();
+		
 		// World stepper?
 		// Not sure exactly what this does, but it has something to do with how the engine deals with collisions
 		accumulator += delta;
@@ -262,6 +274,26 @@ public class Level extends Stage {
 					collisionList.add(gameActorA);
 					//System.out.println("BULLET COLLISION2!!!");
 				}
+
+				
+				if(collisionDataA.getActorType() == "Asteroid" && collisionDataB.getActorType() == "Bullet" && !collisionList.contains(gameActorB)) {
+					Bullet bullet = (Bullet) gameActorB;
+					
+					// Tell the bullet which enemy object it hit
+					bullet.setCollidedEnemy((Asteroid) gameActorA);
+					
+					// Add the bullet to the collision list to be removed from the screen
+					collisionList.add(gameActorB);
+					
+					//System.out.println("BULLET COLLISION1!!!");
+				}
+				else if(collisionDataA.getActorType() == "Bullet" && collisionDataB.getActorType() == "Asteroid" && !collisionList.contains(gameActorA)) {
+					Bullet bullet = (Bullet) gameActorA;
+					bullet.setCollidedEnemy((Asteroid) gameActorB);
+					collisionList.add(gameActorA);
+					//System.out.println("BULLET COLLISION2!!!");
+				}
+				
 				
 				
 				

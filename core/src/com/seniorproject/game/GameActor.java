@@ -124,4 +124,7 @@ public abstract class GameActor extends Actor {
 		
 	}
 	
+	public CollisionData getCollisionData() {
+		return collisionData;
+	}
 }

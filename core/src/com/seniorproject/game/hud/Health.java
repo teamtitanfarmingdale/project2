@@ -42,8 +42,6 @@ public class Health extends BasicHealthBar {
 	private Texture bottomLeftWingTexture;
 	private Sprite bottomLeftWingSprite;
 	
-	private Texture lifeTexture;
-	private Sprite lifeSprite;
 	
 	// Positioning Variables
 	float halfParentWidth;
@@ -60,11 +58,16 @@ public class Health extends BasicHealthBar {
 	float bottomLeftWingX;
 	float bottomLeftWingY;
 	
+	
 	private boolean positionSet = false;
 	
+	public LifeManager lifeManager;
 	
 	public Health() {
 		
+		
+		lifeManager = new LifeManager(3);
+
 		
 		backBarTexture = new Texture(Gdx.files.internal("hud/health/backbar.png"));
 		backBarDangerTexture = new Texture(Gdx.files.internal("hud/health/backbar-danger.png"));
@@ -81,19 +84,12 @@ public class Health extends BasicHealthBar {
 		
 		bottomLeftWingTexture = new Texture (Gdx.files.internal("hud/life/bottomleftwing.png"));
 		bottomLeftWingSprite = new Sprite(bottomLeftWingTexture);
-		
-		lifeTexture = new Texture (Gdx.files.internal("hud/life/life.png"));
-		lifeSprite = new Sprite(lifeTexture);
-		
-		
+
 		// Initial Positions
 		backBarSprite.setPosition(50, 688);
 		healthBarSprite.setPosition(50, 688);
 		topLeftWingSprite.setPosition(10, 670);
 		bottomLeftWingSprite.setPosition(64, 640);
-		lifeSprite.setPosition(200, 650);
-		
-		
 		
 		// Set up animated health bar when health goes below 20
 		animationFrames = new TextureRegion[DANGER_HEALTH_FRAMES];
@@ -142,6 +138,9 @@ public class Health extends BasicHealthBar {
 			healthBarSprite.setPosition(healthBarX, healthBarY);
 			bottomLeftWingSprite.setPosition(bottomLeftWingX, bottomLeftWingY);
 			
+			lifeManager.setStartingXPosition(bottomLeftWingX+(bottomLeftWingSprite.getWidth()/4.5f));
+			lifeManager.setStartingYPosition(bottomLeftWingY+(bottomLeftWingSprite.getHeight()/5f));
+			
 			
 			// Turn on health warning
 			if(!warningMode && totalHealth < HEALTH_WARNING_AMOUNT) {
@@ -165,7 +164,7 @@ public class Health extends BasicHealthBar {
 		healthBarSprite.draw(batch);
 		topLeftWingSprite.draw(batch);
 		bottomLeftWingSprite.draw(batch);
-		lifeSprite.draw(batch);
+		lifeManager.draw(batch, alpha);
 
 	}
 	

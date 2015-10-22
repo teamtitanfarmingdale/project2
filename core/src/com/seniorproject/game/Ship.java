@@ -14,6 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class Ship extends GameActor {
 
+	private final static int MAX_HEALTH = 100;
+	private final static int MAX_ARMOR = 100;
+	
+	
 	boolean rightKeyPressed = false;
 	boolean leftKeyPressed = false;
 	
@@ -57,7 +61,19 @@ public class Ship extends GameActor {
 		}
 		else {
 			health -= damage;
+			
+			if(health < 0) {
+				health = 0;
+			}
+			
 		}
+		
+		if(health == 0 && armor == 0) {
+			level.healthBar.lifeManager.removeLife();
+			armor = MAX_ARMOR;
+			health = MAX_HEALTH;
+		}
+		
 		
 		level.armorBar.setHealth(armor);
 		level.healthBar.setHealth(health);
