@@ -34,7 +34,7 @@ public class Spawner extends Actor {
 		this.maxEnemies = maxEnemies;
 	}
 	
-	protected long getSeconds() {
+	protected static long getSeconds() {
 		return System.nanoTime()/ONE_BILLION;
 	}
 	

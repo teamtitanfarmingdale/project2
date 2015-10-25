@@ -100,15 +100,8 @@ public class Level extends Stage {
 		gameObjects.addActor(asteroidSpawner);
 		gameObjects.addActor(background);
 		gameObjects.addActor(ship);
-		//gameObjects.addActor(levelTitle);
 		gameObjects.addActor(hudObjects);
-		//gameObjects.addActor(healthBar);
-		//gameObjects.addActor(armorBar);
-		//gameObjects.addActor(score);
-		//gameObjects.addActor(levelTitle.getLabel());
-		//gameObjects.addActor(lifeManager);
-		
-		
+
 		// Add the group to the stage
 		addActor(gameObjects);
 
@@ -129,6 +122,10 @@ public class Level extends Stage {
 	
 	public void addHUDObject(Actor actor) {
 		hudObjects.addActor(actor);
+	}
+	
+	public Ship getShip() {
+		return ship;
 	}
 	
 	@Override
@@ -163,7 +160,7 @@ public class Level extends Stage {
 		super.draw();
 		
 		// Comment this out to remove the boxes around the sprites
-		//renderer.render(world, camera.combined);
+		renderer.render(world, camera.combined);
 		
 	}
 	
@@ -195,6 +192,7 @@ public class Level extends Stage {
 					enemyB.reposition();
 					
 				}
+				/*
 				else if(collisionDataA.getActorType() == "Asteroid" && collisionDataB.getActorType() == "Asteroid") {
 					// MOVE ENEMIES THAT WERE COLLIDED
 					
@@ -231,7 +229,7 @@ public class Level extends Stage {
 					enemyB.reposition();
 					
 				}
-				
+				*/
 			}
 
 			@Override

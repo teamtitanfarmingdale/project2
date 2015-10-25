@@ -65,6 +65,7 @@ public class Bullet extends GameActor {
 		if(getStage() != null) {
 			if(getY() > getStage().getHeight()) {
 				body.destroyFixture(fixture);
+				
 				this.remove();
 			}
 		}

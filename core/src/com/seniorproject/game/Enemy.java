@@ -4,10 +4,11 @@ package com.seniorproject.game;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 
 public class Enemy extends GameActor {
-	
+
 	private int health = 100;
 	private int randomX;
 	Double randomNumber; // Used for random position
@@ -19,7 +20,15 @@ public class Enemy extends GameActor {
 	
 	
 	private float movementDistance = 2f;
+	private float movementXDistance = 2f;
+	private float movementYDistance = 2f;
+	
 	private float movementSpeed = .01f;
+	
+	float lastMoveTime = -1;
+	
+	float hoverOffset = 0;
+	boolean hoverPhase = true;
 	
 	public Enemy(World world, String spriteFile) {
 		super(world);
@@ -29,7 +38,18 @@ public class Enemy extends GameActor {
 		
 		// Randomize movement speed
 		movementDistance = (float) (Math.random() * 2f)+1f;
+		
+		movementXDistance = (float) (Math.random() * 2f)+1f;
+		if(Math.random()*100 > 50) {
+			movementXDistance *= -1;
+		}
+		
+		
 		movementSpeed = (float) (Math.random() * .01f)+.01f;
+		
+		hoverOffset = (float) (Math.random()*50f)+250;
+		
+
 	}
 	
 	
@@ -42,27 +62,67 @@ public class Enemy extends GameActor {
 		}
 		else if(reposition) {
 			
+			movementXDistance = movementDistance;
+			if(getSprite().getX() > (level.getWidth()/2)) {
+				movementXDistance = Math.abs(movementDistance)*-1;
+			}
+			
 			MoveByAction mba = new MoveByAction();
-			mba.setAmount(movementDistance, 0f);
+			mba.setAmount(movementXDistance, 0f);
 			mba.setDuration(movementSpeed);
 			addAction(mba);
 			reposition = false;
+			
+			
 		}
 		else {
 			
-			MoveByAction mba = new MoveByAction();
-			mba.setAmount(0f, -movementDistance);
-			mba.setDuration(movementSpeed);
-			addAction(mba);
+			movementYDistance = movementDistance;
+			
+			if(getY() > (level.getHeight()-hoverOffset) || !hoverPhase) {
+				
+				if(!hoverPhase && lastMoveTime == -1) {
+					//lastMoveTime = Spawner.getSeconds();
+				}
+				
+				MoveByAction mba = new MoveByAction();
+				mba.setAmount(0f, (movementYDistance*-1));
+				mba.setDuration(movementSpeed);
+				addAction(mba);
+			}
+			else {
+				
+				if(lastMoveTime == -1) {
+					lastMoveTime = Spawner.getSeconds();
+				}
+				
+				addAction(Actions.moveTo(level.getShip().getX(), getSprite().getY(), 5));
+			}
+			
+			
 		}
 		
-		
-		if(getY()+getHeight() < 0) {
-			this.remove();
-			this.body.destroyFixture(this.fixture);
-			//System.out.println("removed enemy!");
+		if(getY()+getHeight() < 0 && movementDistance > 0) {
+			//this.remove();
+			//this.body.destroyFixture(this.fixture);
+			
+			movementDistance *= -1;
+			//movementSpeed *= -1;
+		}
+		else if(getY()+getHeight() > level.getHeight()-hoverOffset && movementDistance < 0) {
+			movementDistance *= -1;
+			//movementSpeed *= -1;
+			System.out.println("go down");
 		}
 		
+
+		if(hoverPhase && lastMoveTime != -1 && Spawner.getSeconds()-lastMoveTime > 5) {
+			lastMoveTime = -1;
+			hoverPhase = false;
+		}
+		//else if(!hoverPhase && lastMoveTime != -1 && Spawner.getSeconds()-lastMoveTime > 5) {
+			
+		//}
 		
 	}
 	
@@ -82,7 +142,7 @@ public class Enemy extends GameActor {
 			
 			// Spawns the enemy at a random X location at the top of the screen
 			setBounds(randomX, (stage.getHeight()-(getSprite().getHeight()-100)), getSprite().getWidth(), getSprite().getHeight());
-			
+
 		}
 		
 	}
