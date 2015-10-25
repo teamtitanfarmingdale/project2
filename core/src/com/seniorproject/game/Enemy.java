@@ -30,6 +30,8 @@ public class Enemy extends GameActor {
 	float hoverOffset = 0;
 	boolean hoverPhase = true;
 	
+	float hoverSpeed = 5;
+	
 	public Enemy(World world, String spriteFile) {
 		super(world);
 		
@@ -48,6 +50,7 @@ public class Enemy extends GameActor {
 		movementSpeed = (float) (Math.random() * .01f)+.01f;
 		
 		hoverOffset = (float) (Math.random()*50f)+250;
+		hoverSpeed = (float) (Math.random()*3f)+2f;
 		
 
 	}
@@ -79,40 +82,59 @@ public class Enemy extends GameActor {
 			
 			movementYDistance = movementDistance;
 			
+			if(hoverPhase && getX() >= level.getShip().getX()-100 && getX() <= level.getShip().getX()+100) {
+				hoverPhase = false;
+				lastMoveTime = -1;
+				System.out.println("same x");
+			}
+			
+			
+			
+			
 			if(getY() > (level.getHeight()-hoverOffset) || !hoverPhase) {
-				
-				if(!hoverPhase && lastMoveTime == -1) {
-					//lastMoveTime = Spawner.getSeconds();
+				// Enemy is moving down the screen
+				if(!hoverPhase) {
+					movementYDistance *= 3;
 				}
 				
 				MoveByAction mba = new MoveByAction();
 				mba.setAmount(0f, (movementYDistance*-1));
 				mba.setDuration(movementSpeed);
+				
 				addAction(mba);
+				addAction(Actions.moveTo(level.getShip().getX(), getSprite().getY(), hoverSpeed));
+				
+				
 			}
 			else {
-				
+				// Enemy is in hover mode following the player
 				if(lastMoveTime == -1) {
 					lastMoveTime = Spawner.getSeconds();
 				}
 				
-				addAction(Actions.moveTo(level.getShip().getX(), getSprite().getY(), 5));
+				addAction(Actions.moveTo(level.getShip().getX(), getSprite().getY(), hoverSpeed));
+				
 			}
 			
 			
 		}
 		
 		if(getY()+getHeight() < 0 && movementDistance > 0) {
-			//this.remove();
-			//this.body.destroyFixture(this.fixture);
+			// Move enemy up
 			
 			movementDistance *= -1;
-			//movementSpeed *= -1;
+			//System.out.println("go up");
+			
 		}
 		else if(getY()+getHeight() > level.getHeight()-hoverOffset && movementDistance < 0) {
 			movementDistance *= -1;
-			//movementSpeed *= -1;
-			System.out.println("go down");
+			//System.out.println("go down");
+			
+			if(lastMoveTime == -1 && !hoverPhase) {
+				lastMoveTime = Spawner.getSeconds();
+				hoverPhase = true;
+			}
+			
 		}
 		
 
@@ -178,6 +200,12 @@ public class Enemy extends GameActor {
 	
 	public int getKillAwardPoints() {
 		return killAwardPoints;
+	}
+	
+	public void shoot() {
+		
+		
+		
 	}
 
 }

@@ -20,6 +20,8 @@ public class Ship extends GameActor {
 	
 	boolean rightKeyPressed = false;
 	boolean leftKeyPressed = false;
+	boolean upKeyPressed = false;
+	boolean downKeyPressed = false;
 	
 	float movementSpeed = .01f;
 	float movementDistance = 10f;
@@ -27,7 +29,9 @@ public class Ship extends GameActor {
 	// SHIP MOVEMENT CONSTRAINTS
 	float minX = 0;
 	float maxX = 0;
-		
+	float minY = 0;
+	float maxY = 0;
+	
 	float health = 100;
 	float armor = 100;
 	
@@ -116,6 +120,20 @@ public class Ship extends GameActor {
 			addAction(mba);
 		}
 		
+		if(upKeyPressed && getY() < maxY) {
+			MoveByAction mba = new MoveByAction();
+			mba.setAmount(0f, movementDistance);
+			mba.setDuration(movementSpeed);
+			addAction(mba);
+		}
+		else if(downKeyPressed && getY() > minY) {
+			MoveByAction mba = new MoveByAction();
+			mba.setAmount(0f,  movementDistance*-1);
+			mba.setDuration(movementSpeed);
+			addAction(mba);
+		}
+		
+		System.out.println(getY());
 		
 	}
 	
@@ -139,6 +157,9 @@ public class Ship extends GameActor {
 			minX = 0;
 			maxX = this.getStage().getWidth() - getWidth();
 			
+			minY = 10;
+			maxY = this.getStage().getHeight() - (getHeight()*5);
+			
 			stage.addListener(new ClickListener() {
 				
 				@Override
@@ -153,7 +174,6 @@ public class Ship extends GameActor {
 
 						level.addGameObject(bullet);
 						
-						//level.healthBar.setHealth(300);
 						
 						createBody();				
 					}
@@ -179,6 +199,13 @@ public class Ship extends GameActor {
 						case Input.Keys.A:
 							leftKeyPressed = true;
 							break;
+						case Input.Keys.W:
+							upKeyPressed = true;
+							System.out.println("up pressed");
+							break;
+						case Input.Keys.S:
+							downKeyPressed = true;
+							break;
 					}
 					
 					return true;
@@ -197,7 +224,14 @@ public class Ship extends GameActor {
 						break;
 					case Input.Keys.A:
 						leftKeyPressed = false;
-						break;				
+						break;			
+					case Input.Keys.W:
+						upKeyPressed = false;
+						System.out.println("up unpressed");
+						break;
+					case Input.Keys.S:
+						downKeyPressed = false;
+						break;
 				}
 				
 					createBody();

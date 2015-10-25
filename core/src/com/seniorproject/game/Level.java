@@ -160,7 +160,7 @@ public class Level extends Stage {
 		super.draw();
 		
 		// Comment this out to remove the boxes around the sprites
-		renderer.render(world, camera.combined);
+		//renderer.render(world, camera.combined);
 		
 	}
 	
@@ -192,44 +192,6 @@ public class Level extends Stage {
 					enemyB.reposition();
 					
 				}
-				/*
-				else if(collisionDataA.getActorType() == "Asteroid" && collisionDataB.getActorType() == "Asteroid") {
-					// MOVE ENEMIES THAT WERE COLLIDED
-					
-					//GameActor gameActorA = collisionDataA.getActor();
-					GameActor gameActorB = collisionDataB.getActor();
-					
-					//Asteroid enemyA = (Asteroid) gameActorA;
-					Asteroid enemyB = (Asteroid) gameActorB;
-					
-					enemyB.reposition();
-					
-				}
-				else if(collisionDataA.getActorType() == "Asteroid" && collisionDataB.getActorType() == "Enemy") {
-					// MOVE ENEMIES THAT WERE COLLIDED
-					
-					//GameActor gameActorA = collisionDataA.getActor();
-					GameActor gameActorB = collisionDataB.getActor();
-					
-					//Asteroid enemyA = (Asteroid) gameActorA;
-					Enemy enemyB = (Enemy) gameActorB;
-
-					enemyB.reposition();
-					
-				}
-				else if(collisionDataA.getActorType() == "Enemy" && collisionDataB.getActorType() == "Asteroid") {
-					// MOVE ENEMIES THAT WERE COLLIDED
-					
-					//GameActor gameActorA = collisionDataA.getActor();
-					GameActor gameActorB = collisionDataB.getActor();
-					
-					//Enemy enemyA = (Enemy) gameActorA;
-					Asteroid enemyB = (Asteroid) gameActorB;
-
-					enemyB.reposition();
-					
-				}
-				*/
 			}
 
 			@Override
@@ -307,6 +269,8 @@ public class Level extends Stage {
 						
 						collidedShip.hit(collidedEnemy.getCollisionDamage());
 						collidedShip.addCollidedObject(gameActorA);
+						
+						collidedEnemy.setDead(true);
 					}
 					
 				}
@@ -320,6 +284,7 @@ public class Level extends Stage {
 						
 						collidedShip.hit(collidedEnemy.getCollisionDamage());
 						collidedShip.addCollidedObject(gameActorB);
+						collidedEnemy.setDead(true);
 					}
 				}
 				

@@ -91,6 +91,7 @@ public class Bullet extends GameActor {
 			// DESTROY THE CURRENT BODY IF THERE IS ONE
 			if(body != null) {
 				body.destroyFixture(fixture);
+				actorWorld.destroyBody(body);
 			}
 			
 			// CREATE A NEW BODY
