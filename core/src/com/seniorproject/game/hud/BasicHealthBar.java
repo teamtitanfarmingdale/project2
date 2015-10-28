@@ -25,7 +25,7 @@ public class BasicHealthBar extends BaseHUD {
 		
 		System.out.println(totalHealth);
 		
-		barSprite.setSize((totalHealth/MAX_HEALTH)*healthBarWidth, 15);
+		barSprite.setSize((totalHealth/MAX_HEALTH)*healthBarWidth, 17);
 		positionSet = false;
 	}
 	
