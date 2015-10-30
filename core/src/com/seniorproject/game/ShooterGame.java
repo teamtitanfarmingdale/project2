@@ -5,37 +5,34 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
-
 public class ShooterGame extends ApplicationAdapter {
-	
+
 	private Level stage;
-	
+
 	public static int GAME_WIDTH = 1200;
 	public static int GAME_HEIGHT = 720;
-	
+
 	BitmapFont myFont;
-	
+
 	@Override
-	public void create () {
-		
+	public void create() {
+
 		stage = new Level();
-		Gdx.input.setInputProcessor(stage);		
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override
-	public void render () {
+	public void render() {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 	}
-	
-	
+
 	@Override
 	public void dispose() {
-		if(stage != null) {
+		if (stage != null) {
 			stage.dispose();
 		}
 	}
 
-	
 }

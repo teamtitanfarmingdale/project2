@@ -2,6 +2,7 @@ package com.seniorproject.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -19,7 +20,14 @@ public class LevelBackground extends Actor {
 	boolean upPressed = false;
 	float backgroundPosition = 0f;
 	
+	int per =0;
+	
 	public LevelBackground() {
+		//background music
+		Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/x.mp3"));
+		wavSound.loop(.70f);
+		System.out.println("llassalslalsalslaslalsla");
+		System.out.println(per++);
 		
 		background = new Texture(Gdx.files.internal("starsbg1.png"));
 		background.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);

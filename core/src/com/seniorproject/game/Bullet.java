@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 
 public class Bullet extends GameActor {
 
-	private int damage = 10;
+	private int damage = 20;
 	
 	private Texture bulletTexture = new Texture(Gdx.files.internal("bullet.png"));
 	private Sprite bulletSprite = new Sprite(bulletTexture);
@@ -36,6 +36,7 @@ public class Bullet extends GameActor {
 	public Bullet(World world, float x, float y) {
 		this(world);
 		setBounds(x, y, bulletSprite.getWidth(), bulletSprite.getHeight());
+		
 	}
 	
 	
