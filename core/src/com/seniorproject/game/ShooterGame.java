@@ -1,38 +1,25 @@
 package com.seniorproject.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.seniorproject.game.levels.Level;
+import com.seniorproject.game.screens.GameScreen;
 
-public class ShooterGame extends ApplicationAdapter {
+
+public class ShooterGame extends Game {
 
 	private Level stage;
 
 	public static int GAME_WIDTH = 1200;
 	public static int GAME_HEIGHT = 720;
 
-	BitmapFont myFont;
-
 	@Override
 	public void create() {
+		
+		this.setScreen(new GameScreen());
 
-		stage = new Level();
-		Gdx.input.setInputProcessor(stage);
 	}
 
-	@Override
-	public void render() {
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		stage.act(Gdx.graphics.getDeltaTime());
-		stage.draw();
-	}
-
-	@Override
-	public void dispose() {
-		if (stage != null) {
-			stage.dispose();
-		}
-	}
 
 }

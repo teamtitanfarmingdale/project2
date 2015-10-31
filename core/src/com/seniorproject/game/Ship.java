@@ -165,7 +165,7 @@ public class Ship extends GameActor {
 				@Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 					
-					if(button == Input.Buttons.LEFT) {
+					if(!level.screen.gamePaused && button == Input.Buttons.LEFT) {
 						
 						Bullet bullet = new Bullet(getWorld(), Ship.this.getX(), Ship.this.getY());
 						

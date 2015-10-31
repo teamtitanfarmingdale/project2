@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.seniorproject.game.levels.Level;
 
 public class LevelBackground extends Actor {
 
@@ -20,7 +21,9 @@ public class LevelBackground extends Actor {
 	boolean upPressed = false;
 	float backgroundPosition = 0f;
 
-	public LevelBackground() {
+	Level level;
+	
+	public LevelBackground(Level level) {
 		// background music
 		Sound wavSound = Gdx.audio.newSound(Gdx.files
 				.internal("sounds/action.wav"));
@@ -32,11 +35,14 @@ public class LevelBackground extends Actor {
 		bgSprite = new Sprite(background);
 		setBounds(bgSprite.getX(), bgSprite.getY(), bgSprite.getWidth(),
 				bgSprite.getHeight());
+		
+		this.level = level;
 	}
 
 	@Override
 	public void draw(Batch batch, float alpha) {
 
+		/*
 		if (upPressed) {
 			backgroundPosition -= movementSpeedMoving;
 			bgSprite.setV(backgroundPosition);
@@ -46,8 +52,16 @@ public class LevelBackground extends Actor {
 			bgSprite.setV(backgroundPosition);
 			bgSprite.setV2(backgroundPosition + 1);
 		}
-
+		*/
+		
+		if(!level.screen.gamePaused) {
+			backgroundPosition -= movementSpeedIdle;
+			bgSprite.setV(backgroundPosition);
+			bgSprite.setV2(backgroundPosition + 1);
+		}
+		
 		bgSprite.draw(batch);
+		
 	}
 
 	@Override

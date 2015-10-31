@@ -1,7 +1,9 @@
-package com.seniorproject.game;
+package com.seniorproject.game.levels;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -12,9 +14,24 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.seniorproject.enemies.Asteroid;
+import com.seniorproject.enemies.AsteroidSpawner;
+import com.seniorproject.enemies.BaseEnemy;
+import com.seniorproject.enemies.Boss;
+import com.seniorproject.enemies.Enemy;
+import com.seniorproject.enemies.EnemySpawner;
+import com.seniorproject.game.Bullet;
+import com.seniorproject.game.CollisionData;
+import com.seniorproject.game.GameActor;
+import com.seniorproject.game.LevelBackground;
+import com.seniorproject.game.Ship;
+import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.hud.*;
+import com.seniorproject.game.screens.GameScreen;
 
 public class Level extends Stage {
 
@@ -33,6 +50,8 @@ public class Level extends Stage {
 	private Group gameObjects;
 	protected String enemySpriteFile = "enemy2.png";
 	protected String asteroidSpriteFile = "asteroid.png";
+	
+	public GameScreen screen;
 	
 	public Score score;
 	public Health healthBar;
@@ -64,7 +83,7 @@ public class Level extends Stage {
 		asteroidSpawner = new AsteroidSpawner(world, asteroidSpriteFile);
 		
 		// The background
-		background = new LevelBackground();
+		background = new LevelBackground(this);
 		
 		// The player's ship
 		ship = new Ship(world);
@@ -113,6 +132,8 @@ public class Level extends Stage {
 		
 		// Sets up the collision detection
 		collisionDetection();
+		
+		pauseListener();
 		
 	}
 	
@@ -168,6 +189,27 @@ public class Level extends Stage {
 	public void dispose() {
 		super.dispose();
 	}
+	
+	public void setScreen(GameScreen screen) {
+		this.screen = screen;
+	}
+	
+	public void pauseListener() {
+		
+		this.addListener(new InputListener() {
+			@Override
+			public boolean keyDown(InputEvent event, int keycode) {
+				
+				if(keycode == Input.Keys.P) {
+					screen.pause();
+				}
+				
+				return true;
+			}
+		});
+		
+	}
+	
 	
 	public void collisionDetection() {
 		

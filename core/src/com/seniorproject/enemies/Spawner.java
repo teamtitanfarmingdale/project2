@@ -1,7 +1,8 @@
-package com.seniorproject.game;
+package com.seniorproject.enemies;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.seniorproject.game.levels.Level;
 
 public class Spawner extends Actor {
 
@@ -34,7 +35,7 @@ public class Spawner extends Actor {
 		this.maxEnemies = maxEnemies;
 	}
 	
-	protected static long getSeconds() {
+	public static long getSeconds() {
 		return System.nanoTime()/ONE_BILLION;
 	}
 	

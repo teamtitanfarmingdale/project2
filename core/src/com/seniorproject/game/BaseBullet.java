@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.seniorproject.enemies.Asteroid;
+import com.seniorproject.enemies.BaseEnemy;
+import com.seniorproject.game.levels.Level;
 
 public class BaseBullet extends GameActor {
 
