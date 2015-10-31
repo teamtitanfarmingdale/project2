@@ -22,10 +22,10 @@ public class EnemySpawner extends Spawner {
 		deadEnemyList = new ArrayList<Enemy>();
 		
 
-		maxEnemies = 30;
+		maxEnemies = 300;
 		maxEnemiesAtOnce = 10;
 		totalEnemies = 0;
-		spawnRate = 3;
+		spawnRate = 2;
 		lastSpawnTime = 0;
 		enemiesToSpawnEachInterval = 2;
 		enemySpawnIntervalCount = 0;
