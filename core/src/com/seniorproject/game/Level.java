@@ -121,7 +121,6 @@ public class Level extends Stage {
 
 		// Sets up the collision detection
 		collisionDetection();
-
 	}
 
 	public void addGameObject(Actor actor) {

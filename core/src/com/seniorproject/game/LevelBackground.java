@@ -19,83 +19,74 @@ public class LevelBackground extends Actor {
 	float movementSpeedMoving = .0015f;
 	boolean upPressed = false;
 	float backgroundPosition = 0f;
-	
-	int per =0;
-	
+
 	public LevelBackground() {
-		//background music
-		Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/x.mp3"));
-		wavSound.loop(.70f);
-		System.out.println("llassalslalsalslaslalsla");
-		System.out.println(per++);
-		
+		// background music
+		Sound wavSound = Gdx.audio.newSound(Gdx.files
+				.internal("sounds/action.wav"));
+		wavSound.loop(.12f);// Plays the sound in a infinite loop. @param volume level
+
 		background = new Texture(Gdx.files.internal("starsbg1.png"));
-		background.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+		background.setWrap(Texture.TextureWrap.Repeat,
+				Texture.TextureWrap.Repeat);
 		bgSprite = new Sprite(background);
-		setBounds(bgSprite.getX(), bgSprite.getY(), bgSprite.getWidth(), bgSprite.getHeight());
-		
+		setBounds(bgSprite.getX(), bgSprite.getY(), bgSprite.getWidth(),
+				bgSprite.getHeight());
 	}
-	
+
 	@Override
 	public void draw(Batch batch, float alpha) {
 
-		if(upPressed) {
+		if (upPressed) {
 			backgroundPosition -= movementSpeedMoving;
 			bgSprite.setV(backgroundPosition);
-			bgSprite.setV2(backgroundPosition+1);
-		}
-		else {
+			bgSprite.setV2(backgroundPosition + 1);
+		} else {
 			backgroundPosition -= movementSpeedIdle;
 			bgSprite.setV(backgroundPosition);
-			bgSprite.setV2(backgroundPosition+1);
+			bgSprite.setV2(backgroundPosition + 1);
 		}
-		
+
 		bgSprite.draw(batch);
-		
 	}
-	
+
 	@Override
 	public void act(float delta) {
-		super.act(delta);		
+		super.act(delta);
 	}
-	
+
 	@Override
 	public void positionChanged() {
 		super.positionChanged();
 	}
-	
+
 	@Override
 	public void setStage(Stage stage) {
 		super.setStage(stage);
-		if(stage != null) {
-			
+		if (stage != null) {
+
 			this.getParent().addListener(new InputListener() {
-				
+
 				@Override
 				public boolean keyDown(InputEvent event, int keycode) {
-					
-					if(keycode == Input.Keys.W) {
-						upPressed = true;
 
+					if (keycode == Input.Keys.W) {
+						upPressed = true;
 					}
-					
+
 					return true;
 				}
-				
+
 				@Override
 				public boolean keyUp(InputEvent event, int keycode) {
-					
-					if(keycode == Input.Keys.W) {
+
+					if (keycode == Input.Keys.W) {
 						upPressed = false;
 					}
-					
+
 					return true;
 				}
-				
 			});
-			
 		}
-		
 	}
-	
 }
