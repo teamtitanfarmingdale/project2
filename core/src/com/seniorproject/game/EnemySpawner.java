@@ -9,8 +9,14 @@ public class EnemySpawner extends Spawner {
 
 	int maxEnemiesAtOnce;
 
+	boolean spawnedBoss = false;
+	
 	ArrayList<Enemy> enemyList;
 	ArrayList<Enemy> deadEnemyList;
+	
+	
+	
+	Boss boss;
 	
 	
 	public EnemySpawner(World world, String enemySpriteFile) {
@@ -20,14 +26,14 @@ public class EnemySpawner extends Spawner {
 		
 		enemyList = new ArrayList<Enemy>();
 		deadEnemyList = new ArrayList<Enemy>();
+		boss = new Boss(world, "temp-boss.png");
 		
-
-		maxEnemies = 300;
+		maxEnemies = 15;
 		maxEnemiesAtOnce = 10;
 		totalEnemies = 0;
-		spawnRate = 2;
+		spawnRate = 3;
 		lastSpawnTime = 0;
-		enemiesToSpawnEachInterval = 2;
+		enemiesToSpawnEachInterval = 5;
 		enemySpawnIntervalCount = 0;
 	}
 	
@@ -67,6 +73,14 @@ public class EnemySpawner extends Spawner {
 		}
 		
 		deadEnemyList.clear();
+		
+		if(totalEnemies == maxEnemies && enemyList.size() == 0 && !spawnedBoss) {
+			
+			level.addGameObject(boss);
+			spawnedBoss = true;
+			
+		}
+		
 		
 	}
 	

@@ -21,6 +21,7 @@ public abstract class GameActor extends Actor {
 	protected Sprite sprite;
 	protected Texture texture;
 	protected Level level;
+	protected boolean died = false;
 	
 	public CollisionData collisionData;
 	
@@ -61,8 +62,13 @@ public abstract class GameActor extends Actor {
 			body.resetMassData();
 			shape.dispose();
 		}
-		else if(getStage() != null && isDead()) {
+		else if(getStage() != null && isDead() && !died) {
+			
+			System.out.println(this.getClass()+" died");
 			body.destroyFixture(fixture);
+			actorWorld.destroyBody(body);
+			died = true;
+			
 			this.remove();
 		}
 	}
