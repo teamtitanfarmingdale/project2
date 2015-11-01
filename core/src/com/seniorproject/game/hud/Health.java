@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.seniorproject.game.ShooterGame;
 
 public class Health extends BasicHealthBar {
 
@@ -53,10 +54,15 @@ public class Health extends BasicHealthBar {
 	float bottomLeftWingY;
 
 	public LifeManager lifeManager;
-
-	public Health() {
+	ShooterGame game;
+	
+	public Health(ShooterGame g) {
 
 		lifeManager = new LifeManager(3);
+		
+		game = g;
+		lifeManager.setGame(game);
+		
 
 		backBarTexture = new Texture(
 				Gdx.files.internal("hud/health/backbar.png"));

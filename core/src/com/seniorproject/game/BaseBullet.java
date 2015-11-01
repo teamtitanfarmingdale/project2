@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.seniorproject.enemies.Asteroid;
-import com.seniorproject.enemies.BaseEnemy;
+import com.seniorproject.game.enemies.Asteroid;
+import com.seniorproject.game.enemies.BaseEnemy;
 import com.seniorproject.game.levels.Level;
 
 public class BaseBullet extends GameActor {
@@ -104,7 +104,6 @@ public class BaseBullet extends GameActor {
 			this.remove();
 			if(collidedEnemy != null) {
 				collidedEnemy.createBody();
-				System.out.println("fixed!");
 			}
 		}
 	}
@@ -116,13 +115,13 @@ public class BaseBullet extends GameActor {
 	
 	public void setCollidedEnemy(GameActor enemy) {
 		
-		if(enemy.getCollisionData().getActorType() == "Enemy" || enemy.getCollisionData().getActorType() == "Boss") {
+		if(enemy.getCollisionData().getActorType() == "Enemy" || enemy.getCollisionData().getActorType() == "Boss" || enemy.getCollisionData().getActorType() == "Asteroid") {
 			BaseEnemy tempEnemy = (BaseEnemy) enemy;
 			tempEnemy.lowerHealth(damage);
 		}
-		else if(enemy.getCollisionData().getActorType() == "Asteroid") {
-			Asteroid tempAsteroid = (Asteroid) enemy;
-			tempAsteroid.lowerHealth(damage);
+		else if(enemy.getCollisionData().getActorType() == "Ship") {
+			Ship tempShip = (Ship) enemy;
+			tempShip.hit(damage);
 		}
 		
 		collidedEnemy = enemy;

@@ -16,7 +16,6 @@ public class BaseHUD extends Actor {
 	
 	public void setPositionXOffsetWidth(float offset) {
 		positionXOffsetWidth = offset;
-		System.out.println("called"+getClass().getName());
 	}
 	
 }

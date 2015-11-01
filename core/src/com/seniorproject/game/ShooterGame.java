@@ -15,9 +15,14 @@ public class ShooterGame extends Game {
 	public static int GAME_WIDTH = 1200;
 	public static int GAME_HEIGHT = 720;
 
+	public static float MUSIC_VOLUME = 100;
+	public static float SFX_VOLUME = 100;
+	
+	
 	// Screen Constants
 	public static final int MAIN_MENU = 1;
 	public static final int GAME = 2;
+	public static final int PAUSE = 3;
 	
 	private Screen currentScreen;
 	
@@ -41,7 +46,7 @@ public class ShooterGame extends Game {
 				break;
 			case GAME:
 				currentScreen.dispose();
-				currentScreen = new GameScreen();
+				currentScreen = new GameScreen(this);
 				this.setScreen(currentScreen);
 				break;
 		}

@@ -1,4 +1,4 @@
-package com.seniorproject.enemies;
+package com.seniorproject.game.enemies;
 
 import java.util.ArrayList;
 

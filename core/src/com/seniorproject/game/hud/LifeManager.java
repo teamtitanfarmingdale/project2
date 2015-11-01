@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.seniorproject.game.ShooterGame;
 
 public class LifeManager extends Actor {
 
@@ -17,12 +18,15 @@ public class LifeManager extends Actor {
 	float startingY = 0;
 	float lifeSpacing = 20;
 	
+	ShooterGame game;
+	
 	public LifeManager() {
 		
 		lifeSprites = new ArrayList<Sprite>();
 		lifeTexture = new Texture(Gdx.files.internal("hud/life/life.png"));
-		
 	}
+	
+	
 	
 	public LifeManager(int lives) {
 		this();
@@ -31,11 +35,21 @@ public class LifeManager extends Actor {
 		}
 	}
 	
+	public void setGame(ShooterGame g) {
+		game = g;
+	}
+	
 	public void removeLife() {
 		
 		if(lifeSprites.size() > 0) {
 			
 			lifeSprites.remove(lifeSprites.size()-1);
+			
+		}
+		else {
+			
+			
+			game.switchScreen(1);
 			
 		}
 		

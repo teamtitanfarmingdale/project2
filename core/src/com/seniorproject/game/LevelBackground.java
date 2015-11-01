@@ -28,7 +28,9 @@ public class LevelBackground extends Actor {
 		wavSound = Gdx.audio.newSound(Gdx.files
 				.internal("sounds/action.wav"));
 		wavSound.loop(.12f);// Plays the sound in a infinite loop. @param volume level
-
+		long soundID = wavSound.play();
+		wavSound.setVolume(soundID, ShooterGame.MUSIC_VOLUME);
+		
 		background = new Texture(Gdx.files.internal("starsbg1.png"));
 		background.setWrap(Texture.TextureWrap.Repeat,
 				Texture.TextureWrap.Repeat);

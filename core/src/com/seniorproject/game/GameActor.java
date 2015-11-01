@@ -65,7 +65,6 @@ public abstract class GameActor extends Actor {
 		}
 		else if(getStage() != null && isDead() && !died) {
 			
-			System.out.println(this.getClass()+" died");
 			body.destroyFixture(fixture);
 			actorWorld.destroyBody(body);
 			died = true;

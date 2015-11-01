@@ -18,19 +18,21 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.seniorproject.enemies.Asteroid;
-import com.seniorproject.enemies.AsteroidSpawner;
-import com.seniorproject.enemies.BaseEnemy;
-import com.seniorproject.enemies.Boss;
-import com.seniorproject.enemies.Enemy;
-import com.seniorproject.enemies.EnemySpawner;
 import com.seniorproject.game.Bullet;
 import com.seniorproject.game.CollisionData;
+import com.seniorproject.game.CollisionHelper;
 import com.seniorproject.game.GameActor;
 import com.seniorproject.game.GameScreen;
 import com.seniorproject.game.LevelBackground;
 import com.seniorproject.game.Ship;
 import com.seniorproject.game.ShooterGame;
+import com.seniorproject.game.collisionlisteners.*;
+import com.seniorproject.game.enemies.Asteroid;
+import com.seniorproject.game.enemies.AsteroidSpawner;
+import com.seniorproject.game.enemies.BaseEnemy;
+import com.seniorproject.game.enemies.Boss;
+import com.seniorproject.game.enemies.Enemy;
+import com.seniorproject.game.enemies.EnemySpawner;
 import com.seniorproject.game.hud.*;
 
 public class Level extends Stage {
@@ -93,7 +95,7 @@ public class Level extends Stage {
 		// Used for debugging, shows the boxes around the sprites
 		renderer = new Box2DDebugRenderer();
 		
-		healthBar = new Health();
+		healthBar = new Health(screen.game);
 		armorBar = new Armor();
 		score = new Score();
 		
@@ -210,6 +212,20 @@ public class Level extends Stage {
 		
 	}
 	
+	/*
+	public void collisionDetection() {
+		
+		world.setContactListener(new PlayerCollision("Ship", "Enemy"));
+		//world.setContactListener(new PlayerCollision("Ship", "Asteroid"));
+		//world.setContactListener(new PlayerCollision("Ship", "Boss"));
+		//world.setContactListener(new BulletCollision("Enemy", collisionList));
+		//world.setContactListener(new BulletCollision("Bullet", "Boss", collisionList));
+		//world.setContactListener(new BulletCollision("EnemyBullet", "Ship", collisionList));
+		//world.setContactListener(new RepositionCollision("Enemy", "Enemy"));
+		
+		
+	}
+	*/
 	
 	public void collisionDetection() {
 		
@@ -217,23 +233,7 @@ public class Level extends Stage {
 
 			@Override
 			public void beginContact(Contact contact) {
-
-				// CollisionData contains the actual object that was collided.
-				CollisionData collisionDataA = (CollisionData) contact.getFixtureA().getUserData();
-				CollisionData collisionDataB = (CollisionData) contact.getFixtureB().getUserData();
-				
-				if(collisionDataA.getActorType() == "Enemy" && collisionDataB.getActorType() == "Enemy") {
-					// MOVE ENEMIES THAT WERE COLLIDED
-					
-					//GameActor gameActorA = collisionDataA.getActor();
-					GameActor gameActorB = collisionDataB.getActor();
-					
-					//Enemy enemyA = (Enemy) gameActorA;
-					Enemy enemyB = (Enemy) gameActorB;
-
-					enemyB.reposition();
-					
-				}
+				CollisionHelper.repositionCollision(contact, "Enemy", "Enemy");
 			}
 
 			@Override
@@ -249,145 +249,13 @@ public class Level extends Stage {
 				GameActor gameActorB = collisionDataB.getActor();
 				
 				
-				/*
-				 * Handles collisions between Bullets and Enemies
-				 * 
-				 * When a collision event happens we are passed in a Contact object that has the 2 collided objects in 
-				 * FixtureA and FixtureB
-				 * 
-				 * Depending on the order in which the collision happens the bullet and enemy can be either FixtureA or FixtureB
-				 * So the two if statements below handle either scenario
-				 * 
-				 */
-				
-				// Collision for bullets and enemies:
-				if(collisionDataA.getActorType() == "Enemy" && collisionDataB.getActorType() == "Bullet" && !collisionList.contains(gameActorB)) {
-					Bullet bullet = (Bullet) gameActorB;
-					
-					// Tell the bullet which enemy object it hit
-					bullet.setCollidedEnemy((Enemy) gameActorA);
-					
-					// Add the bullet to the collision list to be removed from the screen
-					collisionList.add(gameActorB);
-					
-					//System.out.println("BULLET COLLISION1!!!");
-				}
-				else if(collisionDataA.getActorType() == "Bullet" && collisionDataB.getActorType() == "Enemy" && !collisionList.contains(gameActorA)) {
-					Bullet bullet = (Bullet) gameActorA;
-					bullet.setCollidedEnemy((Enemy) gameActorB);
-					collisionList.add(gameActorA);
-					//System.out.println("BULLET COLLISION2!!!");
-				}
-
-				
-				// Collision for bullets and asteroids:
-				if(collisionDataA.getActorType() == "Asteroid" && collisionDataB.getActorType() == "Bullet" && !collisionList.contains(gameActorB)) {
-					Bullet bullet = (Bullet) gameActorB;
-					
-					// Tell the bullet which enemy object it hit
-					bullet.setCollidedEnemy((Asteroid) gameActorA);
-					
-					// Add the bullet to the collision list to be removed from the screen
-					collisionList.add(gameActorB);
-					
-					//System.out.println("BULLET COLLISION1!!!");
-				}
-				else if(collisionDataA.getActorType() == "Bullet" && collisionDataB.getActorType() == "Asteroid" && !collisionList.contains(gameActorA)) {
-					Bullet bullet = (Bullet) gameActorA;
-					bullet.setCollidedEnemy((Asteroid) gameActorB);
-					collisionList.add(gameActorA);
-					//System.out.println("BULLET COLLISION2!!!");
-				}
-				
-				// Collision for bullets and bosses:
-				if(collisionDataA.getActorType() == "Boss" && collisionDataB.getActorType() == "Bullet" && !collisionList.contains(gameActorB)) {
-					Bullet bullet = (Bullet) gameActorB;
-					
-					// Tell the bullet which enemy object it hit
-					bullet.setCollidedEnemy((Boss) gameActorA);
-					
-					// Add the bullet to the collision list to be removed from the screen
-					collisionList.add(gameActorB);
-					
-					//System.out.println("BULLET COLLISION1!!!");
-				}
-				else if(collisionDataA.getActorType() == "Bullet" && collisionDataB.getActorType() == "Boss" && !collisionList.contains(gameActorA)) {
-					Bullet bullet = (Bullet) gameActorA;
-					bullet.setCollidedEnemy((Boss) gameActorB);
-					collisionList.add(gameActorA);
-					//System.out.println("BULLET COLLISION2!!!");
-				}
-				
-				
-
-				
-				// HANDLE COLLISIONS BETWEEN PLAYER AND ENEMY
-				
-				if((collisionDataA.getActorType() == "Enemy" || collisionDataA.getActorType() == "Boss") && collisionDataB.getActorType() == "Ship") {
-					
-					Ship collidedShip = (Ship) gameActorB;
-					
-					if(!collidedShip.hasCollidedWith(gameActorA)) {
-						
-						BaseEnemy collidedEnemy = (BaseEnemy) gameActorA;
-						
-						collidedShip.hit(collidedEnemy.getCollisionDamage());
-						collidedShip.addCollidedObject(gameActorA);
-						
-						if(collisionDataA.getActorType() == "Enemy") {
-							collidedEnemy.setDead(true);
-						}
-						
-					}
-					
-				}
-				else if(collisionDataA.getActorType() == "Ship" && (collisionDataB.getActorType() == "Enemy" || collisionDataB.getActorType() == "Boss")) {
-					
-					Ship collidedShip = (Ship) gameActorA;
-					
-					if(!collidedShip.hasCollidedWith(gameActorB)) {
-						
-						BaseEnemy collidedEnemy = (BaseEnemy) gameActorB;
-						
-						collidedShip.hit(collidedEnemy.getCollisionDamage());
-						collidedShip.addCollidedObject(gameActorB);
-						
-						if(collisionDataB.getActorType() == "Enemy") {
-							collidedEnemy.setDead(true);
-						}
-					
-					}
-				}
-				
-				
-				// HANDLE COLLISIONS BETWEEN PLAYER AND ASTEROID
-				if(collisionDataA.getActorType() == "Asteroid" && collisionDataB.getActorType() == "Ship") {
-					
-					Ship collidedShip = (Ship) gameActorB;
-					
-					if(!collidedShip.hasCollidedWith(gameActorA)) {
-						
-						Asteroid collidedEnemy = (Asteroid) gameActorA;
-						
-						collidedShip.hit(collidedEnemy.getCollisionDamage());
-						collidedShip.addCollidedObject(gameActorA);
-					}
-					
-				}
-				else if(collisionDataA.getActorType() == "Ship" && collisionDataB.getActorType() == "Asteroid") {
-					
-					Ship collidedShip = (Ship) gameActorA;
-					
-					if(!collidedShip.hasCollidedWith(gameActorB)) {
-						
-						Asteroid collidedEnemy = (Asteroid) gameActorB;
-						
-						collidedShip.hit(collidedEnemy.getCollisionDamage());
-						collidedShip.addCollidedObject(gameActorB);
-					}
-				}
-				
-				
+				CollisionHelper.bulletCollision(contact, collisionList, "Enemy", "Bullet");
+				CollisionHelper.bulletCollision(contact, collisionList, "Asteroid", "Bullet");
+				CollisionHelper.bulletCollision(contact, collisionList, "Boss", "Bullet");
+				CollisionHelper.bulletCollision(contact, collisionList, "Ship", "EnemyBullet");
+				CollisionHelper.playerCollision(contact, "Enemy", true);
+				CollisionHelper.playerCollision(contact, "Asteroid", true);
+				CollisionHelper.playerCollision(contact, "Boss", false);
 				
 				
 			}

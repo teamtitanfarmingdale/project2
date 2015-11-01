@@ -1,4 +1,4 @@
-package com.seniorproject.enemies;
+package com.seniorproject.game.enemies;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.seniorproject.game.levels.Level;

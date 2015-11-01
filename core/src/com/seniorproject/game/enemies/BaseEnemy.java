@@ -1,4 +1,4 @@
-package com.seniorproject.enemies;
+package com.seniorproject.game.enemies;
 
 
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -39,6 +39,7 @@ public class BaseEnemy extends GameActor {
 	
 	protected float diveRadius = 100;
 	
+	protected boolean customMovement = false;
 	
 	
 	public BaseEnemy(World world, String spriteFile) {
@@ -67,109 +68,111 @@ public class BaseEnemy extends GameActor {
 	}
 	
 	
+
+	
 	public void act(float delta) {
 		super.act(delta);
 		
-		if(!level.screen.gamePaused) {
-			
-			if(health <= 0) {
-				level.score.addToScore(killAwardPoints);
-				setDead(true);
-			}
-			else if(reposition) {
+		if(!customMovement) {
+			if(!level.screen.gamePaused) {
 				
-				movementXDistance = movementDistance;
-				if(getSprite().getX() > (level.getWidth()/2)) {
-					movementXDistance = Math.abs(movementDistance)*-1;
+				if(health <= 0) {
+					level.score.addToScore(killAwardPoints);
+					setDead(true);
 				}
-				
-				MoveByAction mba = new MoveByAction();
-				mba.setAmount(movementXDistance, 0f);
-				mba.setDuration(movementSpeed);
-				addAction(mba);
-				reposition = false;
-				
-				
-			}
-			else {
-				
-				movementYDistance = movementDistance;
-				
-				if(hoverPhase && getX() >= level.getShip().getX()-diveRadius && getX() <= level.getShip().getX()+diveRadius) {
-					hoverPhase = false;
-					lastMoveTime = -1;
-					System.out.println("same x");
-				}
-				
-				
-				
-				
-				if(getY() > (level.getHeight()-hoverOffset) || !hoverPhase) {
-					// Enemy is moving down the screen
-					if(!hoverPhase) {
-						movementYDistance *= 3;
+				else if(reposition) {
+					
+					movementXDistance = movementDistance;
+					if(getSprite().getX() > (level.getWidth()/2)) {
+						movementXDistance = Math.abs(movementDistance)*-1;
 					}
 					
 					MoveByAction mba = new MoveByAction();
-					mba.setAmount(0f, (movementYDistance*-1));
+					mba.setAmount(movementXDistance, 0f);
 					mba.setDuration(movementSpeed);
-					
 					addAction(mba);
-					addAction(Actions.moveTo(level.getShip().getX(), getSprite().getY(), hoverSpeed));
+					reposition = false;
 					
 					
 				}
 				else {
-					// Enemy is in hover mode following the player
-					if(lastMoveTime == -1) {
+					
+					movementYDistance = movementDistance;
+					
+					if(hoverPhase && getX() >= level.getShip().getX()-diveRadius && getX() <= level.getShip().getX()+diveRadius) {
+						hoverPhase = false;
+						lastMoveTime = -1;
+					}
+					
+					
+					
+					
+					if(getY() > (level.getHeight()-hoverOffset) || !hoverPhase) {
+						// Enemy is moving down the screen
+						if(!hoverPhase) {
+							movementYDistance *= 3;
+						}
+						
+						MoveByAction mba = new MoveByAction();
+						mba.setAmount(0f, (movementYDistance*-1));
+						mba.setDuration(movementSpeed);
+						
+						addAction(mba);
+						addAction(Actions.moveTo(level.getShip().getX(), getSprite().getY(), hoverSpeed));
+						
+						
+					}
+					else {
+						// Enemy is in hover mode following the player
+						if(lastMoveTime == -1) {
+							lastMoveTime = Spawner.getSeconds();
+						}
+						
+						
+						if(lastShootTime == -1) {
+							lastShootTime = Spawner.getSeconds();
+						}
+						
+						if(Spawner.getSeconds() - lastShootTime > shootInterval) {
+							shoot();
+							lastShootTime = Spawner.getSeconds();
+						}
+						
+						
+						addAction(Actions.moveTo(level.getShip().getX(), getSprite().getY(), hoverSpeed));
+						
+					}
+					
+					
+				}
+				
+				if(getY()+getHeight() < 0 && movementDistance > 0) {
+					// Move enemy up
+					
+					movementDistance *= -1;
+					//System.out.println("go up");
+					
+				}
+				else if(getY()+getHeight() > level.getHeight()-hoverOffset && movementDistance < 0) {
+					movementDistance *= -1;
+					//System.out.println("go down");
+					
+					if(lastMoveTime == -1 && !hoverPhase) {
 						lastMoveTime = Spawner.getSeconds();
+						hoverPhase = true;
 					}
-					
-					
-					if(lastShootTime == -1) {
-						lastShootTime = Spawner.getSeconds();
-					}
-					
-					if(Spawner.getSeconds() - lastShootTime > shootInterval) {
-						shoot();
-						lastShootTime = Spawner.getSeconds();
-					}
-					
-					
-					addAction(Actions.moveTo(level.getShip().getX(), getSprite().getY(), hoverSpeed));
 					
 				}
 				
-				
-			}
-			
-			if(getY()+getHeight() < 0 && movementDistance > 0) {
-				// Move enemy up
-				
-				movementDistance *= -1;
-				//System.out.println("go up");
-				
-			}
-			else if(getY()+getHeight() > level.getHeight()-hoverOffset && movementDistance < 0) {
-				movementDistance *= -1;
-				//System.out.println("go down");
-				
-				if(lastMoveTime == -1 && !hoverPhase) {
-					lastMoveTime = Spawner.getSeconds();
-					hoverPhase = true;
+		
+				if(hoverPhase && lastMoveTime != -1 && Spawner.getSeconds()-lastMoveTime > 5) {
+					lastMoveTime = -1;
+					hoverPhase = false;
 				}
-				
-			}
 			
-	
-			if(hoverPhase && lastMoveTime != -1 && Spawner.getSeconds()-lastMoveTime > 5) {
-				lastMoveTime = -1;
-				hoverPhase = false;
+			
 			}
-		
-		
 		}
-		
 	}
 	
 	public void draw(Batch batch, float alpha) {
@@ -203,7 +206,6 @@ public class BaseEnemy extends GameActor {
 	public void lowerHealth(int damage) {
 		health -= damage;
 		level.score.addToScore(hitAwardPoints);
-		System.out.println(health);
 	}
 	
 	public void reposition() {

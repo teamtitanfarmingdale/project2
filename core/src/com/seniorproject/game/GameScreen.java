@@ -9,13 +9,15 @@ public class GameScreen implements Screen {
 
 	
 	private Level stage;
-
+	public ShooterGame game;
 	public boolean gamePaused = false;
 	
 	
-	public GameScreen() {
+	public GameScreen(ShooterGame g) {
+		game = g;
 		create();
 	}
+	
 	
 	public void create() {
 		

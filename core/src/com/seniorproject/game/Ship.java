@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.seniorproject.game.enemies.Boss;
+import com.seniorproject.game.enemies.Spawner;
 
 public class Ship extends GameActor {
 
@@ -86,11 +88,26 @@ public class Ship extends GameActor {
 	public void addCollidedObject(GameActor actor) {
 		if(collidedObjects.indexOf(actor) == -1) {
 			collidedObjects.add(actor);
+			
+			if(actor.getCollisionData().getActorType() == "Boss") {
+				Boss tempBoss = (Boss) actor;
+				tempBoss.setLastShipCollision();
+			}
+			
 		}
 	}
 	
 	public boolean hasCollidedWith(GameActor actor) {
 		boolean returnVal = (collidedObjects.indexOf(actor) != -1);
+		
+		if(returnVal && actor.getCollisionData().getActorType() == "Boss") {
+			Boss tempBoss = (Boss) actor;
+			if(Spawner.getSeconds() - tempBoss.getLastShipCollision() > 1.5) {
+				collidedObjects.remove(actor);
+				returnVal = false;
+			}
+		}
+				
 		return returnVal;
 	}
 	
@@ -133,7 +150,6 @@ public class Ship extends GameActor {
 			addAction(mba);
 		}
 		
-		System.out.println(getY());
 		
 	}
 	
@@ -201,7 +217,6 @@ public class Ship extends GameActor {
 							break;
 						case Input.Keys.W:
 							upKeyPressed = true;
-							System.out.println("up pressed");
 							break;
 						case Input.Keys.S:
 							downKeyPressed = true;
@@ -227,7 +242,6 @@ public class Ship extends GameActor {
 						break;			
 					case Input.Keys.W:
 						upKeyPressed = false;
-						System.out.println("up unpressed");
 						break;
 					case Input.Keys.S:
 						downKeyPressed = false;
