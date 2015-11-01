@@ -27,11 +27,11 @@ import com.seniorproject.enemies.EnemySpawner;
 import com.seniorproject.game.Bullet;
 import com.seniorproject.game.CollisionData;
 import com.seniorproject.game.GameActor;
+import com.seniorproject.game.GameScreen;
 import com.seniorproject.game.LevelBackground;
 import com.seniorproject.game.Ship;
 import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.hud.*;
-import com.seniorproject.game.screens.GameScreen;
 
 public class Level extends Stage {
 

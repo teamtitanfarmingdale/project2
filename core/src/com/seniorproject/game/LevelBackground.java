@@ -20,12 +20,12 @@ public class LevelBackground extends Actor {
 	float movementSpeedMoving = .0015f;
 	boolean upPressed = false;
 	float backgroundPosition = 0f;
-
+	Sound wavSound;
 	Level level;
 	
-	public LevelBackground(Level level) {
+	public LevelBackground() {
 		// background music
-		Sound wavSound = Gdx.audio.newSound(Gdx.files
+		wavSound = Gdx.audio.newSound(Gdx.files
 				.internal("sounds/action.wav"));
 		wavSound.loop(.12f);// Plays the sound in a infinite loop. @param volume level
 
@@ -35,10 +35,21 @@ public class LevelBackground extends Actor {
 		bgSprite = new Sprite(background);
 		setBounds(bgSprite.getX(), bgSprite.getY(), bgSprite.getWidth(),
 				bgSprite.getHeight());
+	
+	}
+
+	public LevelBackground(Level level) {
+		this();
 		
 		this.level = level;
 	}
-
+	
+	public LevelBackground(float movementSpeed) {
+		this();
+		
+		this.movementSpeedIdle = movementSpeed;
+	}
+	
 	@Override
 	public void draw(Batch batch, float alpha) {
 
@@ -54,10 +65,16 @@ public class LevelBackground extends Actor {
 		}
 		*/
 		
-		if(!level.screen.gamePaused) {
+		if(level == null || (level != null && !level.screen.gamePaused)) {
 			backgroundPosition -= movementSpeedIdle;
 			bgSprite.setV(backgroundPosition);
 			bgSprite.setV2(backgroundPosition + 1);
+			
+			wavSound.resume();
+			
+		}
+		else if(level != null && level.screen.gamePaused) {
+			wavSound.pause();
 		}
 		
 		bgSprite.draw(batch);
@@ -102,5 +119,10 @@ public class LevelBackground extends Actor {
 				}
 			});
 		}
+	}
+	
+	public void dispose() {
+		wavSound.dispose();
+		background.dispose();
 	}
 }

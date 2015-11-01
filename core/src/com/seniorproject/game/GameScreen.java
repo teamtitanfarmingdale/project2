@@ -1,4 +1,4 @@
-package com.seniorproject.game.screens;
+package com.seniorproject.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
