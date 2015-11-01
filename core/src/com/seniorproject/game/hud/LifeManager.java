@@ -49,7 +49,7 @@ public class LifeManager extends Actor {
 		else {
 			
 			
-			game.switchScreen(1);
+			//game.switchScreen(1);
 			
 		}
 		

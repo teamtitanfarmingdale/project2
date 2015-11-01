@@ -33,6 +33,8 @@ public class MainMenuScreen implements Screen {
 	SpriteBatch batch;
 	Sprite menuBorder;
 	Sprite logo;
+	Sprite musicTextSprite;
+	Sprite sfxTextSprite;
 	
 	LevelBackground levelBG;
 	ButtonHelper newGameButtonHelper;
@@ -66,6 +68,11 @@ public class MainMenuScreen implements Screen {
 		menuBorder = new Sprite(menuBorderTexture);
 		menuBorder.setPosition((stage.getWidth()/2)-(menuBorder.getWidth()/2), (stage.getHeight()/2)-(menuBorder.getHeight()/2)-borderOffset);
 		
+		Texture sfxTextTexture = new Texture(Gdx.files.internal("menu/sfx-text.png"));
+		sfxTextSprite = new Sprite(sfxTextTexture);
+		
+		Texture musicTextTexture = new Texture(Gdx.files.internal("menu/music-text.png"));
+		musicTextSprite = new Sprite(musicTextTexture);
 		
 		newGameButtonHelper = new ButtonHelper("menu/newgame-button.png", 204, 63, 0, 0, 0, 63);
 		ImageButton newGameButton = newGameButtonHelper.getButton();
@@ -77,6 +84,8 @@ public class MainMenuScreen implements Screen {
 		newGameButton.setPosition((stage.getWidth()/2)-(newGameButton.getWidth()/2), (stage.getHeight()/2)-(newGameButton.getHeight()/2)-buttonOffset);
 		loadButton.setPosition((stage.getWidth()/2)-(loadButton.getWidth()/2), (stage.getHeight()/2)-(loadButton.getHeight()/2)-newGameButton.getHeight()-10-buttonOffset);
 		
+		sfxTextSprite.setPosition((stage.getWidth()/2)-(sfxTextSprite.getWidth()/2), loadButton.getY()-sfxTextSprite.getHeight()-buttonOffset);
+		
 		sfxSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png");
 		musicSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png");
 		
@@ -86,8 +95,10 @@ public class MainMenuScreen implements Screen {
 		final Slider musicSlider = musicSliderHelper.getSlider();
 		musicSlider.setValue(ShooterGame.MUSIC_VOLUME);
 		
-		sfxSlider.setPosition((stage.getWidth()/2)-(sfxSlider.getWidth()/2), (stage.getHeight()/2)-(sfxSlider.getHeight()/2)-newGameButton.getHeight()-loadButton.getHeight()-buttonOffset);
-		musicSlider.setPosition((stage.getWidth()/2)-(musicSlider.getWidth()/2), (stage.getHeight()/2)-(musicSlider.getHeight()/2)-newGameButton.getHeight()-loadButton.getHeight()-sfxSlider.getHeight()-buttonOffset);
+		sfxSlider.setPosition((stage.getWidth()/2)-(sfxSlider.getWidth()/2), sfxTextSprite.getY()-sfxSlider.getHeight());
+
+		musicTextSprite.setPosition((stage.getWidth()/2)-(musicTextSprite.getWidth()/2), sfxSlider.getY()-musicTextSprite.getHeight()-buttonOffset);
+		musicSlider.setPosition((stage.getWidth()/2)-(musicSlider.getWidth()/2), musicTextSprite.getY()-musicSlider.getHeight());
 		
 		
 		newGameButton.addListener(new ClickListener() {
@@ -149,6 +160,8 @@ public class MainMenuScreen implements Screen {
 		batch.begin();
 		menuBorder.draw(batch);
 		logo.draw(batch);
+		sfxTextSprite.draw(batch);
+		musicTextSprite.draw(batch);
 		batch.end();
 		
 		

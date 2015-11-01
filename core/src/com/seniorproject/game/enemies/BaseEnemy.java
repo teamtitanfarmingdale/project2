@@ -111,7 +111,19 @@ public class BaseEnemy extends GameActor {
 						// Enemy is moving down the screen
 						if(!hoverPhase) {
 							movementYDistance *= 3;
+						
+							// Shoot while moving downwards
+							if(lastShootTime == -1) {
+								lastShootTime = Spawner.getSeconds();
+							}
+							
+							if(Spawner.getSeconds() - lastShootTime > shootInterval) {
+								shoot();
+								lastShootTime = Spawner.getSeconds();
+							}
+						
 						}
+						
 						
 						MoveByAction mba = new MoveByAction();
 						mba.setAmount(0f, (movementYDistance*-1));

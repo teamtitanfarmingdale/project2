@@ -17,13 +17,18 @@ public class Boss extends BaseEnemy {
 		this.health = 300;
 		
 		this.hoverOffset = 0;
-		this.shootInterval = .5f;
+		this.shootInterval = .1f;
 		this.diveRadius = 50;
 		
 		
 		this.collisionDamage = 35;
 		this.hitAwardPoints = 15;
 		this.killAwardPoints = 50;
+		this.movementSpeed = .001f;
+		
+		this.movementDistance = 2f;
+		this.movementXDistance = 2f;
+		this.hoverSpeed = 3f;
 	}
 
 
