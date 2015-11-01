@@ -27,7 +27,7 @@ public class SliderHelper {
 		
 		SliderStyle sliderStyle = new SliderStyle(sliderTextureDrawable, sliderKnobTextureDrawable);
 		
-		slider = new Slider(0, 100, 1, false, sliderStyle);
+		slider = new Slider(0, 1, .01f, false, sliderStyle);
 		
 	}
 	

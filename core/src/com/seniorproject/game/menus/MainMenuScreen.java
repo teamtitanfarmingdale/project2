@@ -80,7 +80,7 @@ public class MainMenuScreen implements Screen {
 		sfxSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png");
 		musicSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png");
 		
-		Slider sfxSlider = sfxSliderHelper.getSlider();
+		final Slider sfxSlider = sfxSliderHelper.getSlider();
 		sfxSlider.setValue(ShooterGame.SFX_VOLUME);
 		
 		final Slider musicSlider = musicSliderHelper.getSlider();
@@ -103,6 +103,17 @@ public class MainMenuScreen implements Screen {
 			public void changed(ChangeEvent event, Actor actor) {
 				// TODO Auto-generated method stub
 				ShooterGame.MUSIC_VOLUME = musicSlider.getValue();
+				levelBG.setBGVolume(ShooterGame.MUSIC_VOLUME);
+			}
+			
+		});
+		
+		sfxSlider.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				// TODO Auto-generated method stub
+				ShooterGame.SFX_VOLUME = sfxSlider.getValue();
 			}
 			
 		});

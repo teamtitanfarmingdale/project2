@@ -61,9 +61,9 @@ public class Level extends Stage {
 	
 	private Group hudObjects;
 	
-	public Level() {
+	public Level(ShooterGame g) {
 		super(new ScreenViewport());	
-		
+
 		// world is used for collisions, I believe its constructor sets the gravity in our game using the Vector2 object
 		// Since we don't need actual gravity in the game, its set to 0 here
 		world = new World(new Vector2(0,0), true);	
@@ -95,7 +95,7 @@ public class Level extends Stage {
 		// Used for debugging, shows the boxes around the sprites
 		renderer = new Box2DDebugRenderer();
 		
-		healthBar = new Health(screen.game);
+		healthBar = new Health(g);
 		armorBar = new Armor();
 		score = new Score();
 		

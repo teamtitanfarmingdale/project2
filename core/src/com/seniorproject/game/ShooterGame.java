@@ -15,8 +15,8 @@ public class ShooterGame extends Game {
 	public static int GAME_WIDTH = 1200;
 	public static int GAME_HEIGHT = 720;
 
-	public static float MUSIC_VOLUME = 100;
-	public static float SFX_VOLUME = 100;
+	public static float MUSIC_VOLUME = 1;
+	public static float SFX_VOLUME = 1;
 	
 	
 	// Screen Constants
@@ -52,6 +52,10 @@ public class ShooterGame extends Game {
 		}
 		
 		
+	}
+	
+	public Screen getCurrentScreen() {
+		return currentScreen;
 	}
 	
 

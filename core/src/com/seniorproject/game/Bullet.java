@@ -41,7 +41,7 @@ public class Bullet extends BaseBullet {
 		//Sound for bullets
 		Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
 		if (bulletSoundCount == 0){
-			wavSound.play();
+			wavSound.play(ShooterGame.SFX_VOLUME);
 			bulletSoundCount++;
 		}
 	}

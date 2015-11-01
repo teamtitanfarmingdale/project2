@@ -23,14 +23,14 @@ public class LevelBackground extends Actor {
 	Sound wavSound;
 	Level level;
 	
+	long soundID;
+	
 	public LevelBackground() {
 		// background music
 		wavSound = Gdx.audio.newSound(Gdx.files
 				.internal("sounds/action.wav"));
-		wavSound.loop(.12f);// Plays the sound in a infinite loop. @param volume level
-		long soundID = wavSound.play();
-		wavSound.setVolume(soundID, ShooterGame.MUSIC_VOLUME);
-		
+		soundID = wavSound.loop(ShooterGame.MUSIC_VOLUME);// Plays the sound in a infinite loop. @param volume level
+
 		background = new Texture(Gdx.files.internal("starsbg1.png"));
 		background.setWrap(Texture.TextureWrap.Repeat,
 				Texture.TextureWrap.Repeat);
@@ -51,6 +51,11 @@ public class LevelBackground extends Actor {
 		
 		this.movementSpeedIdle = movementSpeed;
 	}
+	
+	public void setBGVolume(float volume) {
+		wavSound.setVolume(soundID, volume);
+	}
+	
 	
 	@Override
 	public void draw(Batch batch, float alpha) {
@@ -127,4 +132,6 @@ public class LevelBackground extends Actor {
 		wavSound.dispose();
 		background.dispose();
 	}
+	
+	
 }
