@@ -78,6 +78,7 @@ public class BaseEnemy extends GameActor {
 				
 				if(health <= 0) {
 					level.score.addToScore(killAwardPoints);
+					level.ship.totalKills++;
 					setDead(true);
 				}
 				else if(reposition) {

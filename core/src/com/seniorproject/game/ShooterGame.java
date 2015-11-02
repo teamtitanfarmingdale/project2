@@ -1,30 +1,36 @@
 package com.seniorproject.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.seniorproject.game.levels.Level;
 import com.seniorproject.game.menus.MainMenuScreen;
+import com.seniorproject.game.menus.VictoryScreen;
 
 
 public class ShooterGame extends Game {
 
-	private Level stage;
-
 	public static int GAME_WIDTH = 1200;
 	public static int GAME_HEIGHT = 720;
 
-	public static float MUSIC_VOLUME = 1;
+	public static float MUSIC_VOLUME = 0;
 	public static float SFX_VOLUME = 1;
+	
+	public static int PLAYER_SCORE = 1000;
+	
+	public static int STARTING_ENEMY_COUNT = 5;
+	
+	public static int CURRENT_LEVEL = 0;
+	
+	public static Ship PLAYER_SHIP;
 	
 	
 	// Screen Constants
 	public static final int MAIN_MENU = 1;
 	public static final int GAME = 2;
 	public static final int PAUSE = 3;
+	public static final int VICTORY = 4;
 	
 	private Screen currentScreen;
+	private GameScreen currentGameScreen;
 	
 	@Override
 	public void create() {
@@ -45,8 +51,15 @@ public class ShooterGame extends Game {
 				this.setScreen(currentScreen);
 				break;
 			case GAME:
+				CURRENT_LEVEL++;
 				currentScreen.dispose();
 				currentScreen = new GameScreen(this);
+				currentGameScreen = (GameScreen) currentScreen;
+				this.setScreen(currentScreen);
+				break;
+			case VICTORY:
+				currentScreen.dispose();
+				currentScreen = new VictoryScreen(this);
 				this.setScreen(currentScreen);
 				break;
 		}

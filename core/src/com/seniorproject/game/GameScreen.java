@@ -27,6 +27,9 @@ public class GameScreen implements Screen {
 		
 	}
 	
+	public Level getLevel() {
+		return stage;
+	}
 	
 	@Override
 	public void show() {

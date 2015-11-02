@@ -75,7 +75,7 @@ public class EnemySpawner extends Spawner {
 		
 		deadEnemyList.clear();
 		
-		if(totalEnemies == maxEnemies && enemyList.size() == 0 && !spawnedBoss) {
+		if(level != null && totalEnemies == maxEnemies && enemyList.size() == 0 && !spawnedBoss) {
 			
 			level.addGameObject(boss);
 			spawnedBoss = true;

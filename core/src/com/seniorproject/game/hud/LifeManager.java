@@ -44,6 +44,7 @@ public class LifeManager extends Actor {
 		if(lifeSprites.size() > 0) {
 			
 			lifeSprites.remove(lifeSprites.size()-1);
+			ShooterGame.PLAYER_SHIP.lives = lifeSprites.size();
 			
 		}
 		else {
@@ -61,6 +62,7 @@ public class LifeManager extends Actor {
 		tempSprite.setPosition((startingX+(lifeSprites.size()*tempSprite.getWidth()+lifeSpacing)), startingY);
 		
 		lifeSprites.add(tempSprite);
+		ShooterGame.PLAYER_SHIP.lives++;
 		
 	}
 	

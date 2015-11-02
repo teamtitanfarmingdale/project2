@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 import com.seniorproject.game.LabelHelper;
+import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.levels.Level;
 
 public class Score extends Actor {
@@ -24,6 +25,7 @@ public class Score extends Actor {
 	
 	public Score() {
 		
+		score = ShooterGame.PLAYER_SCORE;
 		
 		backgroundTexture = new Texture(Gdx.files.internal("hud/score/bg.png"));
 		backgroundSprite = new Sprite(backgroundTexture);
@@ -79,5 +81,9 @@ public class Score extends Actor {
 	public void setScore(int score) {
 		this.score = score;
 		labelHelper.getLabel().setText(String.format("%,d", score));
+	}
+	
+	public int getScore() {
+		return score;
 	}
 }

@@ -2,6 +2,7 @@ package com.seniorproject.game.enemies;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.levels.Level;
 
 public class Spawner extends Actor {
@@ -33,6 +34,7 @@ public class Spawner extends Actor {
 	
 	public void setMaxEnemies(int maxEnemies) {
 		this.maxEnemies = maxEnemies;
+		System.out.println(ShooterGame.CURRENT_LEVEL);
 	}
 	
 	public static long getSeconds() {

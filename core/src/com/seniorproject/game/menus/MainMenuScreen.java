@@ -1,52 +1,34 @@
 package com.seniorproject.game.menus;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.seniorproject.game.ButtonHelper;
-import com.seniorproject.game.LevelBackground;
 import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.SliderHelper;
 
-public class MainMenuScreen implements Screen {
+public class MainMenuScreen extends BaseMenu implements Screen {
 
-	ShooterGame game;
-	Stage stage;
-	
-	SpriteBatch batch;
-	Sprite menuBorder;
 	Sprite logo;
 	Sprite musicTextSprite;
 	Sprite sfxTextSprite;
-	
-	LevelBackground levelBG;
+
 	ButtonHelper newGameButtonHelper;
 	ButtonHelper loadGameButtonHelper;
 	SliderHelper sfxSliderHelper;
 	SliderHelper musicSliderHelper;
 	
 	public MainMenuScreen(ShooterGame g) {
-		
-		game = g;
+		super(g);
 		create();
-		
 	}
 	
 	
@@ -54,19 +36,13 @@ public class MainMenuScreen implements Screen {
 		
 		int borderOffset = 80;
 		int buttonOffset = 20;
-		batch = new SpriteBatch();
-		stage = new Stage();
-
-		Texture menuBorderTexture = new Texture(Gdx.files.internal("menu/mainmenu.png"));
 		
-		levelBG = new LevelBackground(.00005f);
+		init("menu/mainmenu.png", borderOffset);
+		
 		
 		Texture logoTexture = new Texture(Gdx.files.internal("logo-small.png"));
 		logo = new Sprite(logoTexture);
 		logo.setPosition((stage.getWidth()/2)-(logo.getWidth()/2), stage.getHeight()-logo.getHeight());
-		
-		menuBorder = new Sprite(menuBorderTexture);
-		menuBorder.setPosition((stage.getWidth()/2)-(menuBorder.getWidth()/2), (stage.getHeight()/2)-(menuBorder.getHeight()/2)-borderOffset);
 		
 		Texture sfxTextTexture = new Texture(Gdx.files.internal("menu/sfx-text.png"));
 		sfxTextSprite = new Sprite(sfxTextTexture);
@@ -129,8 +105,6 @@ public class MainMenuScreen implements Screen {
 			
 		});
 		
-		
-		stage.addActor(levelBG);
 		stage.addActor(newGameButton);
 		stage.addActor(loadButton);
 		stage.addActor(sfxSlider);
@@ -151,18 +125,18 @@ public class MainMenuScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
-		
+
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		stage.act(Gdx.graphics.getDeltaTime());
-		stage.draw();
+		this.stage.act(Gdx.graphics.getDeltaTime());
+		this.stage.draw();
 		
-		batch.begin();
-		menuBorder.draw(batch);
+		this.batch.begin();
+		this.menuBorder.draw(batch);
 		logo.draw(batch);
 		sfxTextSprite.draw(batch);
 		musicTextSprite.draw(batch);
-		batch.end();
+		this.batch.end();
 		
 		
 	}
@@ -194,8 +168,7 @@ public class MainMenuScreen implements Screen {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		levelBG.dispose();
-		menuBorder.getTexture().dispose();
+		super.dispose();
 		newGameButtonHelper.dispose();
 		logo.getTexture().dispose();
 	}

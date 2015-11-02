@@ -1,9 +1,7 @@
 package com.seniorproject.game.levels;
 
 import java.util.ArrayList;
-
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -18,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.seniorproject.game.Bullet;
 import com.seniorproject.game.CollisionData;
 import com.seniorproject.game.CollisionHelper;
 import com.seniorproject.game.GameActor;
@@ -26,12 +23,7 @@ import com.seniorproject.game.GameScreen;
 import com.seniorproject.game.LevelBackground;
 import com.seniorproject.game.Ship;
 import com.seniorproject.game.ShooterGame;
-import com.seniorproject.game.collisionlisteners.*;
-import com.seniorproject.game.enemies.Asteroid;
 import com.seniorproject.game.enemies.AsteroidSpawner;
-import com.seniorproject.game.enemies.BaseEnemy;
-import com.seniorproject.game.enemies.Boss;
-import com.seniorproject.game.enemies.Enemy;
 import com.seniorproject.game.enemies.EnemySpawner;
 import com.seniorproject.game.hud.*;
 
@@ -39,7 +31,7 @@ public class Level extends Stage {
 
 	public static float WORLD_STEP = (1/300f);
 	
-	private Ship ship;
+	public Ship ship;
 	private LevelBackground background;
 	private EnemySpawner enemySpawner;
 	private AsteroidSpawner asteroidSpawner;
@@ -81,6 +73,8 @@ public class Level extends Stage {
 		
 		// Used to generate enemies onto the screen
 		enemySpawner = new EnemySpawner(world, enemySpriteFile);
+		enemySpawner.setMaxEnemies(ShooterGame.CURRENT_LEVEL*ShooterGame.STARTING_ENEMY_COUNT);
+		
 		
 		asteroidSpawner = new AsteroidSpawner(world, asteroidSpriteFile);
 		
@@ -89,8 +83,9 @@ public class Level extends Stage {
 		
 		// The player's ship
 		ship = new Ship(world);
-
-		levelTitle = new LevelTitle("Level 1");
+		ShooterGame.PLAYER_SHIP = ship;
+		
+		levelTitle = new LevelTitle("Level "+ShooterGame.CURRENT_LEVEL);
 
 		// Used for debugging, shows the boxes around the sprites
 		renderer = new Box2DDebugRenderer();
@@ -190,6 +185,7 @@ public class Level extends Stage {
 	@Override
 	public void dispose() {
 		super.dispose();
+		background.dispose();
 	}
 	
 	public void setScreen(GameScreen screen) {

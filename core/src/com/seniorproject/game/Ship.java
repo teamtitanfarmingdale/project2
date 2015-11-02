@@ -34,8 +34,10 @@ public class Ship extends GameActor {
 	float minY = 0;
 	float maxY = 0;
 	
-	float health = 100;
-	float armor = 100;
+	public float health = 100;
+	public float armor = 100;
+	public float lives = 0;
+	public float totalKills = 0;
 	
 	ArrayList<GameActor> collidedObjects;
 	

@@ -3,6 +3,9 @@ package com.seniorproject.game.enemies;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
+import com.seniorproject.game.ShooterGame;
 
 public class Boss extends BaseEnemy {
 
@@ -42,6 +45,27 @@ public class Boss extends BaseEnemy {
 	
 	public void setLastShipCollision(float time) {
 		lastShipCollision = time;
+	}
+	
+	@Override
+	public void setDead(boolean dead) {
+		super.setDead(dead);
+		
+		ShooterGame.PLAYER_SCORE = level.score.getScore();
+		
+		// BRING UP VICTORY SCREEN
+		
+		Timer.schedule(new Task() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				level.screen.game.switchScreen(ShooterGame.VICTORY);
+			}
+			
+		}, 3);
+		
+		
 	}
 	
 	
