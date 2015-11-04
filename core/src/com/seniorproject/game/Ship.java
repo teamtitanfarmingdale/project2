@@ -2,15 +2,22 @@ package com.seniorproject.game;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.seniorproject.game.enemies.Boss;
 import com.seniorproject.game.enemies.Spawner;
 
@@ -41,6 +48,8 @@ public class Ship extends GameActor {
 	
 	ArrayList<GameActor> collidedObjects;
 	
+	Sprite gasSprite;
+	
 	
 	public Ship(World world) {
 		super(world);
@@ -53,6 +62,8 @@ public class Ship extends GameActor {
 		
 		collidedObjects = new ArrayList<GameActor>();
 		
+		Texture gasTexture = new Texture(Gdx.files.internal("gas.png"));
+		gasSprite = new Sprite(gasTexture);		
 	}
 	
 	public void hit(float damage) {
@@ -76,10 +87,29 @@ public class Ship extends GameActor {
 			
 		}
 		
-		if(health == 0 && armor == 0) {
+		if(health == 0 && armor == 0 && lives > 0) {
 			level.healthBar.lifeManager.removeLife();
 			armor = MAX_ARMOR;
 			health = MAX_HEALTH;
+		}
+		else if(health == 0 && armor == 0 && lives == 0) {
+			// GAME OVER
+			
+			this.setDead(true);
+			ShooterGame.PLAYER_SCORE = level.score.getScore();
+			
+			// TRIGGER GAME OVER SCREEN
+			Timer.schedule(new Task() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					level.screen.game.switchScreen(ShooterGame.GAME_OVER);
+				}
+				
+			}, 3);
+			
+		
 		}
 		
 		
@@ -94,6 +124,10 @@ public class Ship extends GameActor {
 			if(actor.getCollisionData().getActorType() == "Boss") {
 				Boss tempBoss = (Boss) actor;
 				tempBoss.setLastShipCollision();
+				
+				// PLAY EXPLOSION NOISE
+				Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion-2.wav"));
+				wavSound.play(ShooterGame.SFX_VOLUME);
 			}
 			
 		}
@@ -118,6 +152,11 @@ public class Ship extends GameActor {
 	public void draw(Batch batch, float alpha) {
 		getSprite().draw(batch);
 		createBody();
+		
+		if(upKeyPressed || level.levelFinished) {
+			gasSprite.setPosition(getSprite().getX()+(gasSprite.getWidth()/2)-4, getSprite().getY()-8);
+			gasSprite.draw(batch);
+		}
 	}
 	
 	
@@ -125,35 +164,68 @@ public class Ship extends GameActor {
 	public void act(float delta) {
 		super.act(delta);
 
-		if(rightKeyPressed && getX() < maxX) {
-			MoveByAction mba = new MoveByAction();
-			mba.setAmount(movementDistance,  0f);
-			mba.setDuration(movementSpeed);
-			addAction(mba);
+		if(!level.levelFinished) {
+			if(rightKeyPressed && getX() < maxX) {
+				MoveByAction mba = new MoveByAction();
+				mba.setAmount(movementDistance,  0f);
+				mba.setDuration(movementSpeed);
+				addAction(mba);
+				
+			}
+			else if(leftKeyPressed && getX() > minX) {
+				MoveByAction mba = new MoveByAction();
+				mba.setAmount(movementDistance*-1,  0f);
+				mba.setDuration(movementSpeed);
+				addAction(mba);
+			}
 			
+			if(upKeyPressed && getY() < maxY) {
+				MoveByAction mba = new MoveByAction();
+				mba.setAmount(0f, movementDistance);
+				mba.setDuration(movementSpeed);
+				addAction(mba);
+			}
+			else if(downKeyPressed && getY() > minY) {
+				MoveByAction mba = new MoveByAction();
+				mba.setAmount(0f,  movementDistance*-1);
+				mba.setDuration(movementSpeed);
+				addAction(mba);
+			}
+			
+			if(!upKeyPressed && !downKeyPressed && getY() > minY) {
+				MoveByAction mba = new MoveByAction();
+				mba.setAmount(0f,  (movementDistance*-1)*.1f);
+				mba.setDuration((movementSpeed*.1f));
+				addAction(mba);
+			}
 		}
-		else if(leftKeyPressed && getX() > minX) {
-			MoveByAction mba = new MoveByAction();
-			mba.setAmount(movementDistance*-1,  0f);
-			mba.setDuration(movementSpeed);
-			addAction(mba);
-		}
-		
-		if(upKeyPressed && getY() < maxY) {
-			MoveByAction mba = new MoveByAction();
-			mba.setAmount(0f, movementDistance);
-			mba.setDuration(movementSpeed);
-			addAction(mba);
-		}
-		else if(downKeyPressed && getY() > minY) {
-			MoveByAction mba = new MoveByAction();
-			mba.setAmount(0f,  movementDistance*-1);
-			mba.setDuration(movementSpeed);
-			addAction(mba);
-		}
-		
 		
 	}
+	
+	public void finishedAnimation() {
+		MoveToAction mta = new MoveToAction();
+		
+		mta.setPosition((level.getWidth()/2)-(this.getWidth()/2), (level.getHeight()/2)-(this.getHeight()/2));
+		mta.setDuration(3f);
+		addAction(mta);
+		
+		final Ship tempShip = this;
+		
+		Timer.schedule(new Task() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				MoveToAction mta = new MoveToAction();
+				mta.setPosition((level.getWidth()/2)-(tempShip.getWidth()/2), level.getHeight()+tempShip.getHeight());
+				mta.setDuration(1f);
+				addAction(mta);
+			}
+			
+		}, 3);
+		
+	}
+	
 	
 	@Override
 	protected void positionChanged() {

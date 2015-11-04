@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.levels.Level;
 
 public class EnemySpawner extends Spawner {
@@ -27,7 +28,13 @@ public class EnemySpawner extends Spawner {
 		
 		enemyList = new ArrayList<Enemy>();
 		deadEnemyList = new ArrayList<Enemy>();
-		boss = new Boss(world, "boss.png");
+		
+		String bossFile = "boss.png";
+		if(ShooterGame.CURRENT_LEVEL == 2) {
+			bossFile = "boss2.png";
+		}
+		
+		boss = new Boss(world, bossFile);
 		
 		maxEnemies = 15;
 		maxEnemiesAtOnce = 10;

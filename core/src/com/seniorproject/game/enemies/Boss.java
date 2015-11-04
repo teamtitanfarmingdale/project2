@@ -54,6 +54,9 @@ public class Boss extends BaseEnemy {
 		ShooterGame.PLAYER_SCORE = level.score.getScore();
 		
 		level.asteroidSpawner.stop();
+		level.levelFinished = true;
+		level.ship.finishedAnimation();
+		
 		
 		// BRING UP VICTORY SCREEN
 		
@@ -65,7 +68,7 @@ public class Boss extends BaseEnemy {
 				level.screen.game.switchScreen(ShooterGame.VICTORY);
 			}
 			
-		}, 3);
+		}, 5f);
 		
 		
 	}

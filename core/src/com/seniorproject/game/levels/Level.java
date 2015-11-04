@@ -53,6 +53,8 @@ public class Level extends Stage {
 	
 	private Group hudObjects;
 	
+	public boolean levelFinished = false;
+	
 	public Level(ShooterGame g) {
 		super(new ScreenViewport());	
 

@@ -50,15 +50,12 @@ public class CollisionHelper {
 			bullet.setCollidedEnemy(gameActorA);
 			
 			// Add the bullet to the collision list to be removed from the screen
-			collisionList.add(gameActorB);
-			
-			//System.out.println("BULLET COLLISION1!!!");
+			collisionList.add(gameActorB);			
 		}
 		else if(collisionDataA.getActorType() == bulletName && collisionDataB.getActorType() == objectName && !collisionList.contains(gameActorA)) {
 			BaseBullet bullet = (BaseBullet) gameActorA;
 			bullet.setCollidedEnemy(gameActorB);
-			collisionList.add(gameActorA);
-			//System.out.println("BULLET COLLISION2!!!");
+			collisionList.add(gameActorA);			
 		}
 	}
 	

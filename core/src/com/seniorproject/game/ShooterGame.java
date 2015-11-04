@@ -2,6 +2,7 @@ package com.seniorproject.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
+import com.seniorproject.game.menus.GameOverScreen;
 import com.seniorproject.game.menus.MainMenuScreen;
 import com.seniorproject.game.menus.VictoryScreen;
 
@@ -28,6 +29,8 @@ public class ShooterGame extends Game {
 	public static final int GAME = 2;
 	public static final int PAUSE = 3;
 	public static final int VICTORY = 4;
+	public static final int GAME_OVER = 5;
+	
 	
 	private Screen currentScreen;
 	private GameScreen currentGameScreen;
@@ -60,6 +63,11 @@ public class ShooterGame extends Game {
 			case VICTORY:
 				currentScreen.dispose();
 				currentScreen = new VictoryScreen(this);
+				this.setScreen(currentScreen);
+				break;
+			case GAME_OVER:
+				currentScreen.dispose();
+				currentScreen = new GameOverScreen(this);
 				this.setScreen(currentScreen);
 				break;
 		}
