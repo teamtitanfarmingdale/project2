@@ -25,6 +25,7 @@ public class ButtonHelper {
 		
 		ImageButtonStyle buttonStyle = new ImageButtonStyle(trdButtonDrawable, trdButtonDrawableHover, trdButtonDrawable, trdButtonDrawable, trdButtonDrawableHover, trdButtonDrawable);
 		buttonStyle.imageOver = trdButtonDrawableHover;
+		buttonStyle.checkedOver = trdButtonDrawableHover;
 		
 		button = new ImageButton(buttonStyle);
 		

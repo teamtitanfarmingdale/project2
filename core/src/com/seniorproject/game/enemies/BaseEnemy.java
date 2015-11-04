@@ -1,12 +1,15 @@
 package com.seniorproject.game.enemies;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.seniorproject.game.GameActor;
+import com.seniorproject.game.ShooterGame;
 
 public class BaseEnemy extends GameActor {
 
@@ -253,4 +256,20 @@ public class BaseEnemy extends GameActor {
 		
 	}
 
+	@Override
+	public void setDead(boolean dead) {
+
+		if(!this.dead && dead) {
+			// PLAY EXPLOSION SOUND
+			Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion-2.wav"));
+			wavSound.play(ShooterGame.SFX_VOLUME);
+		}
+		
+		this.dead = dead;
+		
+	}
+	
+	public void silentDeath(boolean dead) {
+		super.setDead(dead);
+	}
 }

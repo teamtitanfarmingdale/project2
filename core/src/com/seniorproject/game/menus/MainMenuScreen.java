@@ -23,6 +23,8 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 
 	ButtonHelper newGameButtonHelper;
 	ButtonHelper loadGameButtonHelper;
+	ButtonHelper quitButtonHelper;
+	
 	SliderHelper sfxSliderHelper;
 	SliderHelper musicSliderHelper;
 	
@@ -39,28 +41,41 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 		
 		init("menu/mainmenu.png", borderOffset);
 		
+		// RESET PLAYER SCORE
+		ShooterGame.PLAYER_SCORE = 0;
 		
+		// LOGO
 		Texture logoTexture = new Texture(Gdx.files.internal("logo-small.png"));
 		logo = new Sprite(logoTexture);
 		logo.setPosition((stage.getWidth()/2)-(logo.getWidth()/2), stage.getHeight()-logo.getHeight());
 		
+		
+		// SLIDER TITLES
 		Texture sfxTextTexture = new Texture(Gdx.files.internal("menu/sfx-text.png"));
 		sfxTextSprite = new Sprite(sfxTextTexture);
 		
 		Texture musicTextTexture = new Texture(Gdx.files.internal("menu/music-text.png"));
 		musicTextSprite = new Sprite(musicTextTexture);
 		
+		// BUTTONS
 		newGameButtonHelper = new ButtonHelper("menu/newgame-button.png", 204, 63, 0, 0, 0, 63);
 		ImageButton newGameButton = newGameButtonHelper.getButton();
 		
 		loadGameButtonHelper = new ButtonHelper("menu/load-button.png", 204, 63, 0, 0, 0, 63);
 		ImageButton loadButton = loadGameButtonHelper.getButton();
 		
+		quitButtonHelper = new ButtonHelper("menu/quit-button.png", 204, 63, 0, 0, 0, 63);
+		ImageButton quitButton = quitButtonHelper.getButton();
+		
 		
 		newGameButton.setPosition((stage.getWidth()/2)-(newGameButton.getWidth()/2), (stage.getHeight()/2)-(newGameButton.getHeight()/2)-buttonOffset);
-		loadButton.setPosition((stage.getWidth()/2)-(loadButton.getWidth()/2), (stage.getHeight()/2)-(loadButton.getHeight()/2)-newGameButton.getHeight()-10-buttonOffset);
+		//loadButton.setPosition((stage.getWidth()/2)-(loadButton.getWidth()/2), newGameButton.getY()-loadButton.getHeight()-buttonOffset);
+		quitButton.setPosition((stage.getWidth()/2)-(quitButton.getWidth()/2), newGameButton.getY()-quitButton.getHeight()-buttonOffset);
 		
-		sfxTextSprite.setPosition((stage.getWidth()/2)-(sfxTextSprite.getWidth()/2), loadButton.getY()-sfxTextSprite.getHeight()-buttonOffset);
+
+		// SLIDERS
+		
+		sfxTextSprite.setPosition((stage.getWidth()/2)-(sfxTextSprite.getWidth()/2), quitButton.getY()-sfxTextSprite.getHeight()-buttonOffset);
 		
 		sfxSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png");
 		musicSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png");
@@ -76,7 +91,7 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 		musicTextSprite.setPosition((stage.getWidth()/2)-(musicTextSprite.getWidth()/2), sfxSlider.getY()-musicTextSprite.getHeight()-buttonOffset);
 		musicSlider.setPosition((stage.getWidth()/2)-(musicSlider.getWidth()/2), musicTextSprite.getY()-musicSlider.getHeight());
 		
-		
+		// BUTTON EVENTS
 		newGameButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -84,6 +99,15 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 			}
 		});
 		
+		quitButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				Gdx.app.exit();
+			}
+		});
+		
+		
+		// SLIDER EVENTS
 		musicSlider.addListener(new ChangeListener() {
 
 			@Override
@@ -105,8 +129,11 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 			
 		});
 		
+		
+		// ADD EVERYTHING TO THE STAGE
 		stage.addActor(newGameButton);
-		stage.addActor(loadButton);
+		//stage.addActor(loadButton);
+		stage.addActor(quitButton);
 		stage.addActor(sfxSlider);
 		stage.addActor(musicSlider);
 		

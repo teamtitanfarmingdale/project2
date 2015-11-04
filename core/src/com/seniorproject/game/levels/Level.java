@@ -32,9 +32,9 @@ public class Level extends Stage {
 	public static float WORLD_STEP = (1/300f);
 	
 	public Ship ship;
-	private LevelBackground background;
+	public LevelBackground background;
 	private EnemySpawner enemySpawner;
-	private AsteroidSpawner asteroidSpawner;
+	public AsteroidSpawner asteroidSpawner;
 	private World world;
 	private float accumulator = 0f;
 	private Box2DDebugRenderer renderer;

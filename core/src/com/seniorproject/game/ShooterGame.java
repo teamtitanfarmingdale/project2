@@ -14,7 +14,7 @@ public class ShooterGame extends Game {
 	public static float MUSIC_VOLUME = 0;
 	public static float SFX_VOLUME = 1;
 	
-	public static int PLAYER_SCORE = 1000;
+	public static int PLAYER_SCORE = 0;
 	
 	public static int STARTING_ENEMY_COUNT = 5;
 	

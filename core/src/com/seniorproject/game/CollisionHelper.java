@@ -2,6 +2,8 @@ package com.seniorproject.game;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.seniorproject.game.enemies.BaseEnemy;
 import com.seniorproject.game.enemies.Enemy;

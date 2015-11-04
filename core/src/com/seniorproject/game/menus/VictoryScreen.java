@@ -52,10 +52,10 @@ public class VictoryScreen extends BaseMenu implements Screen {
 
 		// Calculate Bonus
 		
-		calculatedBonus = 10000;
+		calculatedBonus = 0;
 		if(ShooterGame.PLAYER_SHIP != null) {
-			calculatedBonus = (int) ((ShooterGame.PLAYER_SHIP.health*(ShooterGame.PLAYER_SHIP.lives+1)));
-			calculatedBonus += ShooterGame.PLAYER_SHIP.armor*(ShooterGame.PLAYER_SHIP.lives+1);
+			calculatedBonus = (int) ((ShooterGame.PLAYER_SHIP.health+(100*ShooterGame.PLAYER_SHIP.lives)));
+			calculatedBonus += ShooterGame.PLAYER_SHIP.armor+(100*ShooterGame.PLAYER_SHIP.lives);
 			calculatedBonus *= ((1+ShooterGame.PLAYER_SHIP.totalKills)*.25);
 		}
 		
@@ -81,6 +81,7 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		nextLevelButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				ShooterGame.PLAYER_SCORE += calculatedBonus;
 				game.switchScreen(ShooterGame.GAME);
 			}
 		});
@@ -88,7 +89,7 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		quitButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				Gdx.app.exit();
+				game.switchScreen(ShooterGame.MAIN_MENU);
 			}
 		});
 		
@@ -102,12 +103,6 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		
 	}
 	
-	
-	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void render(float delta) {
@@ -148,36 +143,5 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		
 	}
 
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
 	
 }

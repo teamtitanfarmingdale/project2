@@ -80,8 +80,14 @@ public class BaseMenu implements Screen {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		levelBG.dispose();
-		menuBorder.getTexture().dispose();
+		
+		if(levelBG != null) {
+			levelBG.dispose();
+		}
+		
+		if(menuBorder != null) {
+			menuBorder.getTexture().dispose();
+		}
 	}
 
 }

@@ -53,6 +53,8 @@ public class Boss extends BaseEnemy {
 		
 		ShooterGame.PLAYER_SCORE = level.score.getScore();
 		
+		level.asteroidSpawner.stop();
+		
 		// BRING UP VICTORY SCREEN
 		
 		Timer.schedule(new Task() {
