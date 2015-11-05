@@ -65,7 +65,7 @@ public class Health extends BasicHealthBar {
 		
 
 		backBarTexture = new Texture(
-				Gdx.files.internal("hud/health/backbar.png"));
+				Gdx.files.internal("hud/health/backbar2.png"));
 		backBarDangerTexture = new Texture(
 				Gdx.files.internal("hud/health/backbar-danger.png"));
 		backBarSprite = new Sprite(backBarTexture);
@@ -144,7 +144,9 @@ public class Health extends BasicHealthBar {
 			topLeftWingSprite.setPosition(topLeftWingX, topLeftWingY);
 			backBarWarningSprite.setPosition(backBarX, backBarY);
 			bottomLeftWingSprite.setPosition(bottomLeftWingX, bottomLeftWingY);
-
+			backBarSprite.setPosition(backBarX,  backBarY);
+			
+			
 			lifeManager.setStartingXPosition(bottomLeftWingX
 					+ (bottomLeftWingSprite.getWidth() / 4.5f));
 			lifeManager.setStartingYPosition(bottomLeftWingY
@@ -160,17 +162,21 @@ public class Health extends BasicHealthBar {
 
 		}
 
-		topLeftWingSprite.draw(batch);
-		
-
 		if (warningMode) {
 			elapsedTime += Gdx.graphics.getDeltaTime();
 			backBarWarningSprite.setRegion(backbarAnimation.getKeyFrame(
 					elapsedTime, true));
 			backBarWarningSprite.draw(batch);
 		}
-
+		else {
+			backBarSprite.draw(batch);;
+		}
+		
 		healthBarSprite.draw(batch);
+		
+		game.getCurrentGameScreen().getLevel().armorBar.drawArmor(batch, alpha);
+		
+		topLeftWingSprite.draw(batch);
 		bottomLeftWingSprite.draw(batch);
 		lifeManager.draw(batch, alpha);
 	}

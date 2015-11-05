@@ -12,8 +12,8 @@ public class ShooterGame extends Game {
 	public static int GAME_WIDTH = 1200;
 	public static int GAME_HEIGHT = 720;
 
-	public static float MUSIC_VOLUME = 0;
-	public static float SFX_VOLUME = 1;
+	public static float MUSIC_VOLUME = .5f;
+	public static float SFX_VOLUME = .5f;
 	
 	public static int PLAYER_SCORE = 0;
 	
@@ -51,6 +51,8 @@ public class ShooterGame extends Game {
 			case MAIN_MENU:
 				currentScreen.dispose();
 				currentScreen = new MainMenuScreen(this);
+				CURRENT_LEVEL = 0;
+				PLAYER_SCORE = 0;
 				this.setScreen(currentScreen);
 				break;
 			case GAME:
@@ -79,5 +81,7 @@ public class ShooterGame extends Game {
 		return currentScreen;
 	}
 	
-
+	public GameScreen getCurrentGameScreen() {
+		return currentGameScreen;
+	}
 }

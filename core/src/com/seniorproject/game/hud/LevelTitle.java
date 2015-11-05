@@ -25,7 +25,7 @@ public class LevelTitle extends BaseHUD {
 	public LevelTitle(String title) {
 		
 		
-		wingTexture = new Texture(Gdx.files.internal("hud/leveltitle/wing.png"));
+		wingTexture = new Texture(Gdx.files.internal("hud/leveltitle/wing2.png"));
 		wingSprite = new Sprite(wingTexture);
 		
 		label = new LabelHelper(title, 20, Color.BLACK);
@@ -45,12 +45,21 @@ public class LevelTitle extends BaseHUD {
 			parentWidth = getParent().getStage().getWidth();
 			parentHeight = getParent().getStage().getHeight();
 			
-			wingX = parentWidth/2 - (positionXOffsetWidth/11.5f);
-			wingY = parentHeight - wingSprite.getHeight() - (positionYOffsetHeight/2.52f);
+			/*
+			 * bottomLeftWingX = halfParentWidth
+					- (bottomLeftWingSprite.getWidth() * 1.1f - (positionXOffsetWidth / 50.5f));
+					
+			bottomLeftWingY = topLeftWingY - (bottomLeftWingSprite.getHeight() * 1.30f)
+					+ (positionYOffsetHeight / 175.7f);
+			 */
+			
+			
+			wingX = parentWidth/2 + (wingSprite.getWidth()/10.8f);
+			wingY = parentHeight - wingSprite.getHeight() - (positionYOffsetHeight/2.21f);
 
 			wingSprite.setPosition(wingX, wingY);
 			
-			label.getLabel().setPosition(wingX+(wingSprite.getWidth()/1.5f), wingY+(wingSprite.getHeight()/12));
+			label.getLabel().setPosition(wingX+(wingSprite.getWidth()/1.5f), wingY-(label.getLabel().getHeight()/10f));
 			
 		}
 		

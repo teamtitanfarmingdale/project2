@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Armor extends BasicHealthBar {
 
 	Texture armorBarTex = new Texture(
-			Gdx.files.internal("hud/armor/armorbar.png"));
+			Gdx.files.internal("hud/armor/armorbar-left.png"));
 	Texture wingTex = new Texture(
 			Gdx.files.internal("hud/armor/toprightwing.png"));
 
@@ -22,29 +22,39 @@ public class Armor extends BasicHealthBar {
 		setHealthBarSprite(armorbar);
 	}
 
-	public void draw(Batch batch, float alpha) {
+	public void drawArmor(Batch batch, float alpha) {
 		super.draw(batch, alpha);
 
-		if (getParent().getStage() != null && i == 0
+		if (!isPositionSet() && getParent().getStage() != null
 				&& positionYOffsetHeight != 0 && positionXOffsetWidth != 0) {
 
 			parentWidth = getParent().getStage().getWidth();
 			parentHeight = getParent().getStage().getHeight();
 
+			/*
 			armorbar.setPosition(parentWidth / 2
 					+ (positionXOffsetWidth / 3.5f),
 					parentHeight - armorbar.getHeight()
 							- (positionYOffsetHeight / 4.33f));
+			*/
+			/*
+			healthBarX = halfParentWidth
+					- (healthBarSprite.getWidth() + (positionXOffsetWidth / 3.4f));
+			healthBarY = (parentHeight - healthBarSprite.getHeight())
+					- (positionYOffsetHeight / 4.1f);
+			*/
+			armorbar.setPosition((parentWidth/2)-(armorbar.getWidth()+(positionXOffsetWidth/3.4f)), (parentHeight - armorbar.getHeight())-(positionYOffsetHeight/4.1f));
+			/*
 			wings.setPosition(parentWidth / 2 + (positionXOffsetWidth / 4),
 					parentHeight - wings.getHeight()
 							- (positionYOffsetHeight / 5));
-
+			 */
 			setPositionSet(true);
 			i++;// makes sure that it does not reassign the positions in the
 				// following iterations
 		}
 
-		wings.draw(batch);
+		//wings.draw(batch);
 		armorbar.draw(batch);
 
 	}

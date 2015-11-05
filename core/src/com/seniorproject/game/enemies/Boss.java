@@ -73,5 +73,13 @@ public class Boss extends BaseEnemy {
 		
 	}
 	
+	@Override
+	public void lowerHealth(int damage) {
+		super.lowerHealth(damage);
+		
+		level.enemyHealthBar.lowerHealth(damage);
+		
+	}
+	
 	
 }

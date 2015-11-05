@@ -71,7 +71,9 @@ public class BaseEnemy extends GameActor {
 	}
 	
 	
-
+	public int getHealth() {
+		return health;
+	}
 	
 	public void act(float delta) {
 		super.act(delta);

@@ -65,6 +65,8 @@ public class GameOverScreen extends BaseMenu {
 		newGameButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				ShooterGame.CURRENT_LEVEL = 0;
+				ShooterGame.PLAYER_SCORE = 0;
 				game.switchScreen(ShooterGame.GAME);
 			}
 		});

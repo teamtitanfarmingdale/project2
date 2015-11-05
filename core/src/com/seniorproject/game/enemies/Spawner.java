@@ -41,5 +41,9 @@ public class Spawner extends Actor {
 		return System.nanoTime()/ONE_BILLION;
 	}
 	
+	public int getMaxEnemies() {
+		return maxEnemies;
+	}
+	
 	
 }

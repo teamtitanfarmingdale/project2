@@ -33,7 +33,7 @@ public class Level extends Stage {
 	
 	public Ship ship;
 	public LevelBackground background;
-	private EnemySpawner enemySpawner;
+	public EnemySpawner enemySpawner;
 	public AsteroidSpawner asteroidSpawner;
 	private World world;
 	private float accumulator = 0f;
@@ -50,6 +50,7 @@ public class Level extends Stage {
 	public Score score;
 	public Health healthBar;
 	public Armor armorBar;
+	public EnemyHealth enemyHealthBar;
 	
 	private Group hudObjects;
 	
@@ -95,6 +96,7 @@ public class Level extends Stage {
 		healthBar = new Health(g);
 		armorBar = new Armor();
 		score = new Score();
+		enemyHealthBar = new EnemyHealth();
 		
 		healthBar.setPositionXOffsetWidth(score.getBGWidth());
 		healthBar.setPositionYOffsetHeight(score.getBGHeight());
@@ -102,12 +104,16 @@ public class Level extends Stage {
 		armorBar.setPositionXOffsetWidth(score.getBGWidth());
 		armorBar.setPositionYOffsetHeight(score.getBGHeight());
 		
+		enemyHealthBar.setPositionXOffsetWidth(score.getBGWidth());
+		enemyHealthBar.setPositionYOffsetHeight(score.getBGHeight());
+		
 		levelTitle.setPositionXOffsetWidth(score.getBGWidth());
 		levelTitle.setPositionYOffsetHeight(score.getBGHeight());
 		
 		hudObjects = new Group();
 		hudObjects.addActor(healthBar);
 		hudObjects.addActor(armorBar);
+		hudObjects.addActor(enemyHealthBar);
 		hudObjects.addActor(levelTitle);
 		hudObjects.addActor(score);
 		hudObjects.addActor(levelTitle.getLabel());

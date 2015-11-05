@@ -83,7 +83,10 @@ public class EnemySpawner extends Spawner {
 		deadEnemyList.clear();
 		
 		if(level != null && totalEnemies == maxEnemies && enemyList.size() == 0 && !spawnedBoss) {
+			// SPAWN BOSS
 			
+			level.enemyHealthBar.MAX_HEALTH = boss.getHealth();
+			level.enemyHealthBar.setHealth(boss.getHealth());
 			level.addGameObject(boss);
 			spawnedBoss = true;
 			
