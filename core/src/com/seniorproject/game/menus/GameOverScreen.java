@@ -10,9 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.seniorproject.game.ButtonHelper;
-import com.seniorproject.game.LabelHelper;
 import com.seniorproject.game.ShooterGame;
+import com.seniorproject.game.helpers.ButtonHelper;
+import com.seniorproject.game.helpers.LabelHelper;
 
 public class GameOverScreen extends BaseMenu {
 

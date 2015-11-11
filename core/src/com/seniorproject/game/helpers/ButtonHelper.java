@@ -1,10 +1,17 @@
-package com.seniorproject.game;
+package com.seniorproject.game.helpers;
+
+import java.awt.Cursor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GLTexture;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class ButtonHelper {
@@ -26,9 +33,7 @@ public class ButtonHelper {
 		ImageButtonStyle buttonStyle = new ImageButtonStyle(trdButtonDrawable, trdButtonDrawableHover, trdButtonDrawable, trdButtonDrawable, trdButtonDrawableHover, trdButtonDrawable);
 		buttonStyle.imageOver = trdButtonDrawableHover;
 		buttonStyle.checkedOver = trdButtonDrawableHover;
-		
 		button = new ImageButton(buttonStyle);
-		
 	}
 	
 	public ImageButton getButton() {

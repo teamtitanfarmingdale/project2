@@ -12,7 +12,7 @@ public class ShooterGame extends Game {
 	public static int GAME_WIDTH = 1200;
 	public static int GAME_HEIGHT = 720;
 
-	public static float MUSIC_VOLUME = .5f;
+	public static float MUSIC_VOLUME = 0f;
 	public static float SFX_VOLUME = .5f;
 	
 	public static int PLAYER_SCORE = 0;
@@ -38,10 +38,10 @@ public class ShooterGame extends Game {
 	@Override
 	public void create() {
 		
-		currentScreen = new MainMenuScreen(this);
+		currentScreen = new VictoryScreen(this);//new MainMenuScreen(this);
 		
 		this.setScreen(currentScreen);
-
+		
 	}
 
 	

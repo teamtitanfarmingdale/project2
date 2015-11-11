@@ -40,6 +40,9 @@ public class BaseMenu implements Screen {
 		
 	}
 	
+	public Stage getStage() {
+		return stage;
+	}
 	
 	@Override
 	public void show() {

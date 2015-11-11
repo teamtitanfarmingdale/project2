@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
-import com.seniorproject.game.LabelHelper;
 import com.seniorproject.game.ShooterGame;
+import com.seniorproject.game.helpers.LabelHelper;
 import com.seniorproject.game.levels.Level;
 
 public class Score extends Actor {

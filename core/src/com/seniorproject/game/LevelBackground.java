@@ -31,7 +31,7 @@ public class LevelBackground extends Actor {
 				.internal("sounds/action.wav"));
 		soundID = wavSound.loop(ShooterGame.MUSIC_VOLUME);// Plays the sound in a infinite loop. @param volume level
 
-		background = new Texture(Gdx.files.internal("starsbg1.png"));
+		background = new Texture(Gdx.files.internal("space-level1.jpg"));
 		background.setWrap(Texture.TextureWrap.Repeat,
 				Texture.TextureWrap.Repeat);
 		bgSprite = new Sprite(background);

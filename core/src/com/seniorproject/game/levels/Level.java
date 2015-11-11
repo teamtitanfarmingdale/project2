@@ -1,6 +1,7 @@
 package com.seniorproject.game.levels;
 
 import java.util.ArrayList;
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -17,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.seniorproject.game.CollisionData;
-import com.seniorproject.game.CollisionHelper;
 import com.seniorproject.game.GameActor;
 import com.seniorproject.game.GameScreen;
 import com.seniorproject.game.LevelBackground;
@@ -25,6 +25,7 @@ import com.seniorproject.game.Ship;
 import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.enemies.AsteroidSpawner;
 import com.seniorproject.game.enemies.EnemySpawner;
+import com.seniorproject.game.helpers.CollisionHelper;
 import com.seniorproject.game.hud.*;
 
 public class Level extends Stage {

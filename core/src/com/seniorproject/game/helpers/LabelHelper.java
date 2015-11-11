@@ -1,4 +1,4 @@
-package com.seniorproject.game;
+package com.seniorproject.game.helpers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -19,12 +19,12 @@ public class LabelHelper {
 	private LabelStyle labelStyle;
 	private BitmapFont font;
 	
-	public LabelHelper(String title, int fontSize, Color color) {
+	public LabelHelper(String title, int fontSize, Color color, String fontFile) {
 		
 		// Skin is needed for the label
 		skin = new Skin();
 		
-		setupFont(fontSize);
+		setupFont(fontSize, fontFile);
 		
 		labelStyle = new LabelStyle(font, color);
 		
@@ -34,6 +34,10 @@ public class LabelHelper {
 		label = new Label(title, skin);
 		label.setHeight((float) (fontSize*POINTS_TO_PIXELS_MULTIPLIER));
 		
+	}
+	
+	public LabelHelper(String title, int fontSize, Color color) {
+		this(title, fontSize, color, FONT_FILE);
 	}
 	
 	
@@ -50,14 +54,23 @@ public class LabelHelper {
 		label.setText(title);
 	}
 	
-	private void setupFont(int fontSize) {
+	public BitmapFont getFont() {
+		return font;
+	}
+	
+	
+	private void setupFont(int fontSize, String fontFile) {
 		// Creates a Bitmap font from the .ttf font file
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_FILE));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(fontFile));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = fontSize;
 
 		font = generator.generateFont(parameter);
 		generator.dispose();
+	}
+	
+	private void setupFont(int fontSize) {
+		this.setupFont(fontSize, FONT_FILE);
 	}
 	
 }

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.seniorproject.game.LabelHelper;
+import com.seniorproject.game.helpers.LabelHelper;
 
 public class LevelTitle extends BaseHUD {
 	

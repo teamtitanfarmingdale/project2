@@ -4,14 +4,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureWrap;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.seniorproject.game.ButtonHelper;
-import com.seniorproject.game.LabelHelper;
 import com.seniorproject.game.ShooterGame;
+import com.seniorproject.game.helpers.ButtonHelper;
+import com.seniorproject.game.helpers.FontHelper;
+import com.seniorproject.game.helpers.LabelHelper;
 
 public class VictoryScreen extends BaseMenu implements Screen {
 
@@ -20,6 +28,11 @@ public class VictoryScreen extends BaseMenu implements Screen {
 	ButtonHelper nextLevelButtonHelper;
 	ButtonHelper saveButtonHelper;
 	ButtonHelper quitButtonHelper;
+	
+	SubmitScoreDialog submitScoreDialog;
+	boolean scoreSubmitted = false;
+	
+	Sprite dialogSprite;
 	
 	long lastUpdateTime = 0;
 	int playerScoreCounter = 0;
@@ -40,8 +53,10 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		
 		init("menu/victorymenu.png", 0);
 		
-		int buttonOffset = 20;
+		submitScoreDialog = new SubmitScoreDialog(stage);
 		
+		int buttonOffset = 10;
+
 		scoreLabelHelper = new LabelHelper(String.format("%,d", 0), 18, Color.YELLOW);
 		Label scoreLabel = scoreLabelHelper.getLabel();
 		scoreLabel.setWidth(240);
@@ -59,6 +74,8 @@ public class VictoryScreen extends BaseMenu implements Screen {
 			calculatedBonus *= ((1+ShooterGame.PLAYER_SHIP.totalKills)*.25);
 		}
 		
+		submitScoreDialog.setBonusPoints(calculatedBonus);
+		
 		bonusScoreInterval = (int) (calculatedBonus*.03);
 		
 		bonusLabelHelper = new LabelHelper(String.format("%,d", 0), 18, Color.YELLOW);
@@ -70,19 +87,31 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		nextLevelButtonHelper = new ButtonHelper("menu/nextlevel-button.png", 204, 63, 0, 0, 0, 63);
 		
 		ImageButton nextLevelButton = nextLevelButtonHelper.getButton();
-		nextLevelButton.setPosition((stage.getWidth()/2)-(nextLevelButton.getWidth()/2), bonusLabel.getY()-nextLevelButton.getHeight()-buttonOffset);
+		nextLevelButton.setPosition((stage.getWidth()/2)-(nextLevelButton.getWidth()/2), bonusLabel.getY()-nextLevelButton.getHeight()-(buttonOffset*2));
+		
+		saveButtonHelper = new ButtonHelper("menu/save-button.png", 204, 63, 0, 0, 0, 63);
+		
+		ImageButton saveButton = saveButtonHelper.getButton();
+		saveButton.setPosition((stage.getWidth()/2)-(saveButton.getWidth()/2), nextLevelButton.getY()-saveButton.getHeight()-buttonOffset);
+		
 		
 		quitButtonHelper = new ButtonHelper("menu/quit-button.png", 204, 63, 0, 0, 0, 63);
 		
 		ImageButton quitButton = quitButtonHelper.getButton();
-		quitButton.setPosition((stage.getWidth()/2)-(quitButton.getWidth()/2), nextLevelButton.getY()-quitButton.getHeight()-buttonOffset);
-		
+		quitButton.setPosition((stage.getWidth()/2)-(quitButton.getWidth()/2), saveButton.getY()-quitButton.getHeight()-buttonOffset);
 		
 		nextLevelButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				ShooterGame.PLAYER_SCORE += calculatedBonus;
 				game.switchScreen(ShooterGame.GAME);
+			}
+		});
+		
+		saveButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				submitScoreDialog.show();
 			}
 		});
 		
@@ -96,11 +125,12 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		stage.addActor(scoreLabel);
 		stage.addActor(bonusLabel);
 		stage.addActor(nextLevelButton);
+		stage.addActor(saveButton);
 		stage.addActor(quitButton);
 		
+		
 		Gdx.input.setInputProcessor(stage);
-		
-		
+
 	}
 	
 
@@ -115,7 +145,14 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		
 		batch.begin();
 		menuBorder.draw(batch);
+		submitScoreDialog.draw(batch);
 		batch.end();
+		
+		if(submitScoreDialog.isVisible()) {
+			submitScoreDialog.getStage().act(Gdx.graphics.getDeltaTime());
+			submitScoreDialog.getStage().draw();
+		}
+		
 		
 		if(System.nanoTime()-lastUpdateTime > .1) {
 			lastUpdateTime = System.nanoTime();
@@ -140,6 +177,18 @@ public class VictoryScreen extends BaseMenu implements Screen {
 			
 			
 		}
+		
+		
+		if(!scoreSubmitted && submitScoreDialog.scoreSubmitted()) {
+			// Remove Submit Score Button and move Quit button up
+			
+			scoreSubmitted = true;
+			
+			quitButtonHelper.getButton().setPosition(saveButtonHelper.getButton().getX(), saveButtonHelper.getButton().getY());
+			saveButtonHelper.getButton().setVisible(false);
+			
+		}
+		
 		
 	}
 
