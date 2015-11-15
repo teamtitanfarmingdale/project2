@@ -8,8 +8,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.seniorproject.game.GameActor;
 import com.seniorproject.game.ShooterGame;
+import com.seniorproject.game.helpers.GeneralHelper;
 
 public class BaseEnemy extends GameActor {
 
@@ -263,8 +266,10 @@ public class BaseEnemy extends GameActor {
 
 		if(!this.dead && dead) {
 			// PLAY EXPLOSION SOUND
-			Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion-2.wav"));
+			final Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion-2.wav"));
 			wavSound.play(ShooterGame.SFX_VOLUME);
+			GeneralHelper.disposeSound(wavSound, 2f);
+			
 		}
 		
 		this.dead = dead;

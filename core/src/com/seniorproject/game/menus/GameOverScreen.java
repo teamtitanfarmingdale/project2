@@ -108,5 +108,6 @@ public class GameOverScreen extends BaseMenu {
 		finalScoreText.getTexture().dispose();
 		newGameButtonHelper.dispose();
 		quitButtonHelper.dispose();
+		finalScoreLabelHelper.dispose();
 	}
 }

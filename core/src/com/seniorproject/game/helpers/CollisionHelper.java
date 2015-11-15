@@ -1,9 +1,6 @@
 package com.seniorproject.game.helpers;
 
 import java.util.ArrayList;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.seniorproject.game.BaseBullet;
 import com.seniorproject.game.CollisionData;

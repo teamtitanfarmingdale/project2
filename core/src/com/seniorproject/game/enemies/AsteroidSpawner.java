@@ -42,7 +42,7 @@ public class AsteroidSpawner extends Spawner {
 			Asteroid asteroid = new Asteroid(world, enemySpriteFile);
 			level.addGameObject(asteroid);
 			asteroidList.add(asteroid);
-			totalEnemies++;
+			//totalEnemies++;
 			enemySpawnIntervalCount++;
 			lastSpawnTime = getSeconds();
 		}

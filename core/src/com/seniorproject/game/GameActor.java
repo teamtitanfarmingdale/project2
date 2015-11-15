@@ -1,7 +1,6 @@
 package com.seniorproject.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -27,6 +26,7 @@ public abstract class GameActor extends Actor {
 	
 	public CollisionData collisionData;
 	
+	private boolean disposed = false;
 	
 	public GameActor(World world) {
 		actorWorld = world;
@@ -65,11 +65,8 @@ public abstract class GameActor extends Actor {
 			shape.dispose();
 		}
 		else if(getStage() != null && isDead() && !died) {
-			
-			body.destroyFixture(fixture);
-			actorWorld.destroyBody(body);
+			this.dispose();
 			died = true;
-			
 			this.remove();
 		}
 	}
@@ -130,6 +127,16 @@ public abstract class GameActor extends Actor {
 		texture = new Texture(Gdx.files.internal(spriteImageFile));
 		sprite = new Sprite(texture);
 		
+	}
+	
+	public void dispose() {
+		if(!disposed) {
+			disposed = true;
+			body.destroyFixture(fixture);
+			actorWorld.destroyBody(body);
+			texture.dispose();
+			System.out.println(this.getClass().getName()+" disposed");
+		}
 	}
 	
 	public CollisionData getCollisionData() {

@@ -5,10 +5,12 @@ import com.badlogic.gdx.Screen;
 import com.seniorproject.game.menus.GameOverScreen;
 import com.seniorproject.game.menus.MainMenuScreen;
 import com.seniorproject.game.menus.VictoryScreen;
-
+import com.seniorproject.game.menus.PlayMenu;
 
 public class ShooterGame extends Game {
 
+	public final static String GAME_NAME = "Space Titans";
+	
 	public static int GAME_WIDTH = 1200;
 	public static int GAME_HEIGHT = 720;
 
@@ -16,12 +18,15 @@ public class ShooterGame extends Game {
 	public static float SFX_VOLUME = .5f;
 	
 	public static int PLAYER_SCORE = 0;
+	public static int PREVIOUS_SCORE = 0;
 	
 	public static int STARTING_ENEMY_COUNT = 5;
 	
 	public static int CURRENT_LEVEL = 0;
 	
 	public static Ship PLAYER_SHIP;
+	
+	public Database db;
 	
 	
 	// Screen Constants
@@ -38,7 +43,8 @@ public class ShooterGame extends Game {
 	@Override
 	public void create() {
 		
-		currentScreen = new VictoryScreen(this);//new MainMenuScreen(this);
+		currentScreen = new PlayMenu(this);//new MainMenuScreen(this);
+		db = new Database();
 		
 		this.setScreen(currentScreen);
 		
@@ -84,4 +90,5 @@ public class ShooterGame extends Game {
 	public GameScreen getCurrentGameScreen() {
 		return currentGameScreen;
 	}
+	
 }

@@ -9,7 +9,7 @@ import com.badlogic.gdx.audio.Sound;
 
 public class Bullet extends BaseBullet {
 	
-	
+	Sound wavSound;
 	int bulletSoundCount= 0;
 	
 	public Bullet(World world) {
@@ -39,11 +39,16 @@ public class Bullet extends BaseBullet {
 		super.createBody();
 		
 		//Sound for bullets
-		Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
+		wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
 		if (bulletSoundCount == 0){
 			wavSound.play(ShooterGame.SFX_VOLUME);
 			bulletSoundCount++;
 		}
 	}
 	
+	@Override
+	public void destroyBullet() {
+		super.destroyBullet();
+		wavSound.dispose();
+	}
 }

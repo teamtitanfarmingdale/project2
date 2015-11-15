@@ -72,5 +72,9 @@ public class LabelHelper {
 	private void setupFont(int fontSize) {
 		this.setupFont(fontSize, FONT_FILE);
 	}
+
+	public void dispose() {
+		skin.dispose();
+	}
 	
 }

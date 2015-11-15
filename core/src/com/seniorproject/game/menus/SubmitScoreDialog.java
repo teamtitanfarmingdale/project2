@@ -54,6 +54,8 @@ public class SubmitScoreDialog {
 	LabelHelper messageLabelHelper;
 	Label messageLabel;
 	
+	TextFieldHelper tfHelper;
+	
 	public SubmitScoreDialog(Stage parentStage) {
 		
 		this.parentStage = parentStage;
@@ -82,7 +84,7 @@ public class SubmitScoreDialog {
 		enterNameLabel.setPosition(dialogSprite.getX()+50, dialogSprite.getY()+dialogSprite.getHeight()-125);
 		
 		// Enter Name Textbox
-		TextFieldHelper tfHelper = new TextFieldHelper((int) (dialogSprite.getWidth()-100), 35, labelHelper.getFont());
+		tfHelper = new TextFieldHelper((int) (dialogSprite.getWidth()-100), 35);
 		
 		final TextField nameText = tfHelper.getTextField();
 		nameText.setPosition((stage.getWidth()/2)-(nameText.getWidth()/2), enterNameLabel.getY()-40);
@@ -269,5 +271,15 @@ public class SubmitScoreDialog {
 	private void setSuccessMessage(String message) {
 		messageLabel.setText(message);
 		messageLabel.setColor(Color.GREEN);
+	}
+	
+	public void dispose() {
+		fadedBGTexture.dispose();
+		labelHelper.dispose();
+		messageLabelHelper.dispose();
+		cancelButtonHelper.dispose();
+		saveButtonHelper.dispose();
+		stage.dispose();
+		errorBorder.getTexture().dispose();
 	}
 }

@@ -58,7 +58,7 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 		musicTextSprite = new Sprite(musicTextTexture);
 		
 		// BUTTONS
-		newGameButtonHelper = new ButtonHelper("menu/newgame-button.png", 204, 63, 0, 0, 0, 63);
+		newGameButtonHelper = new ButtonHelper("menu/play-button.png", 204, 64, 0, 0, 0, 63);
 		ImageButton newGameButton = newGameButtonHelper.getButton();
 		
 		loadGameButtonHelper = new ButtonHelper("menu/load-button.png", 204, 63, 0, 0, 0, 63);
@@ -128,7 +128,7 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 			}
 			
 		});
-		
+
 		
 		// ADD EVERYTHING TO THE STAGE
 		stage.addActor(newGameButton);
@@ -197,6 +197,11 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 		// TODO Auto-generated method stub
 		super.dispose();
 		newGameButtonHelper.dispose();
+		quitButtonHelper.dispose();
+		sfxSliderHelper.dispose();
+		musicSliderHelper.dispose();
+		sfxTextSprite.getTexture().dispose();
+		musicTextSprite.getTexture().dispose();
 		logo.getTexture().dispose();
 	}
 

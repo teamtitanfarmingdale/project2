@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.seniorproject.game.enemies.Boss;
 import com.seniorproject.game.enemies.Spawner;
+import com.seniorproject.game.helpers.GeneralHelper;
 
 public class Ship extends GameActor {
 
@@ -128,6 +129,7 @@ public class Ship extends GameActor {
 				// PLAY EXPLOSION NOISE
 				Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion-2.wav"));
 				wavSound.play(ShooterGame.SFX_VOLUME);
+				GeneralHelper.disposeSound(wavSound, 2f);
 			}
 			
 		}

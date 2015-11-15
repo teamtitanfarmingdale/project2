@@ -34,7 +34,6 @@ public class Spawner extends Actor {
 	
 	public void setMaxEnemies(int maxEnemies) {
 		this.maxEnemies = maxEnemies;
-		System.out.println(ShooterGame.CURRENT_LEVEL);
 	}
 	
 	public static long getSeconds() {

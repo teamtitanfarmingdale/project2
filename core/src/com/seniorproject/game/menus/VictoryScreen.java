@@ -72,6 +72,8 @@ public class VictoryScreen extends BaseMenu implements Screen {
 			calculatedBonus = (int) ((ShooterGame.PLAYER_SHIP.health+(100*ShooterGame.PLAYER_SHIP.lives)));
 			calculatedBonus += ShooterGame.PLAYER_SHIP.armor+(100*ShooterGame.PLAYER_SHIP.lives);
 			calculatedBonus *= ((1+ShooterGame.PLAYER_SHIP.totalKills)*.25);
+			
+			ShooterGame.PLAYER_SHIP.dispose();
 		}
 		
 		submitScoreDialog.setBonusPoints(calculatedBonus);
@@ -190,6 +192,15 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		}
 		
 		
+	}
+	
+	public void dispose() {
+		scoreLabelHelper.dispose();
+		bonusLabelHelper.dispose();
+		nextLevelButtonHelper.dispose();
+		saveButtonHelper.dispose();
+		quitButtonHelper.dispose();
+		submitScoreDialog.dispose();
 	}
 
 	

@@ -65,6 +65,8 @@ public class BaseBullet extends GameActor {
 	
 	public void destroyBullet() {
 		body.destroyFixture(fixture);
+		actorWorld.destroyBody(body);
+		bulletTexture.dispose();
 	}
 
 
@@ -100,7 +102,8 @@ public class BaseBullet extends GameActor {
 			shape.dispose();
 		}
 		else if(getStage() != null && isDead()) {
-			body.destroyFixture(fixture);
+			destroyBullet();
+			
 			this.remove();
 			if(collidedEnemy != null) {
 				collidedEnemy.createBody();

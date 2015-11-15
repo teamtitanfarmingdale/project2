@@ -55,7 +55,7 @@ public class Asteroid extends BaseEnemy {
 		
 		if(getY()+getHeight() < 0) {
 			this.remove();
-			this.body.destroyFixture(this.fixture);
+			this.dispose();
 			//System.out.println("removed asteroid!");
 		}
 		

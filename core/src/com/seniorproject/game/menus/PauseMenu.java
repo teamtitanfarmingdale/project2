@@ -159,6 +159,7 @@ public class PauseMenu {
 		sfxTextSprite.getTexture().dispose();
 		musicSliderHelper.dispose();
 		sfxSliderHelper.dispose();
+		stage.dispose();
 	}
 	
 	public Stage getStage() {
