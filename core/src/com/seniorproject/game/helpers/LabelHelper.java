@@ -33,7 +33,6 @@ public class LabelHelper {
 		
 		label = new Label(title, skin);
 		label.setHeight((float) (fontSize*POINTS_TO_PIXELS_MULTIPLIER));
-		
 	}
 	
 	public LabelHelper(String title, int fontSize, Color color) {

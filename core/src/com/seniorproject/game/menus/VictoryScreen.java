@@ -91,7 +91,7 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		ImageButton nextLevelButton = nextLevelButtonHelper.getButton();
 		nextLevelButton.setPosition((stage.getWidth()/2)-(nextLevelButton.getWidth()/2), bonusLabel.getY()-nextLevelButton.getHeight()-(buttonOffset*2));
 		
-		saveButtonHelper = new ButtonHelper("menu/save-button.png", 204, 63, 0, 0, 0, 63);
+		saveButtonHelper = new ButtonHelper("menu/submitonline-button.png", 204, 63, 0, 0, 0, 63);
 		
 		ImageButton saveButton = saveButtonHelper.getButton();
 		saveButton.setPosition((stage.getWidth()/2)-(saveButton.getWidth()/2), nextLevelButton.getY()-saveButton.getHeight()-buttonOffset);
@@ -102,6 +102,18 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		ImageButton quitButton = quitButtonHelper.getButton();
 		quitButton.setPosition((stage.getWidth()/2)-(quitButton.getWidth()/2), saveButton.getY()-quitButton.getHeight()-buttonOffset);
 		
+		
+		// Save Game
+		if(ShooterGame.PLAYER_SAVE != null) {
+		
+			ShooterGame.PLAYER_SAVE.level = ShooterGame.CURRENT_LEVEL+1;
+			ShooterGame.PLAYER_SAVE.score = ShooterGame.PLAYER_SCORE + calculatedBonus;
+			
+			submitScoreDialog.tfHelper.getTextField().setText(ShooterGame.PLAYER_SAVE.name);
+			
+			game.db.savePlayer(ShooterGame.PLAYER_SAVE);
+			
+		}
 		nextLevelButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {

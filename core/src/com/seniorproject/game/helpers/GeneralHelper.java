@@ -21,4 +21,19 @@ public class GeneralHelper {
 	}
 	
 	
+	public static String formatScore(int score) {
+		String formattedScore = score+"";
+		
+		if(score >= 1000000) {
+			formattedScore = String.format("%.1f", (score/1000000.0))+"M";
+		}
+		else if(score >= 1000) {
+			formattedScore = String.format("%.1f", (score/1000.0))+"K";
+		}
+
+		
+		return formattedScore;
+	}
+	
+	
 }

@@ -26,6 +26,7 @@ public class ShooterGame extends Game {
 	
 	public static Ship PLAYER_SHIP;
 	
+	public static PlayerSave PLAYER_SAVE = null;
 	public Database db;
 	
 	
@@ -35,6 +36,8 @@ public class ShooterGame extends Game {
 	public static final int PAUSE = 3;
 	public static final int VICTORY = 4;
 	public static final int GAME_OVER = 5;
+	public static final int LOADED_GAME = 6;
+	public static final int PLAY_MENU = 7;
 	
 	
 	private Screen currentScreen;
@@ -43,8 +46,8 @@ public class ShooterGame extends Game {
 	@Override
 	public void create() {
 		
-		currentScreen = new PlayMenu(this);//new MainMenuScreen(this);
 		db = new Database();
+		currentScreen = new MainMenuScreen(this);
 		
 		this.setScreen(currentScreen);
 		
@@ -61,8 +64,14 @@ public class ShooterGame extends Game {
 				PLAYER_SCORE = 0;
 				this.setScreen(currentScreen);
 				break;
+			case PLAY_MENU:
+				currentScreen.dispose();
+				currentScreen = new PlayMenu(this);
+				this.setScreen(currentScreen);
+				break;
 			case GAME:
 				CURRENT_LEVEL++;
+			case LOADED_GAME:
 				currentScreen.dispose();
 				currentScreen = new GameScreen(this);
 				currentGameScreen = (GameScreen) currentScreen;
@@ -91,4 +100,11 @@ public class ShooterGame extends Game {
 		return currentGameScreen;
 	}
 	
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		
+		this.db.disconnect();
+	}
 }

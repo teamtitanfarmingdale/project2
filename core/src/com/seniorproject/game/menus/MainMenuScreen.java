@@ -58,7 +58,7 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 		musicTextSprite = new Sprite(musicTextTexture);
 		
 		// BUTTONS
-		newGameButtonHelper = new ButtonHelper("menu/play-button.png", 204, 64, 0, 0, 0, 63);
+		newGameButtonHelper = new ButtonHelper("menu/start-button.png", 204, 64, 0, 0, 0, 63);
 		ImageButton newGameButton = newGameButtonHelper.getButton();
 		
 		loadGameButtonHelper = new ButtonHelper("menu/load-button.png", 204, 63, 0, 0, 0, 63);
@@ -95,7 +95,7 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 		newGameButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.switchScreen(ShooterGame.GAME);
+				game.switchScreen(ShooterGame.PLAY_MENU);
 			}
 		});
 		

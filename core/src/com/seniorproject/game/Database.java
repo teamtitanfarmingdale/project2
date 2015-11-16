@@ -3,6 +3,7 @@ import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 import javax.swing.JOptionPane;
 
@@ -21,12 +22,11 @@ public class Database {
 		if(connect()) {
 			createPlayerTable();
 			createScoresTable();
-			disconnect();
 		}
-		System.out.println("Connected to database!");
+		
 	}
 	
-	private boolean connect() {
+	public boolean connect() {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:"+dbName);
@@ -39,7 +39,7 @@ public class Database {
 		return c != null;
 	}
 	
-	private void disconnect() {
+	public void disconnect() {
 		try {
 			c.close();			
 		}
@@ -68,10 +68,11 @@ public class Database {
 				System.exit(0);
 			}
 		}
-		
+
 	}
 	
 	private void createScoresTable() {
+
 		try {
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE scores (" +
@@ -88,17 +89,39 @@ public class Database {
 				System.exit(0);
 			}
 		}
+
 	}
 	
-	private boolean savePlayer() {
+	public boolean savePlayer(PlayerSave save) {
 		
 		boolean result = true;
 		
 		try {
 			stmt = c.createStatement();
-			String sql = "INSERT INTO player (name, score, level, last_saved) VALUES ('Leo', 0, 1, datetime('now'))";
+			String sql = "";
+			if(save.player_id == 0) {
+				sql = "INSERT INTO player (name, score, level, last_saved) VALUES ('"+save.name+"', "+save.score+", "+save.level+", datetime('now'))";
+			}
+			else {
+				sql = "UPDATE player SET name = '"+save.name+"', score = "+save.score+", level = "+save.level+", last_saved = datetime('now') WHERE player_id = "+save.player_id;
+			}
+						
 			stmt.executeUpdate(sql);
+			
+		
+			if(save.player_id == 0) {
+				// Save player id
+				ResultSet getLastID = stmt.getGeneratedKeys();
+				if(getLastID.next()) {
+					save.player_id = getLastID.getInt(1);
+					System.out.println(save.player_id);
+				}
+			}
+			
+			ShooterGame.PLAYER_SAVE = save;
+			
 			stmt.close();
+		
 		}
 		catch(Exception e) {
 			System.out.println("Failed to save player info");
@@ -110,12 +133,12 @@ public class Database {
 	}
 	
 	
-	private ArrayList<PlayerSave> getPlayerSaves() {
+	public ArrayList<PlayerSave> getPlayerSaves() {
 		
 		ArrayList<PlayerSave> playerSaves = new ArrayList<PlayerSave>();
 		PlayerSave tempSave;
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd H:m:s");
-		
+
 		try {
 			stmt = c.createStatement();
 			String sql = "SELECT player_id, name, score, level, last_saved FROM player ORDER BY last_saved DESC";
@@ -127,6 +150,7 @@ public class Database {
 				tempSave.score = result.getInt("score");
 				tempSave.level = result.getInt("level");
 				tempSave.date.setTime(df.parse(result.getString("last_saved")));
+
 				playerSaves.add(tempSave);
 			}
 		}
