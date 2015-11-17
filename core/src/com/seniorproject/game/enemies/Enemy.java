@@ -1,7 +1,9 @@
 package com.seniorproject.game.enemies;
 
 import com.badlogic.gdx.physics.box2d.World;
+import com.seniorproject.game.helpers.GeneralHelper;
 import com.seniorproject.game.hud.EnemyHealth;
+import com.seniorproject.game.particles.FireExplosion;
 
 public class Enemy extends BaseEnemy {
 
@@ -14,6 +16,9 @@ public class Enemy extends BaseEnemy {
 		collisionData.setActorType("Enemy");
 		
 		this.health = 30;
+		
+		explosion = new FireExplosion();
+		
 	}
 
 	
@@ -36,5 +41,10 @@ public class Enemy extends BaseEnemy {
 		}
 	}
 	
-
+	@Override
+	public void lowerHealth(int damage) {
+		super.lowerHealth(damage);
+		getLevel().addAction(GeneralHelper.shakeSprite(getSprite()));
+	}
+	
 }

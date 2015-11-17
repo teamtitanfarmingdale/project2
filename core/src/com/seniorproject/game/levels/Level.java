@@ -27,6 +27,7 @@ import com.seniorproject.game.enemies.AsteroidSpawner;
 import com.seniorproject.game.enemies.EnemySpawner;
 import com.seniorproject.game.helpers.CollisionHelper;
 import com.seniorproject.game.hud.*;
+import com.seniorproject.game.particles.FireExplosion;
 
 public class Level extends Stage {
 
@@ -140,6 +141,7 @@ public class Level extends Stage {
 		collisionDetection();
 		
 		pauseListener();
+
 		
 	}
 	

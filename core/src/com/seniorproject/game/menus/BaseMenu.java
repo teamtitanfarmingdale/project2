@@ -6,10 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.seniorproject.game.BaseScreen;
 import com.seniorproject.game.LevelBackground;
 import com.seniorproject.game.ShooterGame;
 
-public class BaseMenu implements Screen {
+public class BaseMenu extends BaseScreen {
 
 	protected ShooterGame game;
 	protected Stage stage;
@@ -29,6 +30,8 @@ public class BaseMenu implements Screen {
 		batch = new SpriteBatch();
 		stage = new Stage();
 
+		setGameStage(stage);
+		
 		Texture menuBorderTexture = new Texture(Gdx.files.internal(menuImage));
 		
 		levelBG = new LevelBackground(.00005f);

@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.seniorproject.game.levels.Level;
 import com.seniorproject.game.menus.PauseMenu;
 
-public class GameScreen implements Screen {
+public class GameScreen extends BaseScreen {
 
 	
 	private Level stage;
@@ -32,6 +32,8 @@ public class GameScreen implements Screen {
 	public void create() {
 		
 		stage = new Level(game);
+		setGameStage(stage);
+		
 		stage.setScreen(this);
 		Gdx.input.setInputProcessor(stage);
 		

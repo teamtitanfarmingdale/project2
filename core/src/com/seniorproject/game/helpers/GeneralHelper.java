@@ -1,6 +1,9 @@
 package com.seniorproject.game.helpers;
 
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
@@ -33,6 +36,45 @@ public class GeneralHelper {
 
 		
 		return formattedScore;
+	}
+	
+	public static SequenceAction shakeSprite(final Sprite sprite) {
+		
+		SequenceAction sa = Actions.sequence(
+				
+				Actions.run(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						sprite.rotate(5);
+					}
+					
+				}),
+				Actions.delay(.05f),
+				Actions.run(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						sprite.rotate(-10);
+					}
+					
+				}),
+				Actions.delay(.05f),
+				Actions.run(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						sprite.rotate(5);
+					}
+					
+				})
+			);
+		
+		
+		return sa;
 	}
 	
 	

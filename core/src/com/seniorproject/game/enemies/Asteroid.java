@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.seniorproject.game.GameActor;
+import com.seniorproject.game.particles.SmokeExplosion;
 
 public class Asteroid extends BaseEnemy {
 	
@@ -25,6 +26,8 @@ public class Asteroid extends BaseEnemy {
 		this.killAwardPoints = 25;
 		this.hitAwardPoints = 10;
 		this.customMovement = true;
+		
+		this.explosion = new SmokeExplosion();
 		
 	}
 	

@@ -51,6 +51,8 @@ public class ShooterGame extends Game {
 		
 		this.setScreen(currentScreen);
 		
+		
+		
 	}
 
 	

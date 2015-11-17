@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.seniorproject.game.GameActor;
 import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.helpers.GeneralHelper;
+import com.seniorproject.game.particles.BaseExplosion;
+import com.seniorproject.game.particles.FireExplosion;
 
 public class BaseEnemy extends GameActor {
 
@@ -47,6 +49,7 @@ public class BaseEnemy extends GameActor {
 	
 	protected boolean customMovement = false;
 	
+	protected BaseExplosion explosion;
 	
 	public BaseEnemy(World world, String spriteFile) {
 		super(world);
@@ -265,6 +268,13 @@ public class BaseEnemy extends GameActor {
 	public void setDead(boolean dead) {
 
 		if(!this.dead && dead) {
+			
+			if(explosion != null) {
+				level.addGameObject(explosion);
+				explosion.start(this.getX(), this.getY());
+				System.out.println(explosion.particleFile);
+			}
+
 			// PLAY EXPLOSION SOUND
 			final Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion-2.wav"));
 			wavSound.play(ShooterGame.SFX_VOLUME);

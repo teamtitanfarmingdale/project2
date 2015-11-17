@@ -135,11 +135,18 @@ public abstract class GameActor extends Actor {
 			body.destroyFixture(fixture);
 			actorWorld.destroyBody(body);
 			texture.dispose();
-			System.out.println(this.getClass().getName()+" disposed");
 		}
+	}
+	
+	public boolean isDisposed() {
+		return disposed;
 	}
 	
 	public CollisionData getCollisionData() {
 		return collisionData;
+	}
+	
+	public Level getLevel() {
+		return level;
 	}
 }

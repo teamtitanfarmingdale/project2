@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.seniorproject.game.ShooterGame;
+import com.seniorproject.game.particles.FireExplosion;
 
 public class Boss extends BaseEnemy {
 
@@ -32,6 +33,8 @@ public class Boss extends BaseEnemy {
 		this.movementDistance = 2f;
 		this.movementXDistance = 2f;
 		this.hoverSpeed = 3f;
+		
+		this.explosion = new FireExplosion();
 	}
 
 

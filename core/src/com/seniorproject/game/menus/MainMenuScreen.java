@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.helpers.ButtonHelper;
 import com.seniorproject.game.helpers.SliderHelper;
+import com.seniorproject.game.particles.FireExplosion;
 
 public class MainMenuScreen extends BaseMenu implements Screen {
 
@@ -27,7 +29,7 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 	
 	SliderHelper sfxSliderHelper;
 	SliderHelper musicSliderHelper;
-	
+
 	public MainMenuScreen(ShooterGame g) {
 		super(g);
 		create();
@@ -40,6 +42,7 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 		int buttonOffset = 20;
 		
 		init("menu/mainmenu.png", borderOffset);
+		
 		
 		// RESET PLAYER SCORE
 		ShooterGame.PLAYER_SCORE = 0;
@@ -137,7 +140,6 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 		stage.addActor(sfxSlider);
 		stage.addActor(musicSlider);
 		
-		
 		Gdx.input.setInputProcessor(stage);
 		
 	}
@@ -196,6 +198,7 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 	public void dispose() {
 		// TODO Auto-generated method stub
 		super.dispose();
+		
 		newGameButtonHelper.dispose();
 		quitButtonHelper.dispose();
 		sfxSliderHelper.dispose();

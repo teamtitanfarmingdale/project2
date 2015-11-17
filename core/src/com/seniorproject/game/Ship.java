@@ -21,6 +21,9 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.seniorproject.game.enemies.Boss;
 import com.seniorproject.game.enemies.Spawner;
 import com.seniorproject.game.helpers.GeneralHelper;
+import com.seniorproject.game.particles.EngineThrust;
+import com.seniorproject.game.particles.FireExplosion;
+import com.seniorproject.game.particles.InfiniteParticle;
 
 public class Ship extends GameActor {
 
@@ -51,11 +54,21 @@ public class Ship extends GameActor {
 	
 	Sprite gasSprite;
 	
+	EngineThrust gasParticle;
+	
+	InfiniteParticle smokingIndicator;
+	InfiniteParticle dangerIndicator;
+	
+	
 	
 	public Ship(World world) {
 		super(world);
 		
 		setupSprite("ship.png");
+		
+		gasParticle = new EngineThrust();
+		smokingIndicator = new InfiniteParticle("particles/smoking-indicator.particle");
+		dangerIndicator = new InfiniteParticle("particles/danger-indicator.particle");
 		
 		collisionData.setActorType("Ship");
 		setBounds(getSprite().getX(), 10, getSprite().getWidth(), getSprite().getHeight());
@@ -65,9 +78,14 @@ public class Ship extends GameActor {
 		
 		Texture gasTexture = new Texture(Gdx.files.internal("gas.png"));
 		gasSprite = new Sprite(gasTexture);		
+		
 	}
 	
 	public void hit(float damage) {
+		
+		
+		getLevel().addAction(GeneralHelper.shakeSprite(getSprite()));
+		
 		
 		if(armor > 0) {
 			armor -= damage;
@@ -89,12 +107,19 @@ public class Ship extends GameActor {
 		}
 		
 		if(health == 0 && armor == 0 && lives > 0) {
+			
+			// EXPLODE
+			this.explode();
+			
 			level.healthBar.lifeManager.removeLife();
 			armor = MAX_ARMOR;
 			health = MAX_HEALTH;
 		}
 		else if(health == 0 && armor == 0 && lives == 0) {
 			// GAME OVER
+			
+			// EXPLODE
+			this.explode();
 			
 			this.setDead(true);
 			ShooterGame.PLAYER_SCORE = level.score.getScore();
@@ -152,13 +177,34 @@ public class Ship extends GameActor {
 	
 	@Override
 	public void draw(Batch batch, float alpha) {
-		getSprite().draw(batch);
+		
 		createBody();
 		
-		if(upKeyPressed || level.levelFinished) {
-			gasSprite.setPosition(getSprite().getX()+(gasSprite.getWidth()/2)-4, getSprite().getY()-8);
-			gasSprite.draw(batch);
+		if(gasParticle != null) {
+			gasParticle.draw(batch);
+			
+			if(upKeyPressed || level.levelFinished) {
+				//gasSprite.setPosition(getSprite().getX()+(gasSprite.getWidth()/2)-4, getSprite().getY()-8);
+				//gasSprite.draw(batch);
+				gasParticle.start(getSprite().getX()+28, getSprite().getY()+15);
+			}
+			else {
+				gasParticle.reset();
+				gasParticle.stop();
+			}
 		}
+		
+		if(dangerIndicator != null && health <= 40) {
+			dangerIndicator.start(this.getX()+(this.getWidth()/2)+5, this.getY()+30);
+			dangerIndicator.draw(batch);
+		}
+		else if(smokingIndicator != null && health <= 70) {
+			smokingIndicator.start(this.getX()+(this.getWidth()/2)+5, this.getY()+30);
+			smokingIndicator.draw(batch);
+		}
+		
+		
+		getSprite().draw(batch);
 	}
 	
 	
@@ -335,5 +381,32 @@ public class Ship extends GameActor {
 		}
 	}
 		
+	@Override
+	public void dispose() {
+		super.dispose();
+		
+		if(gasParticle != null) {
+			gasParticle.dispose();
+			gasParticle = null;
+		}
+		
+		if(smokingIndicator != null) {
+			smokingIndicator.dispose();
+			smokingIndicator = null;
+		}
+		
+		if(dangerIndicator != null) {
+			dangerIndicator.dispose();
+			dangerIndicator = null;
+		}
+		
+	}
+	
+	public void explode() {
+		// EXPLODE
+		FireExplosion explosion = new FireExplosion();
+		level.addGameObject(explosion);
+		explosion.start(this.getX(), this.getY());
+	}
 	
 }

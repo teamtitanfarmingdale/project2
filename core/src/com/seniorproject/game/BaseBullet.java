@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.seniorproject.game.enemies.Asteroid;
 import com.seniorproject.game.enemies.BaseEnemy;
 import com.seniorproject.game.levels.Level;
+import com.seniorproject.game.particles.BaseExplosion;
 
 public class BaseBullet extends GameActor {
 
@@ -29,9 +30,12 @@ public class BaseBullet extends GameActor {
 	protected float bulletSpeed = .01f;
 	protected float movementDistance = 10f;
 	
+	protected BaseExplosion collisionParticle;
+	
 	public BaseBullet(World world) {
 		super(world);
 
+		collisionParticle = new BaseExplosion("particles/bullet-collision.particle");
 		//collisionData.setActorType("Bullet");
 	}
 	
@@ -121,6 +125,10 @@ public class BaseBullet extends GameActor {
 		if(enemy.getCollisionData().getActorType() == "Enemy" || enemy.getCollisionData().getActorType() == "Boss" || enemy.getCollisionData().getActorType() == "Asteroid") {
 			BaseEnemy tempEnemy = (BaseEnemy) enemy;
 			tempEnemy.lowerHealth(damage);
+			
+			level.addGameObject(collisionParticle);
+			collisionParticle.start(this.getX()+(this.getWidth()/2), this.getY()+30);
+			
 		}
 		else if(enemy.getCollisionData().getActorType() == "Ship") {
 			Ship tempShip = (Ship) enemy;
