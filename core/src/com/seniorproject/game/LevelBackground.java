@@ -27,10 +27,10 @@ public class LevelBackground extends Actor {
 	
 	public LevelBackground() {
 		// background music
-		wavSound = Gdx.audio.newSound(Gdx.files
+		/*wavSound = Gdx.audio.newSound(Gdx.files
 				.internal("sounds/action.wav"));
 		soundID = wavSound.loop(ShooterGame.MUSIC_VOLUME);// Plays the sound in a infinite loop. @param volume level
-
+*/
 		background = new Texture(Gdx.files.internal("space-level1.jpg"));
 		background.setWrap(Texture.TextureWrap.Repeat,
 				Texture.TextureWrap.Repeat);
@@ -53,7 +53,7 @@ public class LevelBackground extends Actor {
 	}
 	
 	public void setBGVolume(float volume) {
-		wavSound.setVolume(soundID, volume);
+		//wavSound.setVolume(soundID, volume);
 	}
 	
 	
@@ -77,11 +77,11 @@ public class LevelBackground extends Actor {
 			bgSprite.setV(backgroundPosition);
 			bgSprite.setV2(backgroundPosition + 1);
 			
-			wavSound.resume();
+			ShooterGame.bgMusic.resume();
 			
 		}
 		else if(level != null && level.screen.gamePaused) {
-			wavSound.pause();
+			ShooterGame.bgMusic.pause();
 		}
 		
 		bgSprite.draw(batch);
@@ -129,7 +129,7 @@ public class LevelBackground extends Actor {
 	}
 	
 	public void dispose() {
-		wavSound.dispose();
+		//wavSound.dispose();
 		background.dispose();
 	}
 	

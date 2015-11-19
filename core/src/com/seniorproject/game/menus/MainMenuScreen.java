@@ -116,8 +116,7 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				// TODO Auto-generated method stub
-				ShooterGame.MUSIC_VOLUME = musicSlider.getValue();
-				levelBG.setBGVolume(ShooterGame.MUSIC_VOLUME);
+				ShooterGame.setBGMusicVolume(musicSlider.getValue());
 			}
 			
 		});

@@ -1,7 +1,9 @@
 package com.seniorproject.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.seniorproject.game.menus.GameOverScreen;
 import com.seniorproject.game.menus.MainMenuScreen;
 import com.seniorproject.game.menus.VictoryScreen;
@@ -17,6 +19,8 @@ public class ShooterGame extends Game {
 	public static float MUSIC_VOLUME = 0f;
 	public static float SFX_VOLUME = .5f;
 	
+	public static Sound bgMusic;
+	
 	public static int PLAYER_SCORE = 0;
 	public static int PREVIOUS_SCORE = 0;
 	
@@ -28,6 +32,8 @@ public class ShooterGame extends Game {
 	
 	public static PlayerSave PLAYER_SAVE = null;
 	public Database db;
+	
+	public static long soundID;
 	
 	
 	// Screen Constants
@@ -47,6 +53,12 @@ public class ShooterGame extends Game {
 	public void create() {
 		
 		db = new Database();
+		
+		bgMusic = Gdx.audio.newSound(Gdx.files
+				.internal("sounds/action.wav"));
+		soundID = bgMusic.loop(ShooterGame.MUSIC_VOLUME);
+		
+		
 		currentScreen = new MainMenuScreen(this);
 		
 		this.setScreen(currentScreen);
@@ -92,6 +104,11 @@ public class ShooterGame extends Game {
 		}
 		
 		
+	}
+	
+	public static void setBGMusicVolume(float volume) {
+		MUSIC_VOLUME = volume;
+		bgMusic.setVolume(soundID, volume);
 	}
 	
 	public Screen getCurrentScreen() {

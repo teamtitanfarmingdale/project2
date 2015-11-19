@@ -112,8 +112,7 @@ public class PauseMenu {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				// TODO Auto-generated method stub
-				ShooterGame.MUSIC_VOLUME = musicSlider.getValue();
-				s.getLevel().background.setBGVolume(ShooterGame.MUSIC_VOLUME);
+				ShooterGame.setBGMusicVolume(musicSlider.getValue());
 			}
 			
 		});

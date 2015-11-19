@@ -207,6 +207,7 @@ public class VictoryScreen extends BaseMenu implements Screen {
 	}
 	
 	public void dispose() {
+		super.dispose();
 		scoreLabelHelper.dispose();
 		bonusLabelHelper.dispose();
 		nextLevelButtonHelper.dispose();
