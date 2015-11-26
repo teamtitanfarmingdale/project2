@@ -5,23 +5,17 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.seniorproject.game.GameActor;
 import com.seniorproject.game.PlayerSave;
 import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.helpers.ButtonHelper;
-import com.seniorproject.game.helpers.LabelHelper;
 import com.seniorproject.game.helpers.ScrollPaneHelper;
 
 public class PlayMenu extends BaseMenu {
@@ -48,11 +42,11 @@ public class PlayMenu extends BaseMenu {
 	@Override
 	public void dispose() {
 		super.dispose();
-		playSavedDisabledTexture.dispose();
+		//playSavedDisabledTexture.dispose();
 		backButtonHelper.dispose();
 		playSavedGameHelper.dispose();
 		dialog.dispose();
-		logo.getTexture().dispose();
+		//logo.getTexture().dispose();
 		
 		for(Slot slot : saveSlots) {
 			slot.dispose();
@@ -76,7 +70,7 @@ public class PlayMenu extends BaseMenu {
 		
 		
 		// LOGO
-		Texture logoTexture = new Texture(Gdx.files.internal("logo-small.png"));
+		Texture logoTexture = game.assetManager.getTexture("logo-small.png");
 		logo = new Sprite(logoTexture);
 		logo.setPosition((stage.getWidth()/2)-(logo.getWidth()/2), stage.getHeight()-logo.getHeight());
 		
@@ -126,7 +120,6 @@ public class PlayMenu extends BaseMenu {
 			
 		}
 		
-		System.out.println("List Height:"+listHeight);
 		if(listHeight < 206) {
 			for(Slot saveSlot : saveSlots) {
 				saveSlot.setWidth(saveSlot.getWidth()+19);
@@ -134,7 +127,7 @@ public class PlayMenu extends BaseMenu {
 		}
 
 		// Setup Scroll Pane
-		ScrollPaneHelper spHelper = new ScrollPaneHelper(saveListTable);
+		ScrollPaneHelper spHelper = new ScrollPaneHelper(saveListTable, game);
 		
 		final ScrollPane scrollPane = spHelper.getScrollPane();
 		scrollPane.setSize(280, 180);
@@ -153,20 +146,20 @@ public class PlayMenu extends BaseMenu {
 		
 		// Setup Buttons
 		
-		playSavedDisabledTexture = new Texture(Gdx.files.internal("menu/play-disabled-button.png"));
+		playSavedDisabledTexture = game.assetManager.getTexture("menu/play-disabled-button.png");
 		playSavedGameDisabled = new Image(playSavedDisabledTexture);
 		
 		playSavedGameDisabled.setPosition((stage.getWidth()/2) - (playSavedGameDisabled.getWidth()/2), menuBorder.getY()+borderOffset+buttonOffset);
 		stage.addActor(playSavedGameDisabled);
 		
 		
-		playSavedGameHelper = new ButtonHelper("menu/play-button.png", 204, 63, 0, 0, 0, 63);
+		playSavedGameHelper = new ButtonHelper("menu/play-button.png", 204, 63, 0, 0, 0, 63, game);
 		ImageButton playButton = playSavedGameHelper.getButton();
 		playButton.setPosition(playSavedGameDisabled.getX(), playSavedGameDisabled.getY());
 		playButton.setVisible(false);
 		stage.addActor(playButton);
 		
-		backButtonHelper = new ButtonHelper("menu/back-button.png", 204, 63, 0, 0,0, 63);
+		backButtonHelper = new ButtonHelper("menu/back-button.png", 204, 63, 0, 0,0, 63, game);
 		ImageButton backButton = backButtonHelper.getButton();
 		backButton.setPosition((stage.getWidth()/2) - (backButton.getWidth()/2), playButton.getY()-playButton.getHeight()-(buttonOffset/4));
 		stage.addActor(backButton);
@@ -191,9 +184,7 @@ public class PlayMenu extends BaseMenu {
 					}
 					
 				}
-				else {
-					System.out.println("no save selected");
-				}
+
 			}
 		});
 		

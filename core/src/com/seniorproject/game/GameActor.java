@@ -1,6 +1,5 @@
 package com.seniorproject.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -24,12 +23,19 @@ public abstract class GameActor extends Actor {
 	protected Level level;
 	protected boolean died = false;
 	
+	protected boolean hittable = true;
+	
 	public CollisionData collisionData;
 	
 	private boolean disposed = false;
 	
-	public GameActor(World world) {
-		actorWorld = world;
+	protected float bodyXOffset;
+	protected float bodyYOffset;
+	
+	public GameActor(Level l) {
+		
+		level = l;
+		actorWorld = l.world;
 		collisionData = new CollisionData(this, "");
 		dead = false;
 	}
@@ -40,36 +46,50 @@ public abstract class GameActor extends Actor {
 			
 			level = (Level) getStage();
 			
-			float bodyXOffset = (getParent().getStage().getWidth()/2)-(sprite.getWidth()/2);
-			float bodyYOffset = (getParent().getStage().getHeight()/2)-(sprite.getHeight()/2);
-			
 			// DESTROY THE CURRENT BODY IF THERE IS ONE
-			if(body != null) {
-				body.destroyFixture(fixture);
-				actorWorld.destroyBody(body);
-			}
-			
-			// CREATE A NEW BODY
-			bodyDef = new BodyDef();
-			bodyDef.type = BodyDef.BodyType.DynamicBody;
-			bodyDef.position.set(sprite.getX()-bodyXOffset, sprite.getY()-bodyYOffset);
-			
-			shape = new PolygonShape();
-			shape.setAsBox(sprite.getWidth()/2, sprite.getHeight()/2);
-			
-			
-			body = getWorld().createBody(bodyDef);
-			fixture = body.createFixture(shape, 0f);
-			fixture.setUserData(collisionData);
-			body.resetMassData();
-			shape.dispose();
+			destroyBody();
+			createBodyBoundry();
+
 		}
 		else if(getStage() != null && isDead() && !died) {
 			this.dispose();
 			died = true;
 			this.remove();
 		}
+
 	}
+	
+	protected void createBodyBoundry() {
+		
+		bodyXOffset = (getParent().getStage().getWidth()/2)-(sprite.getWidth()/2);
+		bodyYOffset = (getParent().getStage().getHeight()/2)-(sprite.getHeight()/2);
+		
+		// CREATE A NEW BODY
+
+		bodyDef = new BodyDef();
+		bodyDef.type = BodyDef.BodyType.DynamicBody;
+		
+		
+		bodyDef.position.set(sprite.getX()-bodyXOffset, sprite.getY()-bodyYOffset);
+		
+		shape = new PolygonShape();
+		shape.setAsBox(sprite.getWidth()/2, sprite.getHeight()/2);
+		
+		body = getWorld().createBody(bodyDef);
+		fixture = body.createFixture(shape, 0f);
+		fixture.setUserData(collisionData);
+		body.resetMassData();
+		shape.dispose();
+	}
+	
+	protected void destroyBody() {
+		if(body != null) {
+			//ystem.out.println(this.getClass().getName());
+			body.destroyFixture(fixture);
+			actorWorld.destroyBody(body);
+		}
+	}
+	
 	
 	@Override
 	public void act(float delta) {
@@ -124,7 +144,14 @@ public abstract class GameActor extends Actor {
 	
 	public void setupSprite(String spriteImageFile) {
 		
-		texture = new Texture(Gdx.files.internal(spriteImageFile));
+		if(level == null) {
+			System.out.println("LEVEL NULL");
+		}
+		else if(level.game == null) {
+			System.out.println("GAME NULL");
+		}
+		
+		texture = level.game.assetManager.getTexture(spriteImageFile);
 		sprite = new Sprite(texture);
 		
 	}
@@ -132,9 +159,11 @@ public abstract class GameActor extends Actor {
 	public void dispose() {
 		if(!disposed) {
 			disposed = true;
-			body.destroyFixture(fixture);
-			actorWorld.destroyBody(body);
-			texture.dispose();
+			destroyBody();
+			//texture.dispose();
+			if(shape != null) {
+				shape.dispose();
+			}
 		}
 	}
 	
@@ -149,4 +178,9 @@ public abstract class GameActor extends Actor {
 	public Level getLevel() {
 		return level;
 	}
+	
+	public void hittable(boolean yesNo) {
+		hittable = yesNo;
+	}
+		
 }

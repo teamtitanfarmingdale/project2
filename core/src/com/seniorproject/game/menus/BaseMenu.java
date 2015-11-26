@@ -1,7 +1,5 @@
 package com.seniorproject.game.menus;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,9 +30,9 @@ public class BaseMenu extends BaseScreen {
 
 		setGameStage(stage);
 		
-		Texture menuBorderTexture = new Texture(Gdx.files.internal(menuImage));
+		Texture menuBorderTexture = game.assetManager.getTexture(menuImage);
 		
-		levelBG = new LevelBackground(.00005f);
+		levelBG = new LevelBackground(game, .00005f);
 	
 		menuBorder = new Sprite(menuBorderTexture);
 		menuBorder.setPosition((stage.getWidth()/2)-(menuBorder.getWidth()/2), (stage.getHeight()/2)-(menuBorder.getHeight()/2)-borderOffset);
@@ -92,7 +90,7 @@ public class BaseMenu extends BaseScreen {
 		}
 		
 		if(menuBorder != null) {
-			menuBorder.getTexture().dispose();
+			//menuBorder.getTexture().dispose();
 		}
 	}
 

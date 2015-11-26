@@ -2,13 +2,12 @@ package com.seniorproject.game;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,9 +20,12 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.seniorproject.game.enemies.Boss;
 import com.seniorproject.game.enemies.Spawner;
 import com.seniorproject.game.helpers.GeneralHelper;
+import com.seniorproject.game.levels.Level;
 import com.seniorproject.game.particles.EngineThrust;
 import com.seniorproject.game.particles.FireExplosion;
 import com.seniorproject.game.particles.InfiniteParticle;
+import com.seniorproject.game.weapons.Bullet;
+import com.seniorproject.game.weapons.EMP;
 
 public class Ship extends GameActor {
 
@@ -61,8 +63,8 @@ public class Ship extends GameActor {
 	
 	
 	
-	public Ship(World world) {
-		super(world);
+	public Ship(Level l) {
+		super(l);
 		
 		setupSprite("ship.png");
 		
@@ -76,71 +78,89 @@ public class Ship extends GameActor {
 		
 		collidedObjects = new ArrayList<GameActor>();
 		
-		Texture gasTexture = new Texture(Gdx.files.internal("gas.png"));
+		Texture gasTexture = l.game.assetManager.getTexture("gas.png");
 		gasSprite = new Sprite(gasTexture);		
+		
+		
+		
+		shape = new PolygonShape();
+		
+		float vertices[] = {
+				-38, -25,
+				-1, 31,
+				37, -30,
+				19, -23,
+				10, -36,
+				-10, -36,
+				-19, -25
+		};
+		
+		shape.set(vertices);
+		
 		
 	}
 	
 	public void hit(float damage) {
 		
-		
-		getLevel().addAction(GeneralHelper.shakeSprite(getSprite()));
-		
-		
-		if(armor > 0) {
-			armor -= damage;
+		if(hittable) {
+			getLevel().addAction(GeneralHelper.shakeSprite(getSprite()));
 			
-			// Lower health by remaining damage
-			if(armor < 0) {
-				health += armor;
-				armor = 0;
-			}
 			
-		}
-		else {
-			health -= damage;
-			
-			if(health < 0) {
-				health = 0;
-			}
-			
-		}
-		
-		if(health == 0 && armor == 0 && lives > 0) {
-			
-			// EXPLODE
-			this.explode();
-			
-			level.healthBar.lifeManager.removeLife();
-			armor = MAX_ARMOR;
-			health = MAX_HEALTH;
-		}
-		else if(health == 0 && armor == 0 && lives == 0) {
-			// GAME OVER
-			
-			// EXPLODE
-			this.explode();
-			
-			this.setDead(true);
-			ShooterGame.PLAYER_SCORE = level.score.getScore();
-			
-			// TRIGGER GAME OVER SCREEN
-			Timer.schedule(new Task() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					level.screen.game.switchScreen(ShooterGame.GAME_OVER);
+			if(armor > 0) {
+				armor -= damage;
+				
+				// Lower health by remaining damage
+				if(armor < 0) {
+					health += armor;
+					armor = 0;
 				}
 				
-			}, 3);
+			}
+			else {
+				health -= damage;
+				
+				if(health < 0) {
+					health = 0;
+				}
+				
+			}
 			
-		
+			if(health == 0 && armor == 0 && lives > 0) {
+				
+				// EXPLODE
+				this.explode();
+				
+				level.healthBar.lifeManager.removeLife();
+				armor = MAX_ARMOR;
+				health = MAX_HEALTH;
+			}
+			else if(health == 0 && armor == 0 && lives == 0) {
+				// GAME OVER
+				
+				// EXPLODE
+				this.explode();
+				
+				this.setDead(true);
+				ShooterGame.PLAYER_SCORE = level.score.getScore();
+				
+				// TRIGGER GAME OVER SCREEN
+				Timer.schedule(new Task() {
+	
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						level.screen.game.switchScreen(ShooterGame.GAME_OVER);
+					}
+					
+				}, 3);
+				
+			
+			}
+			
+			
+			level.armorBar.setHealth(armor);
+			level.healthBar.setHealth(health);
 		}
-		
-		
-		level.armorBar.setHealth(armor);
-		level.healthBar.setHealth(health);
 	}
 	
 	public void addCollidedObject(GameActor actor) {
@@ -152,9 +172,12 @@ public class Ship extends GameActor {
 				tempBoss.setLastShipCollision();
 				
 				// PLAY EXPLOSION NOISE
-				Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion-2.wav"));
-				wavSound.play(ShooterGame.SFX_VOLUME);
-				GeneralHelper.disposeSound(wavSound, 2f);
+				//Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion-2.wav"));
+				//wavSound.play(ShooterGame.SFX_VOLUME);
+				//GeneralHelper.disposeSound(wavSound, 2f);
+				
+				level.game.assetManager.playSound("sounds/explosion-2.wav", 2f);
+				
 			}
 			
 		}
@@ -305,7 +328,7 @@ public class Ship extends GameActor {
 					
 					if(!level.screen.gamePaused && button == Input.Buttons.LEFT) {
 						
-						Bullet bullet = new Bullet(getWorld(), Ship.this.getX(), Ship.this.getY());
+						Bullet bullet = new Bullet(level, Ship.this.getX(), Ship.this.getY());
 						
 						bullet.setX(Ship.this.getX()+(Ship.this.getWidth()/2)-(bullet.getWidth()/2));
 						bullet.setY(Ship.this.getY()+(Ship.this.getHeight()/2));
@@ -368,6 +391,11 @@ public class Ship extends GameActor {
 					case Input.Keys.S:
 						downKeyPressed = false;
 						break;
+					case Input.Keys.E:
+						EMP emp = new EMP(level);
+						emp.setPosition(Ship.this.getX()+(emp.getWidth()/2)-(Ship.this.getWidth()), Ship.this.getY());
+						level.addGameObject(emp);
+						break;
 				}
 				
 					createBody();
@@ -407,6 +435,29 @@ public class Ship extends GameActor {
 		FireExplosion explosion = new FireExplosion();
 		level.addGameObject(explosion);
 		explosion.start(this.getX(), this.getY());
+	}
+	
+	@Override
+	protected void createBodyBoundry() {
+		
+		bodyXOffset = (getParent().getStage().getWidth()/2)-(sprite.getWidth()/2);
+		bodyYOffset = (getParent().getStage().getHeight()/2)-(sprite.getHeight()/2);
+		
+		// CREATE A NEW BODY
+		
+		if(bodyDef == null) {
+			bodyDef = new BodyDef();
+			bodyDef.type = BodyDef.BodyType.DynamicBody;
+		}
+		
+		bodyDef.position.set(sprite.getX()-bodyXOffset, sprite.getY()-bodyYOffset);
+		
+
+		body = getWorld().createBody(bodyDef);
+		fixture = body.createFixture(shape, 0f);
+		fixture.setUserData(collisionData);
+		body.resetMassData();
+		//shape.dispose();
 	}
 	
 }

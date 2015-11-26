@@ -1,24 +1,20 @@
-package com.seniorproject.game;
+package com.seniorproject.game.weapons;
 
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
-import com.badlogic.gdx.audio.Sound;
+import com.seniorproject.game.levels.Level;
 
 
 public class Bullet extends BaseBullet {
 	
-	Sound wavSound;
 	int bulletSoundCount= 0;
 	
-	public Bullet(World world) {
-		super(world);
+	public Bullet(Level l) {
+		super(l);
 		collisionData.setActorType("Bullet");
 	}
 
-	public Bullet(World world, float x, float y) {
-		super(world, x, y);
+	public Bullet(Level l, float x, float y) {
+		super(l, x, y);
 		collisionData.setActorType("Bullet");
 	}
 	
@@ -39,9 +35,10 @@ public class Bullet extends BaseBullet {
 		super.createBody();
 		
 		//Sound for bullets
-		wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
+		//wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
 		if (bulletSoundCount == 0){
-			wavSound.play(ShooterGame.SFX_VOLUME);
+			//wavSound.play(ShooterGame.SFX_VOLUME);
+			level.game.assetManager.playSound("sounds/laser.wav", 1f);
 			bulletSoundCount++;
 		}
 	}
@@ -49,6 +46,6 @@ public class Bullet extends BaseBullet {
 	@Override
 	public void destroyBullet() {
 		super.destroyBullet();
-		wavSound.dispose();
+		//wavSound.dispose();
 	}
 }

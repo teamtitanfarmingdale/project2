@@ -1,24 +1,30 @@
 package com.seniorproject.game.hud;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.seniorproject.game.ShooterGame;
 
 public class Armor extends BasicHealthBar {
 
-	Texture armorBarTex = new Texture(
-			Gdx.files.internal("hud/armor/armorbar-left.png"));
-	Texture wingTex = new Texture(
-			Gdx.files.internal("hud/armor/toprightwing.png"));
+	Texture armorBarTex;
+	Texture wingTex;
 
-	Sprite armorbar = new Sprite(armorBarTex);
-	Sprite wings = new Sprite(wingTex);
+	Sprite armorbar;
+	Sprite wings;
 
 	// sentinel value to keep the position from reassigning
 	int i = 0;
 
-	public Armor() {
+	public Armor(ShooterGame g) {
+		super(g);
+		
+		
+		armorBarTex = game.assetManager.getTexture("hud/armor/armorbar-left.png");
+		wingTex = game.assetManager.getTexture("hud/armor/toprightwing.png");
+		armorbar = new Sprite(armorBarTex);
+		wings = new Sprite(wingTex);
+		
 		setHealthBarSprite(armorbar);
 	}
 

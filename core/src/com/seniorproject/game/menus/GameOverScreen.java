@@ -37,12 +37,12 @@ public class GameOverScreen extends BaseMenu {
 		init("menu/gameover.png", 0);
 		
 		// FINAL SCORE TEXT
-		Texture finalScoreTexture = new Texture(Gdx.files.internal("menu/score-text.png"));
+		Texture finalScoreTexture = game.assetManager.getTexture("menu/score-text.png");
 		finalScoreText = new Sprite(finalScoreTexture);
 		finalScoreText.setPosition((stage.getWidth()/2)-(finalScoreText.getWidth()+scoreXOffset), (stage.getHeight()/2)+(finalScoreText.getHeight()+scoreYOffset));
 		
 		// FINAL SCORE LABEL
-		finalScoreLabelHelper = new LabelHelper(String.format("%,d", ShooterGame.PLAYER_SCORE), 18, Color.YELLOW);
+		finalScoreLabelHelper = new LabelHelper(String.format("%,d", ShooterGame.PLAYER_SCORE), 18, Color.YELLOW, game);
 		Label scoreLabel = finalScoreLabelHelper.getLabel();
 		scoreLabel.setWidth(240);
 		scoreLabel.setHeight(finalScoreText.getHeight());
@@ -51,10 +51,10 @@ public class GameOverScreen extends BaseMenu {
 		
 		
 		// BUTTONS
-		newGameButtonHelper = new ButtonHelper("menu/newgame-button.png", 204, 63, 0, 0, 0, 63);
+		newGameButtonHelper = new ButtonHelper("menu/newgame-button.png", 204, 63, 0, 0, 0, 63, game);
 		ImageButton newGameButton = newGameButtonHelper.getButton();
 
-		quitButtonHelper = new ButtonHelper("menu/quit-button.png", 204, 63, 0, 0, 0, 63);
+		quitButtonHelper = new ButtonHelper("menu/quit-button.png", 204, 63, 0, 0, 0, 63, game);
 		ImageButton quitButton = quitButtonHelper.getButton();
 		
 		newGameButton.setPosition((stage.getWidth()/2)-(newGameButton.getWidth()/2), (stage.getHeight()/2)-(newGameButton.getHeight()/2)-buttonOffset);

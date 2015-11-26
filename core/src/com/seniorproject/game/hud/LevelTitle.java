@@ -1,12 +1,11 @@
 package com.seniorproject.game.hud;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.helpers.LabelHelper;
 
 public class LevelTitle extends BaseHUD {
@@ -22,13 +21,13 @@ public class LevelTitle extends BaseHUD {
 	float wingX;
 	float wingY;
 	
-	public LevelTitle(String title) {
+	public LevelTitle(String title, ShooterGame g) {
+		super(g);
 		
-		
-		wingTexture = new Texture(Gdx.files.internal("hud/leveltitle/wing2.png"));
+		wingTexture = game.assetManager.getTexture("hud/leveltitle/wing2.png");
 		wingSprite = new Sprite(wingTexture);
 		
-		label = new LabelHelper(title, 20, Color.BLACK);
+		label = new LabelHelper(title, 20, Color.BLACK, g);
 
 
 	}

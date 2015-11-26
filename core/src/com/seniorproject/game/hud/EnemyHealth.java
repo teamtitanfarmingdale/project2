@@ -1,26 +1,34 @@
 package com.seniorproject.game.hud;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.seniorproject.game.ShooterGame;
 
 public class EnemyHealth extends BasicHealthBar {
 
 	
-	Texture healthBarTex = new Texture(
-			Gdx.files.internal("hud/enemyhealth/enemyhealth.png"));
-	Texture wingTex = new Texture(
-			Gdx.files.internal("hud/enemyhealth/toprightwing.png"));
+	Texture healthBarTex;
+	Texture wingTex;
 
-	Texture backBarTex = new Texture(Gdx.files.internal("hud/enemyhealth/backbar.png"));
+	Texture backBarTex;
 	
-	Sprite healthBar = new Sprite(healthBarTex);
-	Sprite wings = new Sprite(wingTex);
-	Sprite backBar = new Sprite(backBarTex);
+	Sprite healthBar;
+	Sprite wings;
+	Sprite backBar;
 	
 	
-	public EnemyHealth() {
+	public EnemyHealth(ShooterGame g) {
+		super(g);
+		
+		healthBarTex = game.assetManager.getTexture("hud/enemyhealth/enemyhealth.png");
+		wingTex = game.assetManager.getTexture("hud/enemyhealth/toprightwing.png");
+		backBarTex = game.assetManager.getTexture("hud/enemyhealth/backbar.png");
+		
+		healthBar = new Sprite(healthBarTex);
+		wings = new Sprite(wingTex);
+		backBar = new Sprite(backBarTex);
+		
 		
 		this.healthBarHeight = 20;
 		

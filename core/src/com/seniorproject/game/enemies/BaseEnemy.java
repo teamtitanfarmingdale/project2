@@ -1,24 +1,18 @@
 package com.seniorproject.game.enemies;
 
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
 import com.seniorproject.game.GameActor;
-import com.seniorproject.game.ShooterGame;
-import com.seniorproject.game.helpers.GeneralHelper;
+import com.seniorproject.game.levels.Level;
 import com.seniorproject.game.particles.BaseExplosion;
-import com.seniorproject.game.particles.FireExplosion;
 
 public class BaseEnemy extends GameActor {
 
 	protected int health = 100;
+	protected int startingHealth = 100;
 	protected int randomX;
 	protected Double randomNumber; // Used for random position
 	protected boolean reposition = false;
@@ -51,8 +45,8 @@ public class BaseEnemy extends GameActor {
 	
 	protected BaseExplosion explosion;
 	
-	public BaseEnemy(World world, String spriteFile) {
-		super(world);
+	public BaseEnemy(Level l, String spriteFile) {
+		super(l);
 		
 		setupSprite(spriteFile);
 		
@@ -255,7 +249,7 @@ public class BaseEnemy extends GameActor {
 	public void shoot() {
 		
 		
-		EnemyBullet bullet = new EnemyBullet(getWorld(), this.getX(), this.getY());
+		EnemyBullet bullet = new EnemyBullet(level, this.getX(), this.getY());
 		
 		bullet.setX(this.getX()+(this.getWidth()/2)-(bullet.getWidth()/2));
 		bullet.setY(this.getY()+(this.getHeight()/2));
@@ -272,14 +266,13 @@ public class BaseEnemy extends GameActor {
 			if(explosion != null) {
 				level.addGameObject(explosion);
 				explosion.start(this.getX(), this.getY());
-				System.out.println(explosion.particleFile);
 			}
 
 			// PLAY EXPLOSION SOUND
-			final Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion-2.wav"));
-			wavSound.play(ShooterGame.SFX_VOLUME);
-			GeneralHelper.disposeSound(wavSound, 2f);
-			
+			//final Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion-2.wav"));
+			//wavSound.play(ShooterGame.SFX_VOLUME);
+			//GeneralHelper.disposeSound(wavSound, 2f);
+			level.game.assetManager.playSound("sounds/explosion-2.wav", 2f);
 		}
 		
 		this.dead = dead;
@@ -288,5 +281,10 @@ public class BaseEnemy extends GameActor {
 	
 	public void silentDeath(boolean dead) {
 		super.setDead(dead);
+	}
+	
+	public void reset() {
+		health = startingHealth;
+		dead = false;
 	}
 }

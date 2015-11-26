@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.seniorproject.game.menus.GameOverScreen;
 import com.seniorproject.game.menus.MainMenuScreen;
 import com.seniorproject.game.menus.VictoryScreen;
@@ -35,7 +36,8 @@ public class ShooterGame extends Game {
 	
 	public static long soundID;
 	
-	
+	public AssetManager assetManager;
+
 	// Screen Constants
 	public static final int MAIN_MENU = 1;
 	public static final int GAME = 2;
@@ -45,6 +47,8 @@ public class ShooterGame extends Game {
 	public static final int LOADED_GAME = 6;
 	public static final int PLAY_MENU = 7;
 	
+	// Default Skin
+	public Skin defaultSkin;
 	
 	private Screen currentScreen;
 	private GameScreen currentGameScreen;
@@ -53,6 +57,10 @@ public class ShooterGame extends Game {
 	public void create() {
 		
 		db = new Database();
+		
+		assetManager = new AssetManager();
+		
+		defaultSkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 		
 		bgMusic = Gdx.audio.newSound(Gdx.files
 				.internal("sounds/action.wav"));
@@ -69,7 +77,6 @@ public class ShooterGame extends Game {
 
 	
 	public void switchScreen(int screen) {
-		
 		switch(screen) {
 			case MAIN_MENU:
 				currentScreen.dispose();
@@ -84,6 +91,7 @@ public class ShooterGame extends Game {
 				this.setScreen(currentScreen);
 				break;
 			case GAME:
+				
 				CURRENT_LEVEL++;
 			case LOADED_GAME:
 				currentScreen.dispose();

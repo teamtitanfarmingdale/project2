@@ -2,8 +2,6 @@ package com.seniorproject.game.enemies;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.levels.Level;
 
@@ -17,24 +15,23 @@ public class EnemySpawner extends Spawner {
 	ArrayList<Enemy> deadEnemyList;
 	
 	
-	
 	Boss boss;
 	
 	
-	public EnemySpawner(World world, String enemySpriteFile) {
-		super(world, enemySpriteFile);
-		this.world = world;
+	public EnemySpawner(Level l, String enemySpriteFile) {
+		super(l, enemySpriteFile);
+
 		this.enemySpriteFile = enemySpriteFile;
 		
 		enemyList = new ArrayList<Enemy>();
 		deadEnemyList = new ArrayList<Enemy>();
 		
 		String bossFile = "boss.png";
-		if(ShooterGame.CURRENT_LEVEL == 2) {
+		if(ShooterGame.CURRENT_LEVEL == -1) {
 			bossFile = "boss2.png";
 		}
 		
-		boss = new Boss(world, bossFile);
+		boss = new Boss(l, bossFile);
 		
 		maxEnemies = 15;
 		maxEnemiesAtOnce = 10;
@@ -59,7 +56,9 @@ public class EnemySpawner extends Spawner {
 		// Adds enemies to the stage
 		if(getStage() != null && totalEnemies < maxEnemies && enemiesToSpawnEachInterval > enemySpawnIntervalCount && enemyList.size() < maxEnemiesAtOnce) {
 			level = (Level) getStage();
-			Enemy enemy = new Enemy(world, enemySpriteFile);
+			
+			
+			Enemy enemy = new Enemy(level, enemySpriteFile);			
 			enemyList.add(enemy);
 			level.addGameObject(enemy);
 			totalEnemies++;

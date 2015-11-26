@@ -10,7 +10,6 @@ import com.seniorproject.game.ShooterGame;
 
 public class Health extends BasicHealthBar {
 
-	private static final float MAX_HEALTH = 100;
 	private static final int DANGER_HEALTH_FRAMES = 22;
 	private static final int HEALTH_WARNING_AMOUNT = 30;
 
@@ -54,35 +53,29 @@ public class Health extends BasicHealthBar {
 	float bottomLeftWingY;
 
 	public LifeManager lifeManager;
-	ShooterGame game;
-	
-	public Health(ShooterGame g) {
 
-		lifeManager = new LifeManager(3);
+	public Health(ShooterGame g) {
+		super(g);
+		lifeManager = new LifeManager(3, game);
 		
 		game = g;
 		lifeManager.setGame(game);
 		
 
-		backBarTexture = new Texture(
-				Gdx.files.internal("hud/health/backbar2.png"));
-		backBarDangerTexture = new Texture(
-				Gdx.files.internal("hud/health/backbar-danger.png"));
+		backBarTexture = game.assetManager.getTexture("hud/health/backbar2.png");
+		backBarDangerTexture = game.assetManager.getTexture("hud/health/backbar-danger.png");
 		backBarSprite = new Sprite(backBarTexture);
 		backBarWarningSprite = new Sprite(backBarTexture);
 
-		healthBarTexture = new Texture(
-				Gdx.files.internal("hud/health/healthbar.png"));
+		healthBarTexture = game.assetManager.getTexture("hud/health/healthbar.png");
 		healthBarSprite = new Sprite(healthBarTexture);
 
 		setHealthBarSprite(healthBarSprite);
 
-		topLeftWingTexture = new Texture(
-				Gdx.files.internal("hud/health/topleftwing.png"));
+		topLeftWingTexture = game.assetManager.getTexture("hud/health/topleftwing.png");
 		topLeftWingSprite = new Sprite(topLeftWingTexture);
 
-		bottomLeftWingTexture = new Texture(
-				Gdx.files.internal("hud/life/bottomleftwing.png"));
+		bottomLeftWingTexture = game.assetManager.getTexture("hud/life/bottomleftwing.png");
 		bottomLeftWingSprite = new Sprite(bottomLeftWingTexture);
 
 		// Initial Positions
@@ -94,8 +87,7 @@ public class Health extends BasicHealthBar {
 		// Set up animated health bar when health goes below 20
 		animationFrames = new TextureRegion[DANGER_HEALTH_FRAMES];
 
-		TextureRegion[][] tmpFrames = TextureRegion.split(backBarDangerTexture,
-				454, 15);
+		TextureRegion[][] tmpFrames = TextureRegion.split(backBarDangerTexture,454, 15);
 
 		int index = 0;
 		for (int i = 0; i < 2; i++) {

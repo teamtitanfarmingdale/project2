@@ -1,13 +1,11 @@
 package com.seniorproject.game.helpers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.seniorproject.game.ShooterGame;
 
 public class LabelHelper {
 	
@@ -18,13 +16,20 @@ public class LabelHelper {
 	private Label label;
 	private LabelStyle labelStyle;
 	private BitmapFont font;
+	private ShooterGame game;
 	
-	public LabelHelper(String title, int fontSize, Color color, String fontFile) {
+	private Color color;
+	
+	public LabelHelper(String title, int fontSize, Color color, String fontFile, ShooterGame g) {
 		
 		// Skin is needed for the label
 		skin = new Skin();
 		
-		setupFont(fontSize, fontFile);
+		game = g;
+		
+		this.color = color;
+		
+		setupFont(fontSize, fontFile, color);
 		
 		labelStyle = new LabelStyle(font, color);
 		
@@ -35,8 +40,8 @@ public class LabelHelper {
 		label.setHeight((float) (fontSize*POINTS_TO_PIXELS_MULTIPLIER));
 	}
 	
-	public LabelHelper(String title, int fontSize, Color color) {
-		this(title, fontSize, color, FONT_FILE);
+	public LabelHelper(String title, int fontSize, Color color, ShooterGame g) {
+		this(title, fontSize, color, FONT_FILE, g);
 	}
 	
 	
@@ -58,22 +63,24 @@ public class LabelHelper {
 	}
 	
 	
-	private void setupFont(int fontSize, String fontFile) {
+	private void setupFont(int fontSize, String fontFile, Color color) {
 		// Creates a Bitmap font from the .ttf font file
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(fontFile));
+		/*FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(fontFile));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = fontSize;
 
 		font = generator.generateFont(parameter);
-		generator.dispose();
+		generator.dispose();*/
+		
+		font = game.assetManager.getFont(fontFile, fontSize, color);
 	}
 	
-	private void setupFont(int fontSize) {
-		this.setupFont(fontSize, FONT_FILE);
+	public void setupFont(int fontSize) {
+		this.setupFont(fontSize, FONT_FILE, color);
 	}
 
 	public void dispose() {
-		skin.dispose();
+		//skin.dispose();
 	}
 	
 }

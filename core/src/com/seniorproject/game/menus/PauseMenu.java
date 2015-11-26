@@ -43,25 +43,25 @@ public class PauseMenu {
 		stage = new Stage();
 		
 		// BUTTONS
-		resumeButtonHelper = new ButtonHelper("menu/resume-button.png", 204, 63, 0, 0, 0, 63);
+		resumeButtonHelper = new ButtonHelper("menu/resume-button.png", 204, 63, 0, 0, 0, 63, s.game);
 		ImageButton resumeButton = resumeButtonHelper.getButton();
 		resumeButton.setPosition((stage.getWidth()/2)-(resumeButton.getWidth()/2), (stage.getHeight()/2)+topButtonOffset);
 		
-		quitButtonHelper = new ButtonHelper("menu/quit-button.png", 204, 63, 0, 0, 0, 63);
+		quitButtonHelper = new ButtonHelper("menu/quit-button.png", 204, 63, 0, 0, 0, 63, s.game);
 		ImageButton quitButton = quitButtonHelper.getButton();
 		quitButton.setPosition((stage.getWidth()/2)-(quitButton.getWidth()/2), resumeButton.getY()-quitButton.getHeight()-buttonOffset);
 		
 		// SLIDERS
-		Texture sfxTextTexture = new Texture(Gdx.files.internal("menu/sfx-text.png"));
+		Texture sfxTextTexture = s.game.assetManager.getTexture("menu/sfx-text.png");
 		sfxTextSprite = new Sprite(sfxTextTexture);
 		
-		Texture musicTextTexture = new Texture(Gdx.files.internal("menu/music-text.png"));
+		Texture musicTextTexture = s.game.assetManager.getTexture("menu/music-text.png");
 		musicTextSprite = new Sprite(musicTextTexture);
 		
 		sfxTextSprite.setPosition((stage.getWidth()/2)-(sfxTextSprite.getWidth()/2), quitButton.getY()-sfxTextSprite.getHeight()-buttonOffset);
 		
-		sfxSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png");
-		musicSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png");
+		sfxSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png", s.game);
+		musicSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png", s.game);
 		
 		final Slider sfxSlider = sfxSliderHelper.getSlider();
 		sfxSlider.setValue(ShooterGame.SFX_VOLUME);
@@ -77,13 +77,13 @@ public class PauseMenu {
 		
 		
 		// FADED BACKGROUND
-		fadedBGTexture = new Texture(Gdx.files.internal("faded-black-bg.png"));
+		fadedBGTexture = s.game.assetManager.getTexture("faded-black-bg.png");
 		fadedBGTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 		fadedBG = new Sprite(fadedBGTexture);
 		fadedBG.setSize(ShooterGame.GAME_WIDTH, ShooterGame.GAME_HEIGHT);
 
 		// PAUSE MENU BORDER
-		menuTexture = new Texture(Gdx.files.internal("menu/pausemenu.png"));
+		menuTexture = s.game.assetManager.getTexture("menu/pausemenu.png");
 		menuBorder = new Sprite(menuTexture);
 		
 		menuBorder.setPosition((stage.getWidth()/2)-(menuBorder.getWidth()/2), (stage.getHeight()/2)-(menuBorder.getHeight()/2));
@@ -153,9 +153,9 @@ public class PauseMenu {
 	public void dispose() {
 		resumeButtonHelper.dispose();
 		quitButtonHelper.dispose();
-		menuTexture.dispose();
-		fadedBGTexture.dispose();
-		sfxTextSprite.getTexture().dispose();
+		//menuTexture.dispose();
+		//fadedBGTexture.dispose();
+		//sfxTextSprite.getTexture().dispose();
 		musicSliderHelper.dispose();
 		sfxSliderHelper.dispose();
 		stage.dispose();

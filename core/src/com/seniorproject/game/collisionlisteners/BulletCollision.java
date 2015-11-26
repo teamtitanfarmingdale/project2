@@ -6,11 +6,11 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.seniorproject.game.BaseBullet;
-import com.seniorproject.game.Bullet;
 import com.seniorproject.game.CollisionData;
 import com.seniorproject.game.GameActor;
 import com.seniorproject.game.enemies.Enemy;
+import com.seniorproject.game.weapons.BaseBullet;
+import com.seniorproject.game.weapons.Bullet;
 
 public class BulletCollision implements ContactListener {
 

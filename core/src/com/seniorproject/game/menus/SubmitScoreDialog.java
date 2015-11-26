@@ -40,17 +40,17 @@ public class SubmitScoreDialog extends PopupDialog {
 	
 	TextFieldHelper tfHelper;
 	
-	public SubmitScoreDialog(Stage parentStage) {
-		super(parentStage);
+	public SubmitScoreDialog(Stage parentStage, ShooterGame g) {
+		super(parentStage, g);
 		
 		// Enter Name Label
-		labelHelper = new LabelHelper("Enter your name:", 16, Color.WHITE, "opensans.ttf"); 
+		labelHelper = new LabelHelper("Enter your name:", 16, Color.WHITE, "opensans.ttf", game); 
 		Label enterNameLabel = labelHelper.getLabel();
 		enterNameLabel.setAlignment(Align.bottomLeft);
 		enterNameLabel.setPosition(dialogSprite.getX()+50, dialogSprite.getY()+dialogSprite.getHeight()-125);
 		
 		// Enter Name Textbox
-		tfHelper = new TextFieldHelper((int) (dialogSprite.getWidth()-100), 35);
+		tfHelper = new TextFieldHelper((int) (dialogSprite.getWidth()-100), 35, game);
 		
 		final TextField nameText = tfHelper.getTextField();
 		nameText.setPosition((stage.getWidth()/2)-(nameText.getWidth()/2), enterNameLabel.getY()-40);
@@ -58,14 +58,14 @@ public class SubmitScoreDialog extends PopupDialog {
 		/* Error Notifications */
 		
 		// Error Border
-		Texture errorBorderTexture = new Texture(Gdx.files.internal("colors/pink.png"));
+		Texture errorBorderTexture = game.assetManager.getTexture("colors/pink.png");
 		errorBorderTexture.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
 		errorBorder = new Sprite(errorBorderTexture);
 		errorBorder.setSize(nameText.getWidth()+4, nameText.getHeight()+4);
 		errorBorder.setPosition(nameText.getX()-2, nameText.getY()-2);
 		
 		// Error Label
-		messageLabelHelper = new LabelHelper("You must enter a name!", 16, Color.WHITE, "opensans.ttf");
+		messageLabelHelper = new LabelHelper("You must enter a name!", 16, Color.WHITE, "opensans.ttf", game);
 		messageLabel = messageLabelHelper.getLabel();
 		messageLabel.setColor(1f,.5f, .5f, 1f);
 		messageLabel.setAlignment(Align.bottom);
@@ -75,7 +75,7 @@ public class SubmitScoreDialog extends PopupDialog {
 		
 
 		// Save Button
-		saveButtonHelper = new ButtonHelper("menu/submit-button.png", 204, 63, 0, 0, 0, 63);
+		saveButtonHelper = new ButtonHelper("menu/submit-button.png", 204, 63, 0, 0, 0, 63, game);
 		
 		ImageButton saveButton = saveButtonHelper.getButton();
 		saveButton.setPosition((stage.getWidth()/2)-(saveButton.getWidth()/2), dialogSprite.getY()+50);
@@ -227,12 +227,12 @@ public class SubmitScoreDialog extends PopupDialog {
 	
 	@Override
 	public void dispose() {
-		fadedBGTexture.dispose();
+		//fadedBGTexture.dispose();
 		labelHelper.dispose();
 		messageLabelHelper.dispose();
 		cancelButtonHelper.dispose();
 		saveButtonHelper.dispose();
 		stage.dispose();
-		errorBorder.getTexture().dispose();
+		//errorBorder.getTexture().dispose();
 	}
 }

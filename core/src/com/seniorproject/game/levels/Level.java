@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.seniorproject.game.CollisionData;
 import com.seniorproject.game.GameActor;
 import com.seniorproject.game.GameScreen;
 import com.seniorproject.game.LevelBackground;
@@ -27,7 +26,6 @@ import com.seniorproject.game.enemies.AsteroidSpawner;
 import com.seniorproject.game.enemies.EnemySpawner;
 import com.seniorproject.game.helpers.CollisionHelper;
 import com.seniorproject.game.hud.*;
-import com.seniorproject.game.particles.FireExplosion;
 
 public class Level extends Stage {
 
@@ -37,7 +35,7 @@ public class Level extends Stage {
 	public LevelBackground background;
 	public EnemySpawner enemySpawner;
 	public AsteroidSpawner asteroidSpawner;
-	private World world;
+	public World world;
 	private float accumulator = 0f;
 	private Box2DDebugRenderer renderer;
 	private OrthographicCamera camera;
@@ -48,6 +46,8 @@ public class Level extends Stage {
 	protected String asteroidSpriteFile = "asteroid.png";
 	
 	public GameScreen screen;
+	public ShooterGame game;
+	
 	
 	public Score score;
 	public Health healthBar;
@@ -61,6 +61,8 @@ public class Level extends Stage {
 	public Level(ShooterGame g) {
 		super(new ScreenViewport());	
 
+		game = g;
+		
 		// world is used for collisions, I believe its constructor sets the gravity in our game using the Vector2 object
 		// Since we don't need actual gravity in the game, its set to 0 here
 		world = new World(new Vector2(0,0), true);	
@@ -77,28 +79,28 @@ public class Level extends Stage {
 		gameObjects = new Group();
 		
 		// Used to generate enemies onto the screen
-		enemySpawner = new EnemySpawner(world, enemySpriteFile);
+		enemySpawner = new EnemySpawner(this, enemySpriteFile);
 		enemySpawner.setMaxEnemies(ShooterGame.CURRENT_LEVEL*ShooterGame.STARTING_ENEMY_COUNT);
 		
 		
-		asteroidSpawner = new AsteroidSpawner(world, asteroidSpriteFile);
+		asteroidSpawner = new AsteroidSpawner(this, asteroidSpriteFile);
 		
 		// The background
-		background = new LevelBackground(this);
+		background = new LevelBackground(game, this);
 		
 		// The player's ship
-		ship = new Ship(world);
+		ship = new Ship(this);
 		ShooterGame.PLAYER_SHIP = ship;
 		
-		levelTitle = new LevelTitle("Level "+ShooterGame.CURRENT_LEVEL);
+		levelTitle = new LevelTitle("Level "+ShooterGame.CURRENT_LEVEL, game);
 
 		// Used for debugging, shows the boxes around the sprites
 		renderer = new Box2DDebugRenderer();
 		
-		healthBar = new Health(g);
-		armorBar = new Armor();
-		score = new Score();
-		enemyHealthBar = new EnemyHealth();
+		healthBar = new Health(game);
+		armorBar = new Armor(game);
+		score = new Score(game);
+		enemyHealthBar = new EnemyHealth(game);
 		
 		healthBar.setPositionXOffsetWidth(score.getBGWidth());
 		healthBar.setPositionYOffsetHeight(score.getBGHeight());
@@ -189,7 +191,7 @@ public class Level extends Stage {
 		super.draw();
 		
 		// Comment this out to remove the boxes around the sprites
-		//renderer.render(world, camera.combined);
+		renderer.render(world, camera.combined);
 		
 	}
 	
@@ -209,7 +211,7 @@ public class Level extends Stage {
 			@Override
 			public boolean keyDown(InputEvent event, int keycode) {
 				
-				if(keycode == Input.Keys.P) {
+				if(keycode == Input.Keys.P || keycode == Input.Keys.ESCAPE) {
 					screen.pause();
 				}
 				
@@ -246,16 +248,7 @@ public class Level extends Stage {
 			@Override
 			public void endContact(Contact contact) {
 				// TODO Auto-generated method stub
-				
-				// CollisionData contains the actual object that was collided.
-				CollisionData collisionDataA = (CollisionData) contact.getFixtureA().getUserData();
-				CollisionData collisionDataB = (CollisionData) contact.getFixtureB().getUserData();
-				
-				
-				GameActor gameActorA = collisionDataA.getActor();
-				GameActor gameActorB = collisionDataB.getActor();
-				
-				
+
 				CollisionHelper.bulletCollision(contact, collisionList, "Enemy", "Bullet");
 				CollisionHelper.bulletCollision(contact, collisionList, "Asteroid", "Bullet");
 				CollisionHelper.bulletCollision(contact, collisionList, "Boss", "Bullet");

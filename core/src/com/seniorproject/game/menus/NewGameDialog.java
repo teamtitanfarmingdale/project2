@@ -32,16 +32,16 @@ public class NewGameDialog extends PopupDialog {
 	
 	
 	public NewGameDialog(Stage parentStage, final PlayMenu menu) {
-		super(parentStage);
+		super(parentStage, menu.game);
 
 		// Enter Name Label
-		labelHelper = new LabelHelper("Enter your name:", 16, Color.WHITE, "opensans.ttf"); 
+		labelHelper = new LabelHelper("Enter your name:", 16, Color.WHITE, "opensans.ttf", menu.game); 
 		Label enterNameLabel = labelHelper.getLabel();
 		enterNameLabel.setAlignment(Align.bottomLeft);
 		enterNameLabel.setPosition(dialogSprite.getX()+50, dialogSprite.getY()+dialogSprite.getHeight()-125);
 		
 		// Enter Name Textbox
-		tfHelper = new TextFieldHelper((int) (dialogSprite.getWidth()-100), 35);
+		tfHelper = new TextFieldHelper((int) (dialogSprite.getWidth()-100), 35, game);
 		
 		final TextField nameText = tfHelper.getTextField();
 		nameText.setPosition((stage.getWidth()/2)-(nameText.getWidth()/2), enterNameLabel.getY()-40);
@@ -49,7 +49,7 @@ public class NewGameDialog extends PopupDialog {
 		
 		
 		// Start Button
-		startButtonHelper = new ButtonHelper("menu/start-button.png", 204, 63, 0, 0, 0, 63); 
+		startButtonHelper = new ButtonHelper("menu/start-button.png", 204, 63, 0, 0, 0, 63, game); 
 		startButtonHelper.setDisabledTexture("menu/start-button-disabled.png");
 		
 		ImageButton startButton = startButtonHelper.getButton();

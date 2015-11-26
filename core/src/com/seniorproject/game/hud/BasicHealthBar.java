@@ -1,7 +1,7 @@
 package com.seniorproject.game.hud;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.seniorproject.game.ShooterGame;
 
 public class BasicHealthBar extends BaseHUD {
 
@@ -13,6 +13,10 @@ public class BasicHealthBar extends BaseHUD {
 	protected boolean positionSet;
 	
 	protected int healthBarHeight = 17;
+	
+	public BasicHealthBar(ShooterGame g) {
+		super(g);
+	}
 	
 	public void setHealth(float amount) {
 		

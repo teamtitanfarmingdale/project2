@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -15,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.helpers.ButtonHelper;
 import com.seniorproject.game.helpers.SliderHelper;
-import com.seniorproject.game.particles.FireExplosion;
+
 
 public class MainMenuScreen extends BaseMenu implements Screen {
 
@@ -48,26 +47,26 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 		ShooterGame.PLAYER_SCORE = 0;
 		
 		// LOGO
-		Texture logoTexture = new Texture(Gdx.files.internal("logo-small.png"));
+		Texture logoTexture = game.assetManager.getTexture("logo-small.png");
 		logo = new Sprite(logoTexture);
 		logo.setPosition((stage.getWidth()/2)-(logo.getWidth()/2), stage.getHeight()-logo.getHeight());
 		
 		
 		// SLIDER TITLES
-		Texture sfxTextTexture = new Texture(Gdx.files.internal("menu/sfx-text.png"));
+		Texture sfxTextTexture = game.assetManager.getTexture("menu/sfx-text.png");
 		sfxTextSprite = new Sprite(sfxTextTexture);
 		
-		Texture musicTextTexture = new Texture(Gdx.files.internal("menu/music-text.png"));
+		Texture musicTextTexture = game.assetManager.getTexture("menu/music-text.png");
 		musicTextSprite = new Sprite(musicTextTexture);
 		
 		// BUTTONS
-		newGameButtonHelper = new ButtonHelper("menu/start-button.png", 204, 64, 0, 0, 0, 63);
+		newGameButtonHelper = new ButtonHelper("menu/start-button.png", 204, 64, 0, 0, 0, 63, game);
 		ImageButton newGameButton = newGameButtonHelper.getButton();
 		
-		loadGameButtonHelper = new ButtonHelper("menu/load-button.png", 204, 63, 0, 0, 0, 63);
-		ImageButton loadButton = loadGameButtonHelper.getButton();
+		//loadGameButtonHelper = new ButtonHelper("menu/load-button.png", 204, 63, 0, 0, 0, 63, game);
+		//ImageButton loadButton = loadGameButtonHelper.getButton();
 		
-		quitButtonHelper = new ButtonHelper("menu/quit-button.png", 204, 63, 0, 0, 0, 63);
+		quitButtonHelper = new ButtonHelper("menu/quit-button.png", 204, 63, 0, 0, 0, 63, game);
 		ImageButton quitButton = quitButtonHelper.getButton();
 		
 		
@@ -80,8 +79,8 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 		
 		sfxTextSprite.setPosition((stage.getWidth()/2)-(sfxTextSprite.getWidth()/2), quitButton.getY()-sfxTextSprite.getHeight()-buttonOffset);
 		
-		sfxSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png");
-		musicSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png");
+		sfxSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png", game);
+		musicSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png", game);
 		
 		final Slider sfxSlider = sfxSliderHelper.getSlider();
 		sfxSlider.setValue(ShooterGame.SFX_VOLUME);

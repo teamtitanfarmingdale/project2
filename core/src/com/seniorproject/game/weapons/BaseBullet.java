@@ -1,13 +1,12 @@
-package com.seniorproject.game;
+package com.seniorproject.game.weapons;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
-import com.seniorproject.game.enemies.Asteroid;
+import com.seniorproject.game.GameActor;
+import com.seniorproject.game.Ship;
 import com.seniorproject.game.enemies.BaseEnemy;
 import com.seniorproject.game.levels.Level;
 import com.seniorproject.game.particles.BaseExplosion;
@@ -16,8 +15,8 @@ public class BaseBullet extends GameActor {
 
 	protected int damage = 10;
 	
-	protected Texture bulletTexture = new Texture(Gdx.files.internal("bullet.png"));
-	protected Sprite bulletSprite = new Sprite(bulletTexture);
+	protected Texture bulletTexture;
+	protected Sprite bulletSprite;
 	
 	// THE ENEMY THAT THE BULLET COLLIDED WITH
 	protected GameActor collidedEnemy;
@@ -32,17 +31,30 @@ public class BaseBullet extends GameActor {
 	
 	protected BaseExplosion collisionParticle;
 	
-	public BaseBullet(World world) {
-		super(world);
-
+	public BaseBullet(Level l) {
+		super(l);
+		bulletTexture = l.game.assetManager.getTexture("bullet.png");
+		bulletSprite = new Sprite(bulletTexture);
 		collisionParticle = new BaseExplosion("particles/bullet-collision.particle");
 		//collisionData.setActorType("Bullet");
+		
+		shape = new PolygonShape();
+		shape.setAsBox(actualWidth, bulletSprite.getHeight()/2);
+		
 	}
 	
-	public BaseBullet(World world, float x, float y) {
-		this(world);
+	public BaseBullet(Level l, float x, float y) {
+		this(l);
 		setBounds(x, y, bulletSprite.getWidth(), bulletSprite.getHeight());
 	}
+	
+	public BaseBullet(Level l, String bulletImage) {
+		this(l);
+		bulletTexture = l.game.assetManager.getTexture(bulletImage);
+		bulletSprite = new Sprite(bulletTexture);
+		collisionParticle = new BaseExplosion("particles/bullet-collision.particle");
+	}
+	
 	
 	
 	@Override
@@ -58,7 +70,10 @@ public class BaseBullet extends GameActor {
 		// REMOVE THE BULLET ONCE IT IS OFF THE SCREEN
 		if(getStage() != null) {
 			if(getY() > getStage().getHeight()) {
-				body.destroyFixture(fixture);
+				
+				if(body != null) {
+					body.destroyFixture(fixture);
+				}
 				
 				this.remove();
 			}
@@ -70,7 +85,7 @@ public class BaseBullet extends GameActor {
 	public void destroyBullet() {
 		body.destroyFixture(fixture);
 		actorWorld.destroyBody(body);
-		bulletTexture.dispose();
+		//bulletTexture.dispose();
 	}
 
 
@@ -81,29 +96,19 @@ public class BaseBullet extends GameActor {
 			
 			level = (Level) getStage();
 			
-			float bodyXOffset = (getParent().getStage().getWidth()/2)-(bulletSprite.getWidth()/2);
-			float bodyYOffset = (getParent().getStage().getHeight()/2)-(bulletSprite.getHeight()/2);
-			
 			// DESTROY THE CURRENT BODY IF THERE IS ONE
 			if(body != null) {
 				body.destroyFixture(fixture);
 				actorWorld.destroyBody(body);
 			}
 			
-			// CREATE A NEW BODY
-			bodyDef = new BodyDef();
-			bodyDef.type = BodyDef.BodyType.DynamicBody;
-			bodyDef.position.set(bulletSprite.getX()-bodyXOffset, bulletSprite.getY()-bodyYOffset);
-			
-			shape = new PolygonShape();
-			shape.setAsBox(actualWidth, bulletSprite.getHeight()/2);
-			
+			createBodyBoundry();
 			
 			body = getWorld().createBody(bodyDef);
 			fixture = body.createFixture(shape, 0f);
 			fixture.setUserData(collisionData);
 			body.resetMassData();
-			shape.dispose();
+			//shape.dispose();
 		}
 		else if(getStage() != null && isDead()) {
 			destroyBullet();
@@ -119,6 +124,23 @@ public class BaseBullet extends GameActor {
 	public String toString() {
 		return "Bullet";
 	}
+	
+	@Override
+	protected void createBodyBoundry() {
+		
+		bodyXOffset = (getParent().getStage().getWidth()/2)-(bulletSprite.getWidth()/2);
+		bodyYOffset = (getParent().getStage().getHeight()/2)-(bulletSprite.getHeight()/2);
+		
+		// CREATE A NEW BODY
+		if(bodyDef == null) {
+			bodyDef = new BodyDef();
+			bodyDef.type = BodyDef.BodyType.DynamicBody;
+		}
+		
+		bodyDef.position.set(bulletSprite.getX()-bodyXOffset, bulletSprite.getY()-bodyYOffset);
+		
+	}
+	
 	
 	public void setCollidedEnemy(GameActor enemy) {
 		

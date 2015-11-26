@@ -2,7 +2,6 @@ package com.seniorproject.game.hud;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -20,16 +19,16 @@ public class LifeManager extends Actor {
 	
 	ShooterGame game;
 	
-	public LifeManager() {
-		
+	public LifeManager(ShooterGame g) {
+		game = g;
 		lifeSprites = new ArrayList<Sprite>();
-		lifeTexture = new Texture(Gdx.files.internal("hud/life/life.png"));
+		lifeTexture = game.assetManager.getTexture("hud/life/life.png");
 	}
 	
 	
 	
-	public LifeManager(int lives) {
-		this();
+	public LifeManager(int lives, ShooterGame g) {
+		this(g);
 		for(int i = 0; i<lives; i++) {
 			addLife();
 		}

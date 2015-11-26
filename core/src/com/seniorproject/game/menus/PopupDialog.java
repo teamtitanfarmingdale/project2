@@ -25,21 +25,24 @@ public class PopupDialog {
 	protected Texture fadedBGTexture;
 	protected Sprite fadedBG;
 	
-	public PopupDialog(Stage parentStage) {
+	protected ShooterGame game;
+	
+	public PopupDialog(Stage parentStage, ShooterGame g) {
 		
+		game = g;
 		this.parentStage = parentStage;
 		
 		stage = new Stage();
 		
 		// FADED BACKGROUND
-		fadedBGTexture = new Texture(Gdx.files.internal("faded-black-bg.png"));
+		fadedBGTexture = game.assetManager.getTexture("faded-black-bg.png");
 		fadedBGTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 		fadedBG = new Sprite(fadedBGTexture);
 		fadedBG.setSize(ShooterGame.GAME_WIDTH, ShooterGame.GAME_HEIGHT);
 		
 		
 		// Dialog
-		Texture dialogTexture = new Texture(Gdx.files.internal("menu/save-score-popup/bg.png"));
+		Texture dialogTexture = game.assetManager.getTexture("menu/save-score-popup/bg.png");
 		dialogSprite = new Sprite(dialogTexture);
 		
 		dialogSprite.setSize(536, 286);
@@ -47,7 +50,7 @@ public class PopupDialog {
 		
 		
 		// Cancel Button
-		cancelButtonHelper = new ButtonHelper("menu/save-score-popup/cancel-button.png", 71, 71, 0, 0, 0, 71);
+		cancelButtonHelper = new ButtonHelper("menu/save-score-popup/cancel-button.png", 71, 71, 0, 0, 0, 71, game);
 		cancelButton = cancelButtonHelper.getButton();
 		
 		cancelButton.setPosition((dialogSprite.getX()+dialogSprite.getWidth()-(cancelButton.getWidth()/2)-15), dialogSprite.getY()+dialogSprite.getHeight()-cancelButton.getHeight()+15);

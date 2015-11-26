@@ -1,20 +1,14 @@
 package com.seniorproject.game.helpers;
 
-import java.awt.Cursor;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GLTexture;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.seniorproject.game.ShooterGame;
 
 public class ButtonHelper {
 
@@ -24,10 +18,12 @@ public class ButtonHelper {
 	
 	Texture disabledTexture;
 	
-	public ButtonHelper(String imageFile, int width, int height, int x, int y, int xHover, int yHover) {
+	ShooterGame game;
 	
-		
-		buttonTexture = new Texture(Gdx.files.internal(imageFile));
+	public ButtonHelper(String imageFile, int width, int height, int x, int y, int xHover, int yHover, ShooterGame g) {
+	
+		game = g;
+		buttonTexture = game.assetManager.getTexture(imageFile);
 		TextureRegion bButtonTextureRegion = new TextureRegion(buttonTexture, x, y, width, height);
 		TextureRegion buttonTextureRegionHover = new TextureRegion(buttonTexture, xHover, yHover, width, height);
 		
@@ -45,14 +41,8 @@ public class ButtonHelper {
 		return button;
 	}
 	
-	public void setDisabledTexture(String file) {
-		
-		if(disabledTexture != null) {
-			disabledTexture.dispose();
-		}
-		
-		
-		disabledTexture = new Texture(Gdx.files.internal(file));
+	public void setDisabledTexture(String file) {		
+		disabledTexture = game.assetManager.getTexture(file);
 		Sprite disabledSprite = new Sprite(disabledTexture);
 		SpriteDrawable sdDisabled = new SpriteDrawable(disabledSprite);
 		
@@ -61,7 +51,7 @@ public class ButtonHelper {
 	}
 	
 	public void dispose() {
-		
+		/*
 		if(buttonTexture != null) {
 			buttonTexture.dispose();
 		}
@@ -69,7 +59,7 @@ public class ButtonHelper {
 		if(disabledTexture != null) {
 			disabledTexture.dispose();
 		}
-		
+		*/
 	}
 	
 	

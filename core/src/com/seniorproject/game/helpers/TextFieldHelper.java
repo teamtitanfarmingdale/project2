@@ -1,20 +1,14 @@
 package com.seniorproject.game.helpers;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.seniorproject.game.ShooterGame;
 
 public class TextFieldHelper {
 
 	TextField textField;
 
-	Skin skin;
-	
-	public TextFieldHelper(int width, int height) {
-		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-		
-		
-		textField = new TextField("", skin);
+	public TextFieldHelper(int width, int height, ShooterGame game) {
+		textField = new TextField("", game.defaultSkin);
 		textField.setSize(width, height);
 		
 	}
@@ -25,6 +19,6 @@ public class TextFieldHelper {
 	
 	
 	public void dispose() {
-		skin.dispose();
+		//skin.dispose();
 	}
 }

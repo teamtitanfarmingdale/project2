@@ -4,21 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.helpers.ButtonHelper;
-import com.seniorproject.game.helpers.FontHelper;
 import com.seniorproject.game.helpers.LabelHelper;
 
 public class VictoryScreen extends BaseMenu implements Screen {
@@ -53,11 +46,11 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		
 		init("menu/victorymenu.png", 0);
 		
-		submitScoreDialog = new SubmitScoreDialog(stage);
+		submitScoreDialog = new SubmitScoreDialog(stage, game);
 		
 		int buttonOffset = 10;
 
-		scoreLabelHelper = new LabelHelper(String.format("%,d", 0), 18, Color.YELLOW);
+		scoreLabelHelper = new LabelHelper(String.format("%,d", 0), 18, Color.YELLOW, game);
 		Label scoreLabel = scoreLabelHelper.getLabel();
 		scoreLabel.setWidth(240);
 		scoreLabel.setPosition((stage.getWidth()/2)-(scoreLabel.getWidth()/2), (stage.getHeight()*.59f));
@@ -80,24 +73,24 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		
 		bonusScoreInterval = (int) (calculatedBonus*.03);
 		
-		bonusLabelHelper = new LabelHelper(String.format("%,d", 0), 18, Color.YELLOW);
+		bonusLabelHelper = new LabelHelper(String.format("%,d", 0), 18, Color.YELLOW, game);
 		Label bonusLabel = bonusLabelHelper.getLabel();
 		bonusLabel.setWidth(240);
 		bonusLabel.setPosition((stage.getWidth()/2)-(bonusLabel.getWidth()/2), (stage.getHeight()*.558f));
 		bonusLabel.setAlignment(Align.right);
 		
-		nextLevelButtonHelper = new ButtonHelper("menu/nextlevel-button.png", 204, 63, 0, 0, 0, 63);
+		nextLevelButtonHelper = new ButtonHelper("menu/nextlevel-button.png", 204, 63, 0, 0, 0, 63, game);
 		
 		ImageButton nextLevelButton = nextLevelButtonHelper.getButton();
 		nextLevelButton.setPosition((stage.getWidth()/2)-(nextLevelButton.getWidth()/2), bonusLabel.getY()-nextLevelButton.getHeight()-(buttonOffset*2));
 		
-		saveButtonHelper = new ButtonHelper("menu/submitonline-button.png", 204, 63, 0, 0, 0, 63);
+		saveButtonHelper = new ButtonHelper("menu/submitonline-button.png", 204, 63, 0, 0, 0, 63, game);
 		
 		ImageButton saveButton = saveButtonHelper.getButton();
 		saveButton.setPosition((stage.getWidth()/2)-(saveButton.getWidth()/2), nextLevelButton.getY()-saveButton.getHeight()-buttonOffset);
 		
 		
-		quitButtonHelper = new ButtonHelper("menu/quit-button.png", 204, 63, 0, 0, 0, 63);
+		quitButtonHelper = new ButtonHelper("menu/quit-button.png", 204, 63, 0, 0, 0, 63, game);
 		
 		ImageButton quitButton = quitButtonHelper.getButton();
 		quitButton.setPosition((stage.getWidth()/2)-(quitButton.getWidth()/2), saveButton.getY()-quitButton.getHeight()-buttonOffset);

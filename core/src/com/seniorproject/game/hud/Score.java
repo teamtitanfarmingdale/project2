@@ -1,6 +1,5 @@
 package com.seniorproject.game.hud;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -23,14 +22,14 @@ public class Score extends Actor {
 	
 	boolean positionSet = false;
 	
-	public Score() {
+	public Score(ShooterGame g) {
 		
 		score = ShooterGame.PLAYER_SCORE;
 		
-		backgroundTexture = new Texture(Gdx.files.internal("hud/score/bg.png"));
+		backgroundTexture = g.assetManager.getTexture("hud/score/bg.png");
 		backgroundSprite = new Sprite(backgroundTexture);
 		
-		labelHelper = new LabelHelper(""+score+"", 30, Color.GOLD);
+		labelHelper = new LabelHelper(""+score+"", 30, Color.GOLD, g);
 		
 		labelHelper.getLabel().setWidth(backgroundSprite.getWidth());
 		labelHelper.getLabel().setAlignment(Align.center);
@@ -49,9 +48,6 @@ public class Score extends Actor {
 			float x = (getParent().getStage().getWidth()/2)-(backgroundSprite.getWidth()/2);
 			float y = (getParent().getStage().getHeight()-(backgroundSprite.getHeight()));
 			Level level = (Level) getParent().getStage();
-			
-			float parentHeight = getParent().getStage().getHeight();
-			
 			
 			backgroundSprite.setPosition(x, y);
 			

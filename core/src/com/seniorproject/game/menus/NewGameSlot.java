@@ -14,7 +14,7 @@ public class NewGameSlot extends Slot {
 	public NewGameSlot(PlayMenu menu) {
 		super(null, menu);
 		
-		newGameLabelHelper = new LabelHelper("NEW GAME", 24, Color.WHITE);
+		newGameLabelHelper = new LabelHelper("NEW GAME", 24, Color.WHITE, menu.game);
 		newGameLabel = newGameLabelHelper.getLabel();
 		newGameLabel.setPosition(0, 32);
 		newGameLabel.setWidth(this.selectButtonImage.getWidth()-19);

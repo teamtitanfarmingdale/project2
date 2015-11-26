@@ -1,8 +1,6 @@
 package com.seniorproject.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -20,40 +18,33 @@ public class LevelBackground extends Actor {
 	float movementSpeedMoving = .0015f;
 	boolean upPressed = false;
 	float backgroundPosition = 0f;
-	Sound wavSound;
 	Level level;
+	ShooterGame game;
 	
 	long soundID;
 	
-	public LevelBackground() {
-		// background music
-		/*wavSound = Gdx.audio.newSound(Gdx.files
-				.internal("sounds/action.wav"));
-		soundID = wavSound.loop(ShooterGame.MUSIC_VOLUME);// Plays the sound in a infinite loop. @param volume level
-*/
-		background = new Texture(Gdx.files.internal("space-level1.jpg"));
+	public LevelBackground(ShooterGame g) {
+		
+		game = g;
+		
+		background = game.assetManager.getTexture("space-level1.jpg");
 		background.setWrap(Texture.TextureWrap.Repeat,
 				Texture.TextureWrap.Repeat);
 		bgSprite = new Sprite(background);
 		setBounds(bgSprite.getX(), bgSprite.getY(), bgSprite.getWidth(),
 				bgSprite.getHeight());
-	
-	}
-
-	public LevelBackground(Level level) {
-		this();
 		
-		this.level = level;
 	}
 	
-	public LevelBackground(float movementSpeed) {
-		this();
+	public LevelBackground(ShooterGame g, Level l) {
+		this(g);
+		level = l;
+	}
+	
+	public LevelBackground(ShooterGame g, float movementSpeed) {
+		this(g);
 		
 		this.movementSpeedIdle = movementSpeed;
-	}
-	
-	public void setBGVolume(float volume) {
-		//wavSound.setVolume(soundID, volume);
 	}
 	
 	
@@ -129,8 +120,7 @@ public class LevelBackground extends Actor {
 	}
 	
 	public void dispose() {
-		//wavSound.dispose();
-		background.dispose();
+		//background.dispose();
 	}
 	
 	

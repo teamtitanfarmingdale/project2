@@ -2,7 +2,6 @@ package com.seniorproject.game.enemies;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.physics.box2d.World;
 import com.seniorproject.game.levels.Level;
 
 public class AsteroidSpawner extends Spawner {
@@ -11,8 +10,8 @@ public class AsteroidSpawner extends Spawner {
 	ArrayList<Asteroid> asteroidDeadList;
 	
 	
-	public AsteroidSpawner(World world, String enemyAsteroidFile) {
-		super(world, enemyAsteroidFile);
+	public AsteroidSpawner(Level l, String enemyAsteroidFile) {
+		super(l, enemyAsteroidFile);
 		
 		maxEnemies = 100;
 		totalEnemies = 0;
@@ -39,7 +38,7 @@ public class AsteroidSpawner extends Spawner {
 		// Adds enemies to the stage
 		if(getStage() != null && totalEnemies < maxEnemies && enemiesToSpawnEachInterval > enemySpawnIntervalCount) {
 			level = (Level) getStage();
-			Asteroid asteroid = new Asteroid(world, enemySpriteFile);
+			Asteroid asteroid = new Asteroid(level, enemySpriteFile);
 			level.addGameObject(asteroid);
 			asteroidList.add(asteroid);
 			//totalEnemies++;

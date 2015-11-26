@@ -1,23 +1,15 @@
 package com.seniorproject.game.menus;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureWrap;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.seniorproject.game.PlayerSave;
-import com.seniorproject.game.helpers.ButtonHelper;
-import com.seniorproject.game.helpers.LabelHelper;
+
 
 public class Slot extends Group {
 
@@ -38,7 +30,7 @@ public class Slot extends Group {
 		this.menu = menu;
 		this.save = save;
 
-		Texture bgTexture = new Texture(Gdx.files.internal("menu/save-slot-bg.png"));
+		Texture bgTexture = menu.game.assetManager.getTexture("menu/save-slot-bg.png");
 		
 		buttonNormalStateTexture = new TextureRegion(bgTexture, 0, 0, 248, 88);
 		buttonHoverStateTexture = new TextureRegion(bgTexture, 0, 88, 248, 88);
@@ -100,7 +92,7 @@ public class Slot extends Group {
 	
 	
 	public void dispose() {
-		buttonNormalStateTexture.getTexture().dispose();
+		//buttonNormalStateTexture.getTexture().dispose();
 	}
 	
 	public Image getSelectButtonImage() {

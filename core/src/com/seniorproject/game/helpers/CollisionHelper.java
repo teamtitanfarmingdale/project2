@@ -3,13 +3,12 @@ package com.seniorproject.game.helpers;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.seniorproject.game.BaseBullet;
 import com.seniorproject.game.CollisionData;
 import com.seniorproject.game.GameActor;
 import com.seniorproject.game.Ship;
 import com.seniorproject.game.enemies.BaseEnemy;
 import com.seniorproject.game.enemies.Enemy;
+import com.seniorproject.game.weapons.BaseBullet;
 
 public class CollisionHelper {
 

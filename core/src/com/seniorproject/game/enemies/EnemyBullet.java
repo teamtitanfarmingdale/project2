@@ -1,18 +1,18 @@
 package com.seniorproject.game.enemies;
 
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
-import com.seniorproject.game.BaseBullet;
+import com.seniorproject.game.levels.Level;
+import com.seniorproject.game.weapons.BaseBullet;
 
 public class EnemyBullet extends BaseBullet {
 
-	public EnemyBullet(World world) {
-		super(world);
+	public EnemyBullet(Level l) {
+		super(l);
 		collisionData.setActorType("EnemyBullet");
 	}
 
-	public EnemyBullet(World world, float x, float y) {
-		super(world, x, y);
+	public EnemyBullet(Level l, float x, float y) {
+		super(l, x, y);
 		collisionData.setActorType("EnemyBullet");
 	}
 	
