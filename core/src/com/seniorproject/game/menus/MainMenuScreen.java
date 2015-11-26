@@ -201,9 +201,9 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 		quitButtonHelper.dispose();
 		sfxSliderHelper.dispose();
 		musicSliderHelper.dispose();
-		sfxTextSprite.getTexture().dispose();
-		musicTextSprite.getTexture().dispose();
-		logo.getTexture().dispose();
+		//sfxTextSprite.getTexture().dispose();
+		//musicTextSprite.getTexture().dispose();
+		//logo.getTexture().dispose();
 	}
 
 	
