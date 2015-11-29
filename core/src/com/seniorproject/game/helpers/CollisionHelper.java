@@ -8,6 +8,7 @@ import com.seniorproject.game.GameActor;
 import com.seniorproject.game.Ship;
 import com.seniorproject.game.enemies.BaseEnemy;
 import com.seniorproject.game.enemies.Enemy;
+import com.seniorproject.game.powerups.BasePowerup;
 import com.seniorproject.game.weapons.BaseBullet;
 
 public class CollisionHelper {
@@ -33,7 +34,7 @@ public class CollisionHelper {
 		
 	}
 	
-	public static void bulletCollision(Contact contact, ArrayList<GameActor> collisionList, String objectName, String bulletName) {
+	public static void bulletCollision(Contact contact, ArrayList<GameActor> collisionList, String objectName, String bulletName, boolean remove) {
 		
 		// CollisionData contains the actual object that was collided.
 		CollisionData collisionDataA = (CollisionData) contact.getFixtureA().getUserData();
@@ -48,17 +49,25 @@ public class CollisionHelper {
 		if(collisionDataA.getActorType() == objectName && collisionDataB.getActorType() == bulletName && !collisionList.contains(gameActorB)) {
 			BaseBullet bullet = (BaseBullet) gameActorB;
 			
+			
 			// Tell the bullet which enemy object it hit
 			bullet.setCollidedEnemy(gameActorA);
-			
-			// Add the bullet to the collision list to be removed from the screen
-			collisionList.add(gameActorB);			
+			if(remove) {
+				// Add the bullet to the collision list to be removed from the screen
+				collisionList.add(gameActorB);	
+			}
 		}
 		else if(collisionDataA.getActorType() == bulletName && collisionDataB.getActorType() == objectName && !collisionList.contains(gameActorA)) {
 			BaseBullet bullet = (BaseBullet) gameActorA;
 			bullet.setCollidedEnemy(gameActorB);
-			collisionList.add(gameActorA);			
+			if(remove) {
+				collisionList.add(gameActorA);	
+			}
 		}
+	}
+	
+	public static void bulletCollision(Contact contact, ArrayList<GameActor> collisionList, String objectName, String bulletName) {
+		bulletCollision(contact, collisionList, objectName, bulletName, true);
 	}
 	
 	public static void playerCollision(Contact contact, String enemyName, boolean setDeadOnCollision) {
@@ -103,6 +112,47 @@ public class CollisionHelper {
 				if(collisionDataB.getActorType() == enemyName && setDeadOnCollision) {
 					collidedEnemy.setDead(true);
 				}
+			
+			}
+		}
+		
+	}
+	
+	
+	public static void powerupCollision(Contact contact) {
+		
+		// CollisionData contains the actual object that was collided.
+		CollisionData collisionDataA = (CollisionData) contact.getFixtureA().getUserData();
+		CollisionData collisionDataB = (CollisionData) contact.getFixtureB().getUserData();
+		
+		
+		GameActor gameActorA = collisionDataA.getActor();
+		GameActor gameActorB = collisionDataB.getActor();
+		
+		if(collisionDataA.getActorType() == "PowerUp" && collisionDataB.getActorType() == "Ship") {
+			
+			Ship collidedShip = (Ship) gameActorB;
+			
+			if(!collidedShip.hasCollidedWith(gameActorA)) {
+				
+				BasePowerup collidedPowerup = (BasePowerup) gameActorA;
+				collidedShip.addCollidedObject(gameActorA);
+				collidedPowerup.applyPowerup();				
+				collidedPowerup.setDead(true);
+
+			}
+			
+		}
+		else if(collisionDataA.getActorType() == "Ship" && collisionDataB.getActorType() == "PowerUp") {
+			
+			Ship collidedShip = (Ship) gameActorA;
+			
+			if(!collidedShip.hasCollidedWith(gameActorB)) {
+				
+				BasePowerup collidedPowerup = (BasePowerup) gameActorB;
+				collidedShip.addCollidedObject(gameActorB);
+				collidedPowerup.applyPowerup();
+				collidedPowerup.setDead(true);
 			
 			}
 		}

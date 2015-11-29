@@ -2,7 +2,7 @@ package com.seniorproject.game.particles;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-public class EngineThrust {
+public class EngineThrust implements ParticleInterface {
 	
 	InfiniteParticle leftThrust;
 	InfiniteParticle rightThrust;

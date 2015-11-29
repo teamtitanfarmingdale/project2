@@ -19,13 +19,14 @@ public class Armor extends BasicHealthBar {
 	public Armor(ShooterGame g) {
 		super(g);
 		
-		
 		armorBarTex = game.assetManager.getTexture("hud/armor/armorbar-left.png");
 		wingTex = game.assetManager.getTexture("hud/armor/toprightwing.png");
 		armorbar = new Sprite(armorBarTex);
 		wings = new Sprite(wingTex);
 		
 		setHealthBarSprite(armorbar);
+		setHealth(ShooterGame.PLAYER_SHIP.armor);
+		
 	}
 
 	public void drawArmor(Batch batch, float alpha) {

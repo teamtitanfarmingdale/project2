@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.seniorproject.game.GameActor;
 import com.seniorproject.game.GameScreen;
@@ -26,6 +28,10 @@ import com.seniorproject.game.enemies.AsteroidSpawner;
 import com.seniorproject.game.enemies.EnemySpawner;
 import com.seniorproject.game.helpers.CollisionHelper;
 import com.seniorproject.game.hud.*;
+import com.seniorproject.game.powerups.PowerupContainerOLD;
+import com.seniorproject.game.powerups.PowerupSpawner;
+import com.seniorproject.game.weapons.LaserSlot;
+import com.seniorproject.game.weapons.WeaponSlotGroup;
 
 public class Level extends Stage {
 
@@ -35,6 +41,8 @@ public class Level extends Stage {
 	public LevelBackground background;
 	public EnemySpawner enemySpawner;
 	public AsteroidSpawner asteroidSpawner;
+	public PowerupSpawner powerupSpawner;
+	
 	public World world;
 	private float accumulator = 0f;
 	private Box2DDebugRenderer renderer;
@@ -42,12 +50,11 @@ public class Level extends Stage {
 	private ArrayList<GameActor> collisionList;
 	private LevelTitle levelTitle;
 	private Group gameObjects;
-	protected String enemySpriteFile = "enemy2.png";
-	protected String asteroidSpriteFile = "asteroid.png";
+	public String enemySpriteFile = "enemy2.png";
+	public String asteroidSpriteFile = "asteroid.png";
 	
 	public GameScreen screen;
 	public ShooterGame game;
-	
 	
 	public Score score;
 	public Health healthBar;
@@ -57,6 +64,7 @@ public class Level extends Stage {
 	private Group hudObjects;
 	
 	public boolean levelFinished = false;
+	public WeaponSlotGroup weaponSlotGroup;
 	
 	public Level(ShooterGame g) {
 		super(new ScreenViewport());	
@@ -77,18 +85,24 @@ public class Level extends Stage {
 		 * By grouping them, it lets you allow all the actors in the group to take keyboard input
 		 */
 		gameObjects = new Group();
+		hudObjects = new Group();
 		
 		// Used to generate enemies onto the screen
-		enemySpawner = new EnemySpawner(this, enemySpriteFile);
-		enemySpawner.setMaxEnemies(ShooterGame.CURRENT_LEVEL*ShooterGame.STARTING_ENEMY_COUNT);
+		enemySpawner = new EnemySpawner(this);
+		enemySpawner.setMaxItems(ShooterGame.CURRENT_LEVEL*ShooterGame.STARTING_ENEMY_COUNT);
 		
 		
-		asteroidSpawner = new AsteroidSpawner(this, asteroidSpriteFile);
+		asteroidSpawner = new AsteroidSpawner(this);
 		
 		// The background
 		background = new LevelBackground(game, this);
 		
 		// The player's ship
+		
+		if(ShooterGame.PLAYER_SHIP != null) {
+			ShooterGame.PLAYER_SHIP.releaseParticles();
+		}
+		
 		ship = new Ship(this);
 		ShooterGame.PLAYER_SHIP = ship;
 		
@@ -114,7 +128,7 @@ public class Level extends Stage {
 		levelTitle.setPositionXOffsetWidth(score.getBGWidth());
 		levelTitle.setPositionYOffsetHeight(score.getBGHeight());
 		
-		hudObjects = new Group();
+		
 		hudObjects.addActor(healthBar);
 		hudObjects.addActor(armorBar);
 		hudObjects.addActor(enemyHealthBar);
@@ -122,6 +136,10 @@ public class Level extends Stage {
 		hudObjects.addActor(score);
 		hudObjects.addActor(levelTitle.getLabel());
 		
+		// Weapon HUD
+		weaponSlotGroup = new WeaponSlotGroup(this);
+		weaponSlotGroup.init();
+		hudObjects.addActor(weaponSlotGroup);
 		
 		// Add the actors to the group
 		gameObjects.addActor(enemySpawner);
@@ -130,6 +148,13 @@ public class Level extends Stage {
 		gameObjects.addActor(ship);
 		gameObjects.addActor(hudObjects);
 
+		powerupSpawner = new PowerupSpawner(this);
+		gameObjects.addActor(powerupSpawner);
+		
+		//Texture shieldTexture = game.assetManager.getTexture("powerups/shield.png");
+		//Image shieldImage = new Image(shieldTexture);
+		//gameObjects.addActor(shieldImage);
+		
 		// Add the group to the stage
 		addActor(gameObjects);
 
@@ -211,7 +236,7 @@ public class Level extends Stage {
 			@Override
 			public boolean keyDown(InputEvent event, int keycode) {
 				
-				if(keycode == Input.Keys.P || keycode == Input.Keys.ESCAPE) {
+				if((keycode == Input.Keys.P || keycode == Input.Keys.ESCAPE) && (!enemySpawner.spawnedBoss || (enemySpawner.spawnedBoss && !enemySpawner.boss.isDead()))) {
 					screen.pause();
 				}
 				
@@ -250,13 +275,18 @@ public class Level extends Stage {
 				// TODO Auto-generated method stub
 
 				CollisionHelper.bulletCollision(contact, collisionList, "Enemy", "Bullet");
+				CollisionHelper.bulletCollision(contact, collisionList, "Enemy", "Bomb");
+				CollisionHelper.bulletCollision(contact, collisionList, "Enemy", "EMP", false);
 				CollisionHelper.bulletCollision(contact, collisionList, "Asteroid", "Bullet");
+				CollisionHelper.bulletCollision(contact, collisionList, "Asteroid", "Bomb");
 				CollisionHelper.bulletCollision(contact, collisionList, "Boss", "Bullet");
+				CollisionHelper.bulletCollision(contact, collisionList, "Boss", "Bomb");
+				CollisionHelper.bulletCollision(contact, collisionList, "Boss", "EMP", false);
 				CollisionHelper.bulletCollision(contact, collisionList, "Ship", "EnemyBullet");
 				CollisionHelper.playerCollision(contact, "Enemy", true);
 				CollisionHelper.playerCollision(contact, "Asteroid", true);
 				CollisionHelper.playerCollision(contact, "Boss", false);
-				
+				CollisionHelper.powerupCollision(contact);
 				
 			}
 

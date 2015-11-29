@@ -31,6 +31,8 @@ public class ShooterGame extends Game {
 	
 	public static Ship PLAYER_SHIP;
 	
+	public static final int MAX_LIVES = 10;
+	
 	public static PlayerSave PLAYER_SAVE = null;
 	public Database db;
 	
@@ -70,8 +72,6 @@ public class ShooterGame extends Game {
 		currentScreen = new MainMenuScreen(this);
 		
 		this.setScreen(currentScreen);
-		
-		
 		
 	}
 

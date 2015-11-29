@@ -5,9 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
+import com.seniorproject.game.Asset;
 import com.seniorproject.game.GameActor;
+import com.seniorproject.game.Spawner;
 import com.seniorproject.game.levels.Level;
 import com.seniorproject.game.particles.BaseExplosion;
+import com.seniorproject.game.particles.ParticleInterface;
 
 public class BaseEnemy extends GameActor {
 
@@ -43,7 +46,10 @@ public class BaseEnemy extends GameActor {
 	
 	protected boolean customMovement = false;
 	
+	protected Asset<ParticleInterface> particleInterface;
 	protected BaseExplosion explosion;
+	
+	public boolean hitByEMP = false;
 	
 	public BaseEnemy(Level l, String spriteFile) {
 		super(l);
@@ -263,10 +269,7 @@ public class BaseEnemy extends GameActor {
 
 		if(!this.dead && dead) {
 			
-			if(explosion != null) {
-				level.addGameObject(explosion);
-				explosion.start(this.getX(), this.getY());
-			}
+			explode();
 
 			// PLAY EXPLOSION SOUND
 			//final Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion-2.wav"));
@@ -286,5 +289,12 @@ public class BaseEnemy extends GameActor {
 	public void reset() {
 		health = startingHealth;
 		dead = false;
+	}
+	
+	public void explode() {
+		if(explosion != null) {
+			level.addGameObject(explosion);
+			explosion.start(this.getX(), this.getY());
+		}
 	}
 }

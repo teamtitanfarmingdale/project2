@@ -12,12 +12,19 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.seniorproject.game.helpers.FontAsset;
+import com.seniorproject.game.particles.BaseExplosion;
+import com.seniorproject.game.particles.EngineThrust;
+import com.seniorproject.game.particles.FireExplosion;
+import com.seniorproject.game.particles.InfiniteParticle;
+import com.seniorproject.game.particles.ParticleInterface;
+import com.seniorproject.game.particles.SmokeExplosion;
 
 public class AssetManager {
 
 	private ArrayList<Asset<Texture>> textureList;
 	private ArrayList<Asset<Sound>> soundList;
 	private ArrayList<FontAsset<BitmapFont>> fontList;
+	private ArrayList<Asset<ParticleInterface>> particleList;
 	
 	private Sound sound;
 	
@@ -26,6 +33,69 @@ public class AssetManager {
 		textureList = new ArrayList<Asset<Texture>>();
 		soundList = new ArrayList<Asset<Sound>>();
 		fontList = new ArrayList<FontAsset<BitmapFont>>();
+		particleList = new ArrayList<Asset<ParticleInterface>>();
+	}
+	
+	public Asset<ParticleInterface> getParticle(String particleName, String particleType) {
+		Asset<ParticleInterface> particle = null;
+		
+		if(particleName.equals("")) {
+			particleName = particleType;
+		}
+		
+		
+		if(!particleList.isEmpty()) {
+			for(Asset<ParticleInterface> p : particleList) {
+				if(p.fileLocation.equals(particleName) && !p.inUse) {
+					System.out.println("FOUND PARTICLE: "+particleName);
+					p.inUse = true;
+					particle = p;
+					break;
+				}
+			}
+		}
+		
+		
+		if(particle == null) {
+			
+			particle = new Asset<ParticleInterface>();
+			particle.inUse = true;
+			
+			particle.fileLocation = particleName;
+			
+			System.out.println("CREATING PARTICLE: "+particle.fileLocation);
+			
+			switch(particleType) {
+				case "BaseExplosion":
+					particle.asset = new BaseExplosion(particleName);
+					break;
+				case "EngineThrust":
+					particle.asset = new EngineThrust();
+					break;
+				case "FireExplosion":
+					particle.asset = new FireExplosion();
+					break;
+				case "InfiniteParticle":
+					particle.asset = new InfiniteParticle(particleName);
+					break;
+				case "SmokeExplosion":
+					particle.asset = new SmokeExplosion();
+					break;
+			}
+			
+			particleList.add(particle);
+
+		}
+		
+		return particle;
+	}
+	
+	public Asset<ParticleInterface> getParticle(String particleType) {
+		return this.getParticle("", particleType);
+	}
+	
+	public void releaseParticle(Asset<ParticleInterface> p, float time) {
+		Timer.schedule(new ManagerTask<ParticleInterface>(p), time);
 	}
 
 	public Texture getTexture(String fileName) {
@@ -127,21 +197,24 @@ public class AssetManager {
 		}
 		
 		sound.play(ShooterGame.SFX_VOLUME);
-		Timer.schedule(new SoundTask(soundAsset), length);
+		Timer.schedule(new ManagerTask<Sound>(soundAsset), length);
 	}
 	
-	class SoundTask extends Task {
+	class ManagerTask<T> extends Task {
 
-		Asset<Sound> soundAsset;
+		Asset<T> asset;
 		
-		public SoundTask(Asset<Sound> s) {
-			soundAsset = s;
+		public ManagerTask(Asset<T> s) {
+			asset = s;
 		}
 		
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			soundAsset.inUse = false;
+			asset.inUse = false;
+			if(!asset.asset.getClass().getSimpleName().equals("Sound")) {
+				System.out.println("Released "+asset.fileLocation+" - "+asset.asset.getClass().getSimpleName());
+			}
 		}
 		
 	}

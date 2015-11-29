@@ -1,77 +1,43 @@
 package com.seniorproject.game.enemies;
 
-import java.util.ArrayList;
-
+import com.seniorproject.game.GameActor;
+import com.seniorproject.game.Spawner;
 import com.seniorproject.game.levels.Level;
 
 public class AsteroidSpawner extends Spawner {
 
-	ArrayList<Asteroid> asteroidList;
-	ArrayList<Asteroid> asteroidDeadList;
-	
-	
-	public AsteroidSpawner(Level l, String enemyAsteroidFile) {
-		super(l, enemyAsteroidFile);
+	public AsteroidSpawner(Level l) {
+		super(l, l.asteroidSpriteFile);
 		
-		maxEnemies = 100;
-		totalEnemies = 0;
+		maxItems = 100;
+		totalItems = 0;
 		spawnRate = 4;
 		lastSpawnTime = 2;
-		enemiesToSpawnEachInterval = 4;
-		enemySpawnIntervalCount = 0;
+		itemsToSpawnEachInterval = 4;
+		itemSpawnIntervalCount = 0;
 		
-		asteroidList = new ArrayList<Asteroid>();
-		asteroidDeadList = new ArrayList<Asteroid>();
 	}
 	
 	@Override
 	public void act(float delta) {
 		super.act(delta);
-		
-		
-		// Reset the amount spawned this interval if enough time has passed
-		if((getSeconds()-lastSpawnTime) > spawnRate) {
-			enemySpawnIntervalCount = 0;
+		if(!stopped && shouldSpawnItem()) {
+			spawnItem(new Asteroid(level, itemSpriteFile));
+			// Reset total item count so an infinite amount will spawn
+			totalItems = 0;
 		}
-		
-		
-		// Adds enemies to the stage
-		if(getStage() != null && totalEnemies < maxEnemies && enemiesToSpawnEachInterval > enemySpawnIntervalCount) {
-			level = (Level) getStage();
-			Asteroid asteroid = new Asteroid(level, enemySpriteFile);
-			level.addGameObject(asteroid);
-			asteroidList.add(asteroid);
-			//totalEnemies++;
-			enemySpawnIntervalCount++;
-			lastSpawnTime = getSeconds();
-		}
-		
-		
-		// Check list for dead asteroids
-		if(asteroidList.size() > 0) {
-			for(Asteroid a : asteroidList) {
-				if(a.isDead()) {
-					asteroidDeadList.add(a);
-				}
-			}
-			
-			if(asteroidDeadList.size() > 0) {
-				for(Asteroid a : asteroidDeadList) {
-					asteroidList.remove(a);
-				}
-				
-				asteroidDeadList.clear();
-			}
-			
-		}
-		
+		updateItemList();
 	}
 	
+	@Override
 	public void stop() {
-		totalEnemies = maxEnemies;
-		
-		for(Asteroid a : asteroidList) {
-			a.silentDeath(true);
+		totalItems = maxItems;
+		BaseEnemy e;
+		stopped = true;
+		for(GameActor a : itemList) {
+			e = (BaseEnemy) a;
+			e.silentDeath(true);
+			System.out.println("KILLED ASTEROID");
 		}
 		
 	}

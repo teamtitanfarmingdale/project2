@@ -71,7 +71,8 @@ public class Health extends BasicHealthBar {
 		healthBarSprite = new Sprite(healthBarTexture);
 
 		setHealthBarSprite(healthBarSprite);
-
+		setHealth(ShooterGame.PLAYER_SHIP.health);
+		
 		topLeftWingTexture = game.assetManager.getTexture("hud/health/topleftwing.png");
 		topLeftWingSprite = new Sprite(topLeftWingTexture);
 
@@ -161,7 +162,7 @@ public class Health extends BasicHealthBar {
 			backBarWarningSprite.draw(batch);
 		}
 		else {
-			backBarSprite.draw(batch);;
+			backBarSprite.draw(batch);
 		}
 		
 		healthBarSprite.draw(batch);

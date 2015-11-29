@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.seniorproject.game.ShooterGame;
 
 public class LifeManager extends Actor {
-
+	
 	ArrayList<Sprite> lifeSprites;
 	Texture lifeTexture;
 	

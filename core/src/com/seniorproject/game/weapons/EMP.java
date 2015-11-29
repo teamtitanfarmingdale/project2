@@ -1,21 +1,42 @@
 package com.seniorproject.game.weapons;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
+import com.seniorproject.game.GameActor;
+import com.seniorproject.game.enemies.BaseEnemy;
+import com.seniorproject.game.enemies.Enemy;
 import com.seniorproject.game.levels.Level;
+import com.seniorproject.game.particles.InfiniteParticle;
 
 public class EMP extends BaseBullet {
 
-	
+	InfiniteParticle empCloud;
 	
 	public EMP(Level l) {
-		super(l, "emp.png");
+		super(l, "emp2.png");
 		actualWidth = 120f;
 		//shouldCreateBody = false;
-
+		collisionData.setActorType("EMP");
+		damage = 0;
+		
+		particleInterface = l.game.assetManager.getParticle("particles/emp.particle", "InfiniteParticle");
+		empCloud = (InfiniteParticle) particleInterface.asset;
+		empCloud.start(this.getX()+(bulletSprite.getWidth()/2), this.getY()+bulletSprite.getHeight()+100);
 	}
 
+	
+	@Override
+	public boolean remove() {
+		super.remove();
+		
+		empCloud.stop();
+		level.game.assetManager.releaseParticle(particleInterface, 0f);
+		
+		return true;
+	}
+	
 	@Override
 	public void act(float delta) {
 		super.act(delta);
@@ -25,6 +46,13 @@ public class EMP extends BaseBullet {
 		mba.setDuration(bulletSpeed);
 		addAction(mba);
 		
+	}
+	
+	@Override
+	public void draw(Batch batch, float delta) {
+		super.draw(batch, delta);
+		empCloud.start(this.getX()+(bulletSprite.getWidth()/2), this.getY()+bulletSprite.getHeight()+150);
+		empCloud.draw(batch);
 	}
 	
 	
@@ -92,6 +120,16 @@ public class EMP extends BaseBullet {
 		
 		//shape.setAsBox(actualWidth, bulletSprite.getHeight()/2);
 
+	}
+	
+	@Override
+	public void setCollidedEnemy(GameActor enemy) {
+		super.setCollidedEnemy(enemy);
+
+		BaseEnemy collidedEnemy = (BaseEnemy) enemy;
+		collidedEnemy.hitByEMP = true;
+
+		collisionParticle.stop();
 	}
 	
 	

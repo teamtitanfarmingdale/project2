@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class BaseExplosion extends Actor {
+public class BaseExplosion extends Actor implements ParticleInterface {
 	
 	ParticleEffect explosion;
 	boolean explosionStarted = false;
@@ -31,8 +31,8 @@ public class BaseExplosion extends Actor {
 			explosion.draw(batch);
 			
 			if(explosion.isComplete()) {
-				explosion.dispose();
-				explosion = null;
+				explosionStarted = false;
+				explosion.reset();
 			}
 			
 		}
@@ -47,5 +47,13 @@ public class BaseExplosion extends Actor {
 		
 		explosionStarted = true;
 		explosion.start();
+	}
+	
+	public void stop() {
+		explosionStarted = false;
+	}
+	
+	public boolean started() {
+		return explosionStarted;
 	}
 }

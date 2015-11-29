@@ -5,10 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 
-public class InfiniteParticle {
+public class InfiniteParticle implements ParticleInterface {
 	
 	ParticleEffect particleEffect;
 	boolean effectStarted = false;
+	
+	private int startTime = 0;
 	
 	public String particleFile;
 	
@@ -21,6 +23,10 @@ public class InfiniteParticle {
 		
 	}
 	
+	public ParticleEffect getParticleEffect() {
+		return particleEffect;
+	}
+	
 
 	public void draw(Batch batch) {
 
@@ -30,8 +36,10 @@ public class InfiniteParticle {
 			
 			if(effectStarted) {
 				
-				for(ParticleEmitter pe : particleEffect.getEmitters()) {
-					pe.durationTimer = 0;
+				if(startTime >= 0) {
+					for(ParticleEmitter pe : particleEffect.getEmitters()) {
+						pe.durationTimer = startTime;
+					}
 				}
 				
 				
@@ -73,5 +81,9 @@ public class InfiniteParticle {
 	
 	public void dispose() {
 		particleEffect.dispose();
+	}
+	
+	public void setStartTime(int time) {
+		startTime = time;
 	}
 }

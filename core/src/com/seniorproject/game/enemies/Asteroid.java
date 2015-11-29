@@ -27,7 +27,8 @@ public class Asteroid extends BaseEnemy {
 		this.hitAwardPoints = 10;
 		this.customMovement = true;
 		
-		this.explosion = new SmokeExplosion();
+		particleInterface = l.game.assetManager.getParticle("SmokeExplosion");
+		this.explosion = (SmokeExplosion) particleInterface.asset;
 		
 		shape = new PolygonShape();
 		
@@ -44,6 +45,12 @@ public class Asteroid extends BaseEnemy {
 		shape.set(vertices);
 		
 		
+	}
+	
+	@Override
+	public void explode() {
+		super.explode();
+		level.game.assetManager.releaseParticle(particleInterface, SmokeExplosion.RELEASE_TIME);
 	}
 	
 	@Override
@@ -74,9 +81,7 @@ public class Asteroid extends BaseEnemy {
 		if(getY()+getHeight() < 0) {
 			this.remove();
 			this.dispose();
-			//System.out.println("removed asteroid!");
 		}
-		
 		
 	}
 	

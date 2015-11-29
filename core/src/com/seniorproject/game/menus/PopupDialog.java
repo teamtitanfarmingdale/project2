@@ -99,7 +99,7 @@ public class PopupDialog {
 	
 	
 	public void dispose() {
-		fadedBGTexture.dispose();
+		//fadedBGTexture.dispose();
 		cancelButtonHelper.dispose();
 		stage.dispose();
 	}

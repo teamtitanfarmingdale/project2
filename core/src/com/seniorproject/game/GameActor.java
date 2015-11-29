@@ -43,19 +43,17 @@ public abstract class GameActor extends Actor {
 	public void createBody() {
 
 		if(getStage() != null && !isDead()) {
-			
 			level = (Level) getStage();
-			
 			// DESTROY THE CURRENT BODY IF THERE IS ONE
 			destroyBody();
 			createBodyBoundry();
-
 		}
 		else if(getStage() != null && isDead() && !died) {
 			this.dispose();
 			died = true;
 			this.remove();
 		}
+		
 
 	}
 	
@@ -72,14 +70,16 @@ public abstract class GameActor extends Actor {
 		
 		bodyDef.position.set(sprite.getX()-bodyXOffset, sprite.getY()-bodyYOffset);
 		
-		shape = new PolygonShape();
-		shape.setAsBox(sprite.getWidth()/2, sprite.getHeight()/2);
-		
+		if(shape == null) {
+			shape = new PolygonShape();
+			shape.setAsBox(sprite.getWidth()/2, sprite.getHeight()/2);
+		}
+	
 		body = getWorld().createBody(bodyDef);
-		fixture = body.createFixture(shape, 0f);
+		fixture = body.createFixture(getShape(), 0f);
 		fixture.setUserData(collisionData);
 		body.resetMassData();
-		shape.dispose();
+		//shape.dispose();
 	}
 	
 	protected void destroyBody() {
@@ -181,6 +181,10 @@ public abstract class GameActor extends Actor {
 	
 	public void hittable(boolean yesNo) {
 		hittable = yesNo;
+	}
+	
+	public PolygonShape getShape() {
+		return shape;
 	}
 		
 }

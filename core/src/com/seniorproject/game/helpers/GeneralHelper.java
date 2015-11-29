@@ -38,7 +38,7 @@ public class GeneralHelper {
 		return formattedScore;
 	}
 	
-	public static SequenceAction shakeSprite(final Sprite sprite) {
+	public static SequenceAction shakeSprite(final Sprite sprite, final float amount) {
 		
 		SequenceAction sa = Actions.sequence(
 				
@@ -47,7 +47,7 @@ public class GeneralHelper {
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-						sprite.rotate(5);
+						sprite.rotate(amount);
 					}
 					
 				}),
@@ -57,7 +57,7 @@ public class GeneralHelper {
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-						sprite.rotate(-10);
+						sprite.rotate((amount*2)*-1);
 					}
 					
 				}),
@@ -67,7 +67,7 @@ public class GeneralHelper {
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-						sprite.rotate(5);
+						sprite.rotate(amount);
 					}
 					
 				})
@@ -75,6 +75,10 @@ public class GeneralHelper {
 		
 		
 		return sa;
+	}
+	
+	public static SequenceAction shakeSprite(final Sprite sprite) {
+		return shakeSprite(sprite, 5);
 	}
 	
 	

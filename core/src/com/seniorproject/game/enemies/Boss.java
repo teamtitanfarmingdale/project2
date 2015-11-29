@@ -5,6 +5,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.seniorproject.game.ShooterGame;
+import com.seniorproject.game.Spawner;
+import com.seniorproject.game.helpers.GeneralHelper;
 import com.seniorproject.game.levels.Level;
 import com.seniorproject.game.particles.FireExplosion;
 
@@ -14,6 +16,8 @@ public class Boss extends BaseEnemy {
 	protected PolygonShape leftAntennaShape;
 	protected PolygonShape rightAntennaShape;
 	protected PolygonShape centerBodyShape;
+	protected boolean clearedActions = false;
+	protected boolean empEffect = false;
 	
 	float lastShipCollision = -1;
 
@@ -22,7 +26,7 @@ public class Boss extends BaseEnemy {
 
 		collisionData.setActorType("Boss");
 		
-		this.health = 300;
+		this.health = 600*(1+(ShooterGame.CURRENT_LEVEL/25));
 		
 		this.hoverOffset = 0;
 		this.shootInterval = .1f;
@@ -38,7 +42,8 @@ public class Boss extends BaseEnemy {
 		this.movementXDistance = 2f;
 		this.hoverSpeed = 3f;
 		
-		this.explosion = new FireExplosion();
+		particleInterface = l.game.assetManager.getParticle("FireExplosion");
+		this.explosion = (FireExplosion) particleInterface.asset;
 		
 		buildShape();
 		
@@ -126,12 +131,19 @@ public class Boss extends BaseEnemy {
 	}
 	
 	@Override
+	public void explode() {
+		super.explode();
+		level.game.assetManager.releaseParticle(particleInterface, FireExplosion.RELEASE_TIME);
+	}
+	
+	@Override
 	public void setDead(boolean dead) {
 		super.setDead(dead);
 		
 		ShooterGame.PLAYER_SCORE = level.score.getScore();
 		
 		level.asteroidSpawner.stop();
+		level.powerupSpawner.stop();
 		level.levelFinished = true;
 		level.ship.finishedAnimation();
 		level.ship.hittable(false);
@@ -222,4 +234,63 @@ public class Boss extends BaseEnemy {
 		centerBodyShape.dispose();
 	}
 	
+	
+	@Override
+	public void act(float delta) {
+		super.act(delta);
+		
+		if(hitByEMP) {
+			if(!clearedActions) {
+				this.clearActions();
+				clearedActions = true;
+			}
+			
+			freeze();
+			
+		}
+		
+	}
+	
+	public void freeze() {
+		
+		if(!empEffect) {
+			customMovement = true;
+			getSprite().rotate(5);
+			empEffect = true;
+			createBody();
+			
+			// Shake halfway through effect
+			Timer.schedule(new Task() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					level.addAction(GeneralHelper.shakeSprite(getSprite(), -5));
+				}
+				
+			}, 1.5f);
+			
+			// Unset Effect after 3 seconds
+			Timer.schedule(new Task() {
+	
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					getSprite().rotate(-5);
+					empEffect = false;
+					customMovement = false;
+					hitByEMP = false;
+				}
+				
+			}, 3f);
+		}
+		
+		
+		if(health <= 0) {
+			level.score.addToScore(killAwardPoints);
+			level.ship.totalKills++;
+			setDead(true);
+		}
+		
+	}
 }

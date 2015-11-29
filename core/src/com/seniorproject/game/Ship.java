@@ -14,24 +14,30 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.seniorproject.game.enemies.Boss;
-import com.seniorproject.game.enemies.Spawner;
 import com.seniorproject.game.helpers.GeneralHelper;
 import com.seniorproject.game.levels.Level;
 import com.seniorproject.game.particles.EngineThrust;
 import com.seniorproject.game.particles.FireExplosion;
 import com.seniorproject.game.particles.InfiniteParticle;
+import com.seniorproject.game.particles.ParticleInterface;
+import com.seniorproject.game.powerups.Powerup;
 import com.seniorproject.game.weapons.Bullet;
 import com.seniorproject.game.weapons.EMP;
 
 public class Ship extends GameActor {
 
-	private final static int MAX_HEALTH = 100;
-	private final static int MAX_ARMOR = 100;
-	
+	public final static int MAX_HEALTH = 100;
+	public final static int MAX_ARMOR = 100;
+
+	boolean hasShield = false;
+	long shieldStartTime = 0;
+	float shieldOpacity = 0;
+	Task shieldTimer;
 	
 	boolean rightKeyPressed = false;
 	boolean leftKeyPressed = false;
@@ -61,16 +67,29 @@ public class Ship extends GameActor {
 	InfiniteParticle smokingIndicator;
 	InfiniteParticle dangerIndicator;
 	
+	Asset<ParticleInterface> gasParticleInterface;
+	Asset<ParticleInterface> smokingParticleInterface;
+	Asset<ParticleInterface> dangerParticleInterface;
 	
+	
+	
+	Sprite shieldImage;
+	
+	PolygonShape shieldShape;
 	
 	public Ship(Level l) {
 		super(l);
 		
 		setupSprite("ship.png");
 		
-		gasParticle = new EngineThrust();
-		smokingIndicator = new InfiniteParticle("particles/smoking-indicator.particle");
-		dangerIndicator = new InfiniteParticle("particles/danger-indicator.particle");
+		gasParticleInterface = level.game.assetManager.getParticle("EngineThrust");
+		gasParticle = (EngineThrust) gasParticleInterface.asset; //new EngineThrust();
+		
+		smokingParticleInterface = level.game.assetManager.getParticle("particles/smoking-indicator.particle", "InfiniteParticle");
+		smokingIndicator = (InfiniteParticle) smokingParticleInterface.asset; //new InfiniteParticle("particles/smoking-indicator.particle");
+		
+		dangerParticleInterface = level.game.assetManager.getParticle("particles/danger-indicator.particle", "InfiniteParticle");
+		dangerIndicator = (InfiniteParticle) dangerParticleInterface.asset; //new InfiniteParticle("particles/danger-indicator.particle");
 		
 		collisionData.setActorType("Ship");
 		setBounds(getSprite().getX(), 10, getSprite().getWidth(), getSprite().getHeight());
@@ -81,6 +100,11 @@ public class Ship extends GameActor {
 		Texture gasTexture = l.game.assetManager.getTexture("gas.png");
 		gasSprite = new Sprite(gasTexture);		
 		
+		Texture shieldTexture = l.game.assetManager.getTexture("powerups/shield.png");
+		shieldImage = new Sprite(shieldTexture);
+		
+		// Image renders weird at it's natural size so adjusting by 1 pixel
+		shieldImage.setSize(shieldImage.getWidth()+1, shieldImage.getHeight());
 		
 		
 		shape = new PolygonShape();
@@ -96,7 +120,21 @@ public class Ship extends GameActor {
 		};
 		
 		shape.set(vertices);
+
 		
+		shieldShape = new PolygonShape();
+		float shieldVertices[] = {
+				-46, -30,
+				-25, -49,
+				12, -55,
+				45, -29,
+				55, 13,
+				25, 51,
+				-26, 53,
+				-55, 16
+		};
+		
+		shieldShape.set(shieldVertices);
 		
 	}
 	
@@ -105,6 +143,9 @@ public class Ship extends GameActor {
 		if(hittable) {
 			getLevel().addAction(GeneralHelper.shakeSprite(getSprite()));
 			
+			if(hasShield) {
+				damage = 0;
+			}
 			
 			if(armor > 0) {
 				armor -= damage;
@@ -162,6 +203,27 @@ public class Ship extends GameActor {
 			level.healthBar.setHealth(health);
 		}
 	}
+	
+	public void addHealth(float amount) {
+		health += amount;
+		
+		if(health > MAX_HEALTH) {
+			health = MAX_HEALTH;
+		}
+		
+		level.healthBar.setHealth(health);
+	}
+	
+	public void addArmor(float amount) {
+		armor += amount;
+		
+		if(armor > MAX_ARMOR) {
+			armor = MAX_ARMOR;
+		}
+		
+		level.armorBar.setHealth(armor);
+	}
+	
 	
 	public void addCollidedObject(GameActor actor) {
 		if(collidedObjects.indexOf(actor) == -1) {
@@ -228,6 +290,18 @@ public class Ship extends GameActor {
 		
 		
 		getSprite().draw(batch);
+		
+		if(hasShield) {
+			shieldImage.setPosition(sprite.getX()-((shieldImage.getWidth()/2)-(sprite.getWidth()/2)), sprite.getY()-((shieldImage.getHeight()/2)-(sprite.getHeight()/2)));
+			shieldOpacity = 1-((Spawner.getSeconds() - shieldStartTime)/Powerup.SHIELD_TIME);
+			
+			if(shieldOpacity < .1) {
+				shieldOpacity = .1f;
+			}
+			
+			shieldImage.draw(batch, shieldOpacity);
+		}
+		
 	}
 	
 	
@@ -271,6 +345,7 @@ public class Ship extends GameActor {
 			}
 		}
 		
+		
 	}
 	
 	public void finishedAnimation() {
@@ -279,6 +354,7 @@ public class Ship extends GameActor {
 		mta.setPosition((level.getWidth()/2)-(this.getWidth()/2), (level.getHeight()/2)-(this.getHeight()/2));
 		mta.setDuration(3f);
 		addAction(mta);
+		removeShield();
 		
 		final Ship tempShip = this;
 		
@@ -321,6 +397,7 @@ public class Ship extends GameActor {
 			minY = 10;
 			maxY = this.getStage().getHeight() - (getHeight()*5);
 			
+			/*
 			stage.addListener(new ClickListener() {
 				
 				@Override
@@ -345,7 +422,7 @@ public class Ship extends GameActor {
 				
 				
 			});
-			
+			*/
 			
 			// MOVEMENT LISTENERS
 			this.getParent().addListener(new InputListener() {
@@ -413,6 +490,7 @@ public class Ship extends GameActor {
 	public void dispose() {
 		super.dispose();
 		
+		/*
 		if(gasParticle != null) {
 			gasParticle.dispose();
 			gasParticle = null;
@@ -427,14 +505,22 @@ public class Ship extends GameActor {
 			dangerIndicator.dispose();
 			dangerIndicator = null;
 		}
-		
+		*/
+	}
+	
+	public void releaseParticles() {
+		level.game.assetManager.releaseParticle(gasParticleInterface, 0f);
+		level.game.assetManager.releaseParticle(smokingParticleInterface, 0f);
+		level.game.assetManager.releaseParticle(dangerParticleInterface, 0f);
 	}
 	
 	public void explode() {
 		// EXPLODE
-		FireExplosion explosion = new FireExplosion();
+		Asset<ParticleInterface> particleInterface = level.game.assetManager.getParticle("FireExplosion");
+		FireExplosion explosion = (FireExplosion) particleInterface.asset;
 		level.addGameObject(explosion);
 		explosion.start(this.getX(), this.getY());
+		level.game.assetManager.releaseParticle(particleInterface, FireExplosion.RELEASE_TIME);
 	}
 	
 	@Override
@@ -454,10 +540,46 @@ public class Ship extends GameActor {
 		
 
 		body = getWorld().createBody(bodyDef);
-		fixture = body.createFixture(shape, 0f);
+		
+		if(!hasShield) {
+			fixture = body.createFixture(shape, 0f);
+		}
+		else {
+			fixture = body.createFixture(shieldShape, 0f);
+		}
+		
 		fixture.setUserData(collisionData);
 		body.resetMassData();
 		//shape.dispose();
 	}
+
+	public void applyShield() {
+		
+		if(hasShield && shieldTimer != null) {
+			shieldTimer.cancel();
+		}
+		
+
+		hasShield = true;
+		shieldStartTime = Spawner.getSeconds();
+		// Remove Shield after certain amount of time
+		shieldTimer = Timer.schedule(new Task() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				removeShield();
+			}
+			
+		}, Powerup.SHIELD_TIME);
+		
+	}
 	
+	public void removeShield() {
+		hasShield = false;
+	}
+	
+	public boolean hasShield() {
+		return hasShield;
+	}
 }

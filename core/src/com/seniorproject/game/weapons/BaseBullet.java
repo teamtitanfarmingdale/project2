@@ -5,14 +5,18 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.seniorproject.game.Asset;
 import com.seniorproject.game.GameActor;
 import com.seniorproject.game.Ship;
 import com.seniorproject.game.enemies.BaseEnemy;
 import com.seniorproject.game.levels.Level;
 import com.seniorproject.game.particles.BaseExplosion;
+import com.seniorproject.game.particles.ParticleInterface;
 
 public class BaseBullet extends GameActor {
 
+	protected Asset<ParticleInterface> particleInterface;
+	
 	protected int damage = 10;
 	
 	protected Texture bulletTexture;
@@ -35,7 +39,10 @@ public class BaseBullet extends GameActor {
 		super(l);
 		bulletTexture = l.game.assetManager.getTexture("bullet.png");
 		bulletSprite = new Sprite(bulletTexture);
-		collisionParticle = new BaseExplosion("particles/bullet-collision.particle");
+		
+		
+		particleInterface = l.game.assetManager.getParticle("particles/bullet-collision.particle", "BaseExplosion");
+		collisionParticle = (BaseExplosion) particleInterface.asset;
 		//collisionData.setActorType("Bullet");
 		
 		shape = new PolygonShape();
@@ -52,7 +59,6 @@ public class BaseBullet extends GameActor {
 		this(l);
 		bulletTexture = l.game.assetManager.getTexture(bulletImage);
 		bulletSprite = new Sprite(bulletTexture);
-		collisionParticle = new BaseExplosion("particles/bullet-collision.particle");
 	}
 	
 	
@@ -149,13 +155,15 @@ public class BaseBullet extends GameActor {
 			tempEnemy.lowerHealth(damage);
 			
 			level.addGameObject(collisionParticle);
-			collisionParticle.start(this.getX()+(this.getWidth()/2), this.getY()+30);
 			
 		}
 		else if(enemy.getCollisionData().getActorType() == "Ship") {
 			Ship tempShip = (Ship) enemy;
 			tempShip.hit(damage);
 		}
+		
+		collisionParticle.start(this.getX()+(this.getWidth()/2), this.getY()+30);
+		level.game.assetManager.releaseParticle(particleInterface, 2f);
 		
 		collidedEnemy = enemy;
 	}
