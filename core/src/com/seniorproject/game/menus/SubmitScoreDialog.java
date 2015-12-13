@@ -32,8 +32,6 @@ public class SubmitScoreDialog extends PopupDialog {
 	
 	LabelHelper labelHelper;
 		
-	ButtonHelper saveButtonHelper;
-
 	Sprite errorBorder;
 	LabelHelper messageLabelHelper;
 	Label messageLabel;
@@ -44,10 +42,11 @@ public class SubmitScoreDialog extends PopupDialog {
 		super(parentStage, g);
 		
 		// Enter Name Label
-		labelHelper = new LabelHelper("Enter your name:", 16, Color.WHITE, "opensans.ttf", game); 
+		labelHelper = new LabelHelper("Submitting Score...", 16, Color.WHITE, "opensans.ttf", game); 
 		Label enterNameLabel = labelHelper.getLabel();
-		enterNameLabel.setAlignment(Align.bottomLeft);
-		enterNameLabel.setPosition(dialogSprite.getX()+50, dialogSprite.getY()+dialogSprite.getHeight()-125);
+		enterNameLabel.setAlignment(Align.center);
+		enterNameLabel.setWidth(dialogSprite.getWidth());
+		enterNameLabel.setPosition(dialogSprite.getX(), dialogSprite.getY()+dialogSprite.getHeight()-125);
 		
 		// Enter Name Textbox
 		tfHelper = new TextFieldHelper((int) (dialogSprite.getWidth()-100), 35, game);
@@ -72,114 +71,87 @@ public class SubmitScoreDialog extends PopupDialog {
 		messageLabel.setWidth(dialogSprite.getWidth());
 		messageLabel.setPosition(dialogSprite.getX(), dialogSprite.getY()+dialogSprite.getHeight()-85);
 		messageLabel.setVisible(false);
-		
 
-		// Save Button
-		saveButtonHelper = new ButtonHelper("menu/submit-button.png", 204, 63, 0, 0, 0, 63, game);
+		stage.addActor(messageLabel);
+		//stage.addActor(saveButton);
+		stage.addActor(enterNameLabel);
+		//stage.addActor(nameText);
 		
-		ImageButton saveButton = saveButtonHelper.getButton();
-		saveButton.setPosition((stage.getWidth()/2)-(saveButton.getWidth()/2), dialogSprite.getY()+50);
-		
-		
-		// Button Listeners		
-		saveButton.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				
-				error = false;
-				messageLabel.setVisible(error);
-				
-				
-				
-				
-				if(!scoreSubmitted && !nameText.getText().isEmpty()) {
-				
-					if(!saveButtonHelper.getButton().isDisabled()) {
-						saveButtonHelper.getButton().setDisabled(true);
-						HttpRequest httpPost = new HttpRequest(HttpMethods.POST);
-						httpPost.setUrl("http://spacetitans.tk/Score_Upload.php");
-						httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-						httpPost.setContent("score="+(ShooterGame.PLAYER_SCORE+bonusPoints)+"&name="+nameText.getText()+"&level="+ShooterGame.CURRENT_LEVEL);
-		
-						Gdx.net.sendHttpRequest (httpPost, new HttpResponseListener() {
-							
-							String status;
-							
-							public void handleHttpResponse(HttpResponse httpResponse) {
-								status = httpResponse.getResultAsString();
-								System.out.println(status);
-								saveButtonHelper.getButton().setDisabled(false);
-								if(!status.equals("ok")) {
-									status = "Unable to submit score at this time!";
-									setErrorMessage(status);
-									messageLabel.setVisible(true);
-									error = true;
-								}
-								else {
-									// Open browser?
-									scoreSubmitted = true;
-									setSuccessMessage("Successfully Submitted Score!");
-									messageLabel.setVisible(true);
-								
-									Timer.schedule(new Task() {
+	}
 	
-										@Override
-										public void run() {
-											// TODO Auto-generated method stub
-											hide();
-										}
-										
-									}, 2f);
-									
-								
-								}
-								
-								
-							}
+	public void submitScore() {
 		
-							public void failed(Throwable t) {
-								status = "Unable to submit score at this time!";
-								setErrorMessage(status);
-								messageLabel.setVisible(true);
-								error = true;
-								saveButtonHelper.getButton().setDisabled(false);
-							}
-		
-							@Override
-							public void cancelled() {
-								// TODO Auto-generated method stub
-								saveButtonHelper.getButton().setDisabled(false);
-							}
-							
-						});
-					
-					
-					}
+		error = false;
+		messageLabel.setVisible(error);
 
+		HttpRequest httpPost = new HttpRequest(HttpMethods.POST);
+		httpPost.setUrl("http://spacetitans.tk/Score_Upload.php");
+		httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+		httpPost.setContent("score="+(ShooterGame.PLAYER_SCORE+bonusPoints)+"&scoreplayer_id="+ShooterGame.PLAYER_ID+"&level_id="+ShooterGame.CURRENT_LEVEL);
+
+		Gdx.net.sendHttpRequest (httpPost, new HttpResponseListener() {
+			
+			String status;
+			
+			public void handleHttpResponse(HttpResponse httpResponse) {
+				status = httpResponse.getResultAsString();
+			
+				System.out.println("status");
+				System.out.println(status);
 				
-				}
-				else if(scoreSubmitted) {
-					setErrorMessage("You already submitted your score!");
-					messageLabel.setVisible(true);
-				}
-				else {
-					setErrorMessage("You must enter a name!");
+				labelHelper.getLabel().setVisible(false);
+				
+				if(!status.equals("ok")) {
+					status = "Unable to submit score at this time!";
+					setErrorMessage(status);
 					messageLabel.setVisible(true);
 					error = true;
 				}
+				else {
+					// Open browser?
+					scoreSubmitted = true;
+					setSuccessMessage("Successfully Submitted Score!");
+					messageLabel.setVisible(true);
+					
+					
+					
+					Timer.schedule(new Task() {
 
-
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							hide();
+						}
+						
+					}, 2f);
+					
+				
+				}
+				
 				
 			}
+
+			public void failed(Throwable t) {
+				status = "Unable to submit score at this time!";
+				setErrorMessage(status);
+				messageLabel.setVisible(true);
+				error = true;
+
+			}
+
+			@Override
+			public void cancelled() {
+				// TODO Auto-generated method stub
+
+			}
+			
 		});
 		
 		
-		stage.addActor(messageLabel);
-		stage.addActor(saveButton);
-		stage.addActor(enterNameLabel);
-		stage.addActor(nameText);
+		
 		
 	}
+	
 	
 	@Override
 	public void draw(SpriteBatch batch) {
@@ -204,6 +176,7 @@ public class SubmitScoreDialog extends PopupDialog {
 		super.show();
 		error = false;
 		messageLabel.setVisible(false);
+		submitScore();
 	}
 	
 
@@ -231,7 +204,6 @@ public class SubmitScoreDialog extends PopupDialog {
 		labelHelper.dispose();
 		messageLabelHelper.dispose();
 		cancelButtonHelper.dispose();
-		saveButtonHelper.dispose();
 		stage.dispose();
 		//errorBorder.getTexture().dispose();
 	}

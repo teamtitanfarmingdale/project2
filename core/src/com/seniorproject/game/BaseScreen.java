@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class BaseScreen implements Screen {
 
+	protected Stage stage;
 	private Stage gameStage;
 	
 	public void setGameStage(Stage stage) {
@@ -15,6 +16,13 @@ public class BaseScreen implements Screen {
 		return gameStage;
 	}
 	
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
+	
+	public Stage getStage() {
+		return stage;
+	}
 	
 	@Override
 	public void show() {

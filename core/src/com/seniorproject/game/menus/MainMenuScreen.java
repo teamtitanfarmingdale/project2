@@ -23,7 +23,7 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 	Sprite sfxTextSprite;
 
 	ButtonHelper newGameButtonHelper;
-	ButtonHelper loadGameButtonHelper;
+	ButtonHelper loginButtonHelper;
 	ButtonHelper quitButtonHelper;
 	
 	SliderHelper sfxSliderHelper;
@@ -38,7 +38,7 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 	public void create() {
 		
 		int borderOffset = 80;
-		int buttonOffset = 20;
+		int buttonOffset = 10;
 		
 		init("menu/mainmenu.png", borderOffset);
 		
@@ -63,21 +63,21 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 		newGameButtonHelper = new ButtonHelper("menu/start-button.png", 204, 64, 0, 0, 0, 63, game);
 		ImageButton newGameButton = newGameButtonHelper.getButton();
 		
-		//loadGameButtonHelper = new ButtonHelper("menu/load-button.png", 204, 63, 0, 0, 0, 63, game);
-		//ImageButton loadButton = loadGameButtonHelper.getButton();
+		loginButtonHelper = new ButtonHelper("menu/login-button.png", 204, 63, 0, 0, 0, 63, game);
+		ImageButton loginButton = loginButtonHelper.getButton();
 		
 		quitButtonHelper = new ButtonHelper("menu/quit-button.png", 204, 63, 0, 0, 0, 63, game);
 		ImageButton quitButton = quitButtonHelper.getButton();
 		
 		
-		newGameButton.setPosition((stage.getWidth()/2)-(newGameButton.getWidth()/2), (stage.getHeight()/2)-(newGameButton.getHeight()/2)-buttonOffset);
-		//loadButton.setPosition((stage.getWidth()/2)-(loadButton.getWidth()/2), newGameButton.getY()-loadButton.getHeight()-buttonOffset);
-		quitButton.setPosition((stage.getWidth()/2)-(quitButton.getWidth()/2), newGameButton.getY()-quitButton.getHeight()-buttonOffset);
+		newGameButton.setPosition((stage.getWidth()/2)-(newGameButton.getWidth()/2), (stage.getHeight()/2)-(newGameButton.getHeight()/2)-(buttonOffset/2));
+		loginButton.setPosition((stage.getWidth()/2)-(loginButton.getWidth()/2), newGameButton.getY()-loginButton.getHeight()-(buttonOffset*.5f));
+		quitButton.setPosition((stage.getWidth()/2)-(quitButton.getWidth()/2), loginButton.getY()-quitButton.getHeight()-(buttonOffset*.5f));
 		
 
 		// SLIDERS
 		
-		sfxTextSprite.setPosition((stage.getWidth()/2)-(sfxTextSprite.getWidth()/2), quitButton.getY()-sfxTextSprite.getHeight()-buttonOffset);
+		sfxTextSprite.setPosition((stage.getWidth()/2)-(sfxTextSprite.getWidth()/2), quitButton.getY()-sfxTextSprite.getHeight()-(buttonOffset*1.5f));
 		
 		sfxSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png", game);
 		musicSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png", game);
@@ -100,6 +100,15 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 				game.switchScreen(ShooterGame.PLAY_MENU);
 			}
 		});
+		
+		
+		loginButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				game.showLoginDialog();
+			}
+		});
+		
 		
 		quitButton.addListener(new ClickListener() {
 			@Override
@@ -133,7 +142,7 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 		
 		// ADD EVERYTHING TO THE STAGE
 		stage.addActor(newGameButton);
-		//stage.addActor(loadButton);
+		stage.addActor(loginButton);
 		stage.addActor(quitButton);
 		stage.addActor(sfxSlider);
 		stage.addActor(musicSlider);
@@ -163,8 +172,12 @@ public class MainMenuScreen extends BaseMenu implements Screen {
 		logo.draw(batch);
 		sfxTextSprite.draw(batch);
 		musicTextSprite.draw(batch);
+		
+		game.getLoginDialog().draw(batch);
+		
 		this.batch.end();
 		
+		game.drawLoginDialog();
 		
 	}
 

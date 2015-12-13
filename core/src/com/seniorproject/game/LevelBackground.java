@@ -20,25 +20,31 @@ public class LevelBackground extends Actor {
 	float backgroundPosition = 0f;
 	Level level;
 	ShooterGame game;
+	String bgFile;
 	
 	long soundID;
 	
 	public LevelBackground(ShooterGame g) {
-		
+		this(g, null);		
+	}
+	
+	public LevelBackground(ShooterGame g, Level l) {
+		level = l;
 		game = g;
 		
-		background = game.assetManager.getTexture("space-level1.jpg");
+		if(l != null) {
+			bgFile = l.levelBGFile;
+		}
+		else {
+			bgFile = "space-level1.jpg";
+		}
+		
+		background = game.assetManager.getTexture(bgFile);
 		background.setWrap(Texture.TextureWrap.Repeat,
 				Texture.TextureWrap.Repeat);
 		bgSprite = new Sprite(background);
 		setBounds(bgSprite.getX(), bgSprite.getY(), bgSprite.getWidth(),
 				bgSprite.getHeight());
-		
-	}
-	
-	public LevelBackground(ShooterGame g, Level l) {
-		this(g);
-		level = l;
 	}
 	
 	public LevelBackground(ShooterGame g, float movementSpeed) {

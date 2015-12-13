@@ -11,7 +11,7 @@ import com.seniorproject.game.ShooterGame;
 public class BaseMenu extends BaseScreen {
 
 	protected ShooterGame game;
-	protected Stage stage;
+	//protected Stage stage;
 	
 	protected SpriteBatch batch;
 	protected Sprite menuBorder;

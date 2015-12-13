@@ -47,6 +47,7 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		init("menu/victorymenu.png", 0);
 		
 		submitScoreDialog = new SubmitScoreDialog(stage, game);
+		game.getLoginDialog().setVictoryScreen(this);
 		
 		int buttonOffset = 10;
 
@@ -118,7 +119,15 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		saveButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				submitScoreDialog.show();
+				
+				if(ShooterGame.PLAYER_ID != 0) {
+					submitScoreDialog.show();
+				}
+				else {
+					game.showLoginDialog();
+					game.getLoginDialog().showErrorMessage("Please log in to submit your score!");
+				}
+				
 			}
 		});
 		
@@ -153,6 +162,7 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		batch.begin();
 		menuBorder.draw(batch);
 		submitScoreDialog.draw(batch);
+		game.getLoginDialog().draw(batch);
 		batch.end();
 		
 		if(submitScoreDialog.isVisible()) {
@@ -160,6 +170,7 @@ public class VictoryScreen extends BaseMenu implements Screen {
 			submitScoreDialog.getStage().draw();
 		}
 		
+		game.drawLoginDialog();
 		
 		if(System.nanoTime()-lastUpdateTime > .1) {
 			lastUpdateTime = System.nanoTime();

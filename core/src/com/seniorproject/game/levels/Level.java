@@ -28,9 +28,7 @@ import com.seniorproject.game.enemies.AsteroidSpawner;
 import com.seniorproject.game.enemies.EnemySpawner;
 import com.seniorproject.game.helpers.CollisionHelper;
 import com.seniorproject.game.hud.*;
-import com.seniorproject.game.powerups.PowerupContainerOLD;
 import com.seniorproject.game.powerups.PowerupSpawner;
-import com.seniorproject.game.weapons.LaserSlot;
 import com.seniorproject.game.weapons.WeaponSlotGroup;
 
 public class Level extends Stage {
@@ -52,6 +50,9 @@ public class Level extends Stage {
 	private Group gameObjects;
 	public String enemySpriteFile = "enemy2.png";
 	public String asteroidSpriteFile = "asteroid.png";
+	public String bossSpriteFile = "boss.png";
+	public String levelBGFile = "space-level1.png";
+	
 	
 	public GameScreen screen;
 	public ShooterGame game;
@@ -67,8 +68,16 @@ public class Level extends Stage {
 	public WeaponSlotGroup weaponSlotGroup;
 	
 	public Level(ShooterGame g) {
+		this(g, "enemy2.png", "asteroid.png", "boss.png", "space-level1.jpg");
+	}
+	
+	public Level(ShooterGame g, String enemyFile, String asteroidFile, String bossFile, String levelFile) {
 		super(new ScreenViewport());	
 
+		enemySpriteFile = enemyFile;
+		asteroidSpriteFile = asteroidFile;
+		bossSpriteFile = bossFile;
+		levelBGFile = levelFile;
 		game = g;
 		
 		// world is used for collisions, I believe its constructor sets the gravity in our game using the Vector2 object

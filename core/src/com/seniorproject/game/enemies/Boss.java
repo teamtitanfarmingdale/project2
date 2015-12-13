@@ -45,7 +45,13 @@ public class Boss extends BaseEnemy {
 		particleInterface = l.game.assetManager.getParticle("FireExplosion");
 		this.explosion = (FireExplosion) particleInterface.asset;
 		
-		buildShape();
+		if(spriteFile.equals("boss.png")) {
+			buildShape();
+		}
+		else {
+			shape = new PolygonShape();
+			shape.setAsBox(sprite.getWidth(), sprite.getHeight());
+		}
 		
 	}
 	
@@ -190,20 +196,21 @@ public class Boss extends BaseEnemy {
 		fixture = body.createFixture(shape, 0f);
 		fixture.setUserData(collisionData);
 
-
-		fixture = body.createFixture(rightArmShape, 0f);
-		fixture.setUserData(collisionData);
-
-
-		fixture = body.createFixture(leftAntennaShape, 0f);
-		fixture.setUserData(collisionData);
-
-		fixture = body.createFixture(rightAntennaShape, 0f);
-		fixture.setUserData(collisionData);
+		if(rightArmShape != null) {
+			fixture = body.createFixture(rightArmShape, 0f);
+			fixture.setUserData(collisionData);
 	
-		fixture = body.createFixture(centerBodyShape, 0f);
-		fixture.setUserData(collisionData);
 	
+			fixture = body.createFixture(leftAntennaShape, 0f);
+			fixture.setUserData(collisionData);
+	
+			fixture = body.createFixture(rightAntennaShape, 0f);
+			fixture.setUserData(collisionData);
+		
+			fixture = body.createFixture(centerBodyShape, 0f);
+			fixture.setUserData(collisionData);
+		}
+		
 		body.resetMassData();
 		//shape.dispose();
 	}
@@ -228,10 +235,12 @@ public class Boss extends BaseEnemy {
 	@Override
 	public void dispose() {
 		super.dispose();
-		rightArmShape.dispose();
-		leftAntennaShape.dispose();
-		rightAntennaShape.dispose();
-		centerBodyShape.dispose();
+		if(rightArmShape != null) {
+			rightArmShape.dispose();
+			leftAntennaShape.dispose();
+			rightAntennaShape.dispose();
+			centerBodyShape.dispose();
+		}
 	}
 	
 	

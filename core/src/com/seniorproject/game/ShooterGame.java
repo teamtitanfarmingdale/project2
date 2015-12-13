@@ -5,7 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.seniorproject.game.helpers.GeneralHelper;
 import com.seniorproject.game.menus.GameOverScreen;
+import com.seniorproject.game.menus.LoginDialog;
 import com.seniorproject.game.menus.MainMenuScreen;
 import com.seniorproject.game.menus.VictoryScreen;
 import com.seniorproject.game.menus.PlayMenu;
@@ -39,6 +41,8 @@ public class ShooterGame extends Game {
 	public static long soundID;
 	
 	public AssetManager assetManager;
+	
+	public static int PLAYER_ID = 0;
 
 	// Screen Constants
 	public static final int MAIN_MENU = 1;
@@ -52,14 +56,16 @@ public class ShooterGame extends Game {
 	// Default Skin
 	public Skin defaultSkin;
 	
-	private Screen currentScreen;
+	private BaseScreen currentScreen;
 	private GameScreen currentGameScreen;
+	
+	private LoginDialog loginDialog;
 	
 	@Override
 	public void create() {
 		
 		db = new Database();
-		
+
 		assetManager = new AssetManager();
 		
 		defaultSkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
@@ -71,12 +77,18 @@ public class ShooterGame extends Game {
 		
 		currentScreen = new MainMenuScreen(this);
 		
+		loginDialog = new LoginDialog(currentScreen.getStage(), this);
+		
 		this.setScreen(currentScreen);
 		
 	}
 
 	
 	public void switchScreen(int screen) {
+		
+		// Reset Victory Screen for login dialog
+		loginDialog.setVictoryScreen(null);
+		
 		switch(screen) {
 			case MAIN_MENU:
 				currentScreen.dispose();
@@ -111,6 +123,7 @@ public class ShooterGame extends Game {
 				break;
 		}
 		
+		loginDialog.setParentStage(currentScreen.getStage());
 		
 	}
 	
@@ -127,6 +140,23 @@ public class ShooterGame extends Game {
 		return currentGameScreen;
 	}
 	
+	public void showLoginDialog() {
+		System.out.println("test");
+		loginDialog.show();
+	}
+	
+	public LoginDialog getLoginDialog() {
+		return loginDialog;
+	}
+	
+	public void drawLoginDialog() {
+		
+		if(loginDialog.isVisible()) {
+			loginDialog.getStage().act(Gdx.graphics.getDeltaTime());
+			loginDialog.getStage().draw();
+		}
+		
+	}
 	
 	@Override
 	public void dispose() {

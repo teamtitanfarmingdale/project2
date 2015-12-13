@@ -16,10 +16,7 @@ public class EnemySpawner extends Spawner {
 	public EnemySpawner(Level l) {
 		super(l, l.enemySpriteFile);
 
-		String bossFile = "boss.png";
-		if(ShooterGame.CURRENT_LEVEL == -1) {
-			bossFile = "boss2.png";
-		}
+		String bossFile = l.bossSpriteFile;
 		
 		boss = new Boss(l, bossFile);
 		

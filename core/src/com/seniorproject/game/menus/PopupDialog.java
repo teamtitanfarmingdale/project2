@@ -27,6 +27,8 @@ public class PopupDialog {
 	
 	protected ShooterGame game;
 	
+	protected String dialogBGPath;
+	
 	public PopupDialog(Stage parentStage, ShooterGame g) {
 		
 		game = g;
@@ -34,27 +36,15 @@ public class PopupDialog {
 		
 		stage = new Stage();
 		
+		
 		// FADED BACKGROUND
 		fadedBGTexture = game.assetManager.getTexture("faded-black-bg.png");
 		fadedBGTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 		fadedBG = new Sprite(fadedBGTexture);
 		fadedBG.setSize(ShooterGame.GAME_WIDTH, ShooterGame.GAME_HEIGHT);
 		
-		
-		// Dialog
-		Texture dialogTexture = game.assetManager.getTexture("menu/save-score-popup/bg.png");
-		dialogSprite = new Sprite(dialogTexture);
-		
-		dialogSprite.setSize(536, 286);
-		dialogSprite.setPosition((stage.getWidth()/2)-(dialogSprite.getWidth()/2), (stage.getHeight()/2)-(dialogSprite.getHeight()/2));
-		
-		
-		// Cancel Button
-		cancelButtonHelper = new ButtonHelper("menu/save-score-popup/cancel-button.png", 71, 71, 0, 0, 0, 71, game);
-		cancelButton = cancelButtonHelper.getButton();
-		
-		cancelButton.setPosition((dialogSprite.getX()+dialogSprite.getWidth()-(cancelButton.getWidth()/2)-15), dialogSprite.getY()+dialogSprite.getHeight()-cancelButton.getHeight()+15);
-		
+		initDialogBG();
+		initCancelButton();
 		
 		// Button Listeners
 		cancelButton.addListener(new ClickListener() {
@@ -68,6 +58,29 @@ public class PopupDialog {
 		stage.addActor(cancelButton);
 
 	}
+	
+	public void initDialogBG() {
+		
+		dialogBGPath = "menu/save-score-popup/bg.png";
+		
+		// Dialog
+		Texture dialogTexture = game.assetManager.getTexture(dialogBGPath);
+		dialogSprite = new Sprite(dialogTexture);
+		
+		dialogSprite.setSize(536, 286);
+		dialogSprite.setPosition((stage.getWidth()/2)-(dialogSprite.getWidth()/2), (stage.getHeight()/2)-(dialogSprite.getHeight()/2));
+		
+		
+	}
+	
+	public void initCancelButton() {
+		// Cancel Button
+		cancelButtonHelper = new ButtonHelper("menu/save-score-popup/cancel-button.png", 71, 71, 0, 0, 0, 71, game);
+		cancelButton = cancelButtonHelper.getButton();
+		
+		cancelButton.setPosition((dialogSprite.getX()+dialogSprite.getWidth()-(cancelButton.getWidth()/2)-15), dialogSprite.getY()+dialogSprite.getHeight()-cancelButton.getHeight()+15);
+	}
+	
 	
 	public void draw(SpriteBatch batch) {
 
@@ -102,5 +115,13 @@ public class PopupDialog {
 		//fadedBGTexture.dispose();
 		cancelButtonHelper.dispose();
 		stage.dispose();
+	}
+	
+	public void setParentStage(Stage stage) {
+		parentStage = stage;
+	}
+	
+	public Stage getParentStage() {
+		return parentStage;
 	}
 }

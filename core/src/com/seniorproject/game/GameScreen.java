@@ -2,13 +2,15 @@ package com.seniorproject.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.seniorproject.game.levels.IceLevel;
+import com.seniorproject.game.levels.LavaLevel;
 import com.seniorproject.game.levels.Level;
 import com.seniorproject.game.menus.PauseMenu;
 
 public class GameScreen extends BaseScreen {
 
 	
-	private Level stage;
+	//private Level stage;
 	private PauseMenu pauseMenu;
 	
 	public ShooterGame game;
@@ -26,16 +28,28 @@ public class GameScreen extends BaseScreen {
 	
 	public void create() {
 		
-		stage = new Level(game);
+		switch(ShooterGame.CURRENT_LEVEL) {
+			case 2:
+				stage = new IceLevel(game);
+				break;
+			case 3:
+				stage = new LavaLevel(game);
+				break;
+			default:
+				stage = new Level(game);
+		}
+
+		
+		
 		setGameStage(stage);
 		
-		stage.setScreen(this);
+		((Level) stage).setScreen(this);
 		Gdx.input.setInputProcessor(stage);
 		
 	}
 	
 	public Level getLevel() {
-		return stage;
+		return (Level) stage;
 	}
 	
 	@Override
