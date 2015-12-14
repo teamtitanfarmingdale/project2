@@ -7,10 +7,14 @@ import java.util.TimeZone;
 
 public class PlayerSave {
 	
+	public int playersave_id = 0;
 	public int player_id = 0;
 	public String name = "";
 	public int score = 0;
 	public int level = 0;
+	public int lives = 0;
+	public int rockets = 0;
+	public int emp = 0;
 	public Calendar date;
 
 	public PlayerSave() {

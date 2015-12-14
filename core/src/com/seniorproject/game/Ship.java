@@ -55,8 +55,11 @@ public class Ship extends GameActor {
 	
 	public float health = 100;
 	public float armor = 100;
-	public float lives = 0;
+	public float lives = 3;
 	public float totalKills = 0;
+	
+	public int totalRockets = 3;
+	public int totalEMP = 3;
 	
 	ArrayList<GameActor> collidedObjects;
 	
@@ -328,6 +331,7 @@ public class Ship extends GameActor {
 				MoveByAction mba = new MoveByAction();
 				mba.setAmount(0f, movementDistance);
 				mba.setDuration(movementSpeed);
+				
 				addAction(mba);
 			}
 			else if(downKeyPressed && getY() > minY) {
@@ -335,6 +339,14 @@ public class Ship extends GameActor {
 				mba.setAmount(0f,  movementDistance*-1);
 				mba.setDuration(movementSpeed);
 				addAction(mba);
+			}
+			
+			if(upKeyPressed && getY() >= maxY) {
+				level.barrier.setX(this.getX()+(this.getWidth()/2)-(level.barrier.getWidth()/2));
+				level.barrier.setVisible(true);
+			}
+			else {
+				level.barrier.setVisible(false);
 			}
 			
 			if(!upKeyPressed && !downKeyPressed && getY() > minY) {
@@ -395,7 +407,8 @@ public class Ship extends GameActor {
 			maxX = this.getStage().getWidth() - getWidth();
 			
 			minY = 10;
-			maxY = this.getStage().getHeight() - (getHeight()*5);
+			maxY = this.getStage().getHeight() - (getHeight()*4);
+			this.level.barrier.setY(maxY+(this.level.barrier.getHeight()/2));
 			
 			/*
 			stage.addListener(new ClickListener() {
@@ -467,11 +480,6 @@ public class Ship extends GameActor {
 						break;
 					case Input.Keys.S:
 						downKeyPressed = false;
-						break;
-					case Input.Keys.E:
-						EMP emp = new EMP(level);
-						emp.setPosition(Ship.this.getX()+(emp.getWidth()/2)-(Ship.this.getWidth()), Ship.this.getY());
-						level.addGameObject(emp);
 						break;
 				}
 				

@@ -6,7 +6,7 @@ public class RocketSlot extends WeaponSlot {
 
 	public RocketSlot(Level l) {
 		super(l, l.weaponSlotGroup);
-		ammoCount = 10;
+		ammoCount = l.ship.totalRockets;
 		this.setPosition(x, l.weaponSlotGroup.laserSlot.getY()-yBuffer);
 		ammoLabel.setPosition(x, this.getY()-(ammoLabel.getHeight()+5));
 		labelBG.setPosition(ammoLabel.getX(), ammoLabel.getY());
@@ -44,4 +44,18 @@ public class RocketSlot extends WeaponSlot {
 		
 	}
 
+	@Override
+	public void lowerAmmo() {
+		super.lowerAmmo();
+		
+		level.ship.totalRockets = ammoCount;
+	}
+	
+	@Override
+	public void addAmmo(int amount) {
+		super.addAmmo(amount);
+		
+		level.ship.totalRockets = ammoCount;
+	}
+	
 }

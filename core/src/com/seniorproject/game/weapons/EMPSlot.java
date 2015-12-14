@@ -10,7 +10,7 @@ public class EMPSlot extends WeaponSlot {
 		this.setPosition(x, weaponGroup.bombSlot.getY()-yBuffer);
 		ammoLabel.setPosition(x, this.getY()-(ammoLabel.getHeight()+5));
 		labelBG.setPosition(ammoLabel.getX(), ammoLabel.getY());
-		ammoCount = 10;
+		ammoCount = l.ship.totalEMP;
 		ammoLabel.setText(""+ammoCount);
 		deselect();
 	}
@@ -41,6 +41,20 @@ public class EMPSlot extends WeaponSlot {
 		emp.setPosition(level.ship.getX()+(emp.getWidth()/2)-(level.ship.getWidth()), level.ship.getY());
 		level.addGameObject(emp);
 		lowerAmmo();
+	}
+	
+	@Override
+	public void lowerAmmo() {
+		super.lowerAmmo();
+		
+		level.ship.totalEMP = ammoCount;
+	}
+	
+	@Override
+	public void addAmmo(int amount) {
+		super.addAmmo(amount);
+		
+		level.ship.totalEMP = ammoCount;
 	}
 	
 }

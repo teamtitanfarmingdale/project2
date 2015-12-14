@@ -18,6 +18,7 @@ public class Boss extends BaseEnemy {
 	protected PolygonShape centerBodyShape;
 	protected boolean clearedActions = false;
 	protected boolean empEffect = false;
+	protected String bossFile;
 	
 	float lastShipCollision = -1;
 
@@ -45,7 +46,8 @@ public class Boss extends BaseEnemy {
 		particleInterface = l.game.assetManager.getParticle("FireExplosion");
 		this.explosion = (FireExplosion) particleInterface.asset;
 		
-		if(spriteFile.equals("boss.png")) {
+		initBossFile();
+		if(spriteFile.equals(bossFile)) {
 			buildShape();
 		}
 		else {
@@ -237,8 +239,17 @@ public class Boss extends BaseEnemy {
 		super.dispose();
 		if(rightArmShape != null) {
 			rightArmShape.dispose();
+		}
+		
+		if(leftAntennaShape != null) {
 			leftAntennaShape.dispose();
+		}
+		
+		if(rightAntennaShape != null) {
 			rightAntennaShape.dispose();
+		}
+		
+		if(centerBodyShape != null) {
 			centerBodyShape.dispose();
 		}
 	}
@@ -301,5 +312,9 @@ public class Boss extends BaseEnemy {
 			setDead(true);
 		}
 		
+	}
+	
+	public void initBossFile() {
+		bossFile = "boss.png";
 	}
 }

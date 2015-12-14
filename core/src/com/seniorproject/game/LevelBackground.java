@@ -74,11 +74,11 @@ public class LevelBackground extends Actor {
 			bgSprite.setV(backgroundPosition);
 			bgSprite.setV2(backgroundPosition + 1);
 			
-			ShooterGame.bgMusic.resume();
+			ShooterGame.bgMusic[ShooterGame.MUSIC_INDEX].resume();
 			
 		}
 		else if(level != null && level.screen.gamePaused) {
-			ShooterGame.bgMusic.pause();
+			ShooterGame.bgMusic[ShooterGame.MUSIC_INDEX].pause();
 		}
 		
 		bgSprite.draw(batch);

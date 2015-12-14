@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -25,6 +26,7 @@ import com.seniorproject.game.LevelBackground;
 import com.seniorproject.game.Ship;
 import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.enemies.AsteroidSpawner;
+import com.seniorproject.game.enemies.Boss;
 import com.seniorproject.game.enemies.EnemySpawner;
 import com.seniorproject.game.helpers.CollisionHelper;
 import com.seniorproject.game.hud.*;
@@ -53,7 +55,7 @@ public class Level extends Stage {
 	public String bossSpriteFile = "boss.png";
 	public String levelBGFile = "space-level1.png";
 	
-	
+	public Image barrier;
 	public GameScreen screen;
 	public ShooterGame game;
 	
@@ -115,6 +117,13 @@ public class Level extends Stage {
 		ship = new Ship(this);
 		ShooterGame.PLAYER_SHIP = ship;
 		
+		if(ShooterGame.PLAYER_SAVE != null) {
+			ship.lives = ShooterGame.PLAYER_SAVE.lives;
+			ship.totalRockets = ShooterGame.PLAYER_SAVE.rockets;
+			ship.totalEMP = ShooterGame.PLAYER_SAVE.emp;
+		}
+		
+		
 		levelTitle = new LevelTitle("Level "+ShooterGame.CURRENT_LEVEL, game);
 
 		// Used for debugging, shows the boxes around the sprites
@@ -137,7 +146,10 @@ public class Level extends Stage {
 		levelTitle.setPositionXOffsetWidth(score.getBGWidth());
 		levelTitle.setPositionYOffsetHeight(score.getBGHeight());
 		
-		
+		Texture barrierTexture = game.assetManager.getTexture("barrier.png");
+		barrier = new Image(barrierTexture);
+		barrier.setSize(180, 50);
+
 		hudObjects.addActor(healthBar);
 		hudObjects.addActor(armorBar);
 		hudObjects.addActor(enemyHealthBar);
@@ -155,6 +167,7 @@ public class Level extends Stage {
 		gameObjects.addActor(asteroidSpawner);
 		gameObjects.addActor(background);
 		gameObjects.addActor(ship);
+		gameObjects.addActor(barrier);
 		gameObjects.addActor(hudObjects);
 
 		powerupSpawner = new PowerupSpawner(this);
@@ -179,6 +192,11 @@ public class Level extends Stage {
 		pauseListener();
 
 		
+	}
+	
+	
+	public Boss getBoss() {
+		return new Boss(this, bossSpriteFile);
 	}
 	
 	public void addGameObject(Actor actor) {

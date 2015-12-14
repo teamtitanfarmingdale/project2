@@ -26,7 +26,7 @@ public class EMP extends BaseBullet {
 		empCloud.start(this.getX()+(bulletSprite.getWidth()/2), this.getY()+bulletSprite.getHeight()+100);
 	}
 
-	
+
 	@Override
 	public boolean remove() {
 		super.remove();

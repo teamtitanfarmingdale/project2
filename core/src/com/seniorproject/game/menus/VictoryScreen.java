@@ -62,10 +62,21 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		// Calculate Bonus
 		
 		calculatedBonus = 0;
+		
+		int rocketsRemaining = 0;
+		int livesRemaining = 0;
+		int empRemaining = 0;
+		
 		if(ShooterGame.PLAYER_SHIP != null) {
 			calculatedBonus = (int) ((ShooterGame.PLAYER_SHIP.health+(100*ShooterGame.PLAYER_SHIP.lives)));
 			calculatedBonus += ShooterGame.PLAYER_SHIP.armor+(100*ShooterGame.PLAYER_SHIP.lives);
 			calculatedBonus *= ((1+ShooterGame.PLAYER_SHIP.totalKills)*.25);
+			
+			livesRemaining = (int) ShooterGame.PLAYER_SHIP.lives;
+			rocketsRemaining = ShooterGame.PLAYER_SHIP.totalRockets;
+			empRemaining = ShooterGame.PLAYER_SHIP.totalEMP;
+			
+			System.out.println("Lives Remaining: "+livesRemaining);
 			
 			ShooterGame.PLAYER_SHIP.dispose();
 		}
@@ -102,6 +113,11 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		
 			ShooterGame.PLAYER_SAVE.level = ShooterGame.CURRENT_LEVEL+1;
 			ShooterGame.PLAYER_SAVE.score = ShooterGame.PLAYER_SCORE + calculatedBonus;
+			ShooterGame.PLAYER_SAVE.player_id = ShooterGame.PLAYER_ID;
+			ShooterGame.PLAYER_SAVE.lives = livesRemaining;
+			ShooterGame.PLAYER_SAVE.rockets = rocketsRemaining;
+			ShooterGame.PLAYER_SAVE.emp = empRemaining;
+			
 			
 			submitScoreDialog.tfHelper.getTextField().setText(ShooterGame.PLAYER_SAVE.name);
 			

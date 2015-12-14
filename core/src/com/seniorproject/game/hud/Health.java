@@ -56,7 +56,7 @@ public class Health extends BasicHealthBar {
 
 	public Health(ShooterGame g) {
 		super(g);
-		lifeManager = new LifeManager(3, game);
+		lifeManager = new LifeManager((int) ShooterGame.PLAYER_SHIP.lives, game);
 		
 		game = g;
 		lifeManager.setGame(game);

@@ -29,6 +29,9 @@ public class LifeManager extends Actor {
 	
 	public LifeManager(int lives, ShooterGame g) {
 		this(g);
+		if(ShooterGame.PLAYER_SHIP != null) {
+			ShooterGame.PLAYER_SHIP.lives = 0;
+		}
 		for(int i = 0; i<lives; i++) {
 			addLife();
 		}

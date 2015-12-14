@@ -16,9 +16,9 @@ public class EnemySpawner extends Spawner {
 	public EnemySpawner(Level l) {
 		super(l, l.enemySpriteFile);
 
-		String bossFile = l.bossSpriteFile;
+		//String bossFile = l.bossSpriteFile;
 		
-		boss = new Boss(l, bossFile);
+		boss = l.getBoss();
 		
 		maxItems = 15;
 		maxEnemiesAtOnce = 10;

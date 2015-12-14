@@ -72,6 +72,10 @@ public class NewGameDialog extends PopupDialog {
 					save.name = nameText.getText();
 					save.score = 0;
 					save.level = 1;
+					save.lives = 3;
+					save.rockets = 3;
+					save.emp = 3;
+					save.player_id = ShooterGame.PLAYER_ID;
 					menu.game.db.savePlayer(save);
 					menu.game.switchScreen(ShooterGame.GAME);
 					

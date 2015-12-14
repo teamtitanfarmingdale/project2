@@ -53,11 +53,15 @@ public class Database {
 
 		try {
 			stmt = c.createStatement();
-			String sql = "CREATE TABLE player (" +
-						 "player_id INTEGER PRIMARY KEY," +
+			String sql = "CREATE TABLE playersave (" +
+						 "playersave_id INTEGER PRIMARY KEY," +
+						 "player_id INTEGER," +
 						 "name VARCHAR(255) NOT NULL," +
 						 "score INTEGER NOT NULL," +
 						 "level INTEGER NOT NULL," +
+						 "lives INTEGER NOT NULL," +
+						 "rockets INTEGER NOT NULL," +
+						 "emp INTEGER NOT NULL," +
 						 "last_saved DATETIME NOT NULL)";
 			stmt.executeUpdate(sql);
 			stmt.close();
@@ -100,10 +104,10 @@ public class Database {
 			stmt = c.createStatement();
 			String sql = "";
 			if(save.player_id == 0) {
-				sql = "INSERT INTO player (name, score, level, last_saved) VALUES ('"+save.name+"', "+save.score+", "+save.level+", datetime('now'))";
+				sql = "INSERT INTO playersave (name, score, level, last_saved, lives, rockets, emp, player_id) VALUES ('"+save.name+"', "+save.score+", "+save.level+", datetime('now'), "+save.lives+", "+save.rockets+", "+save.emp+", "+save.player_id+")";
 			}
 			else {
-				sql = "UPDATE player SET name = '"+save.name+"', score = "+save.score+", level = "+save.level+", last_saved = datetime('now') WHERE player_id = "+save.player_id;
+				sql = "UPDATE playersave SET name = '"+save.name+"', score = "+save.score+", level = "+save.level+", last_saved = datetime('now'), lives = "+save.lives+", rockets = "+save.rockets+", emp = "+save.emp+", player_id = "+save.player_id+" WHERE playersave_id = "+save.playersave_id;
 			}
 						
 			stmt.executeUpdate(sql);
@@ -113,7 +117,7 @@ public class Database {
 				// Save player id
 				ResultSet getLastID = stmt.getGeneratedKeys();
 				if(getLastID.next()) {
-					save.player_id = getLastID.getInt(1);
+					save.playersave_id = getLastID.getInt(1);
 					System.out.println(save.player_id);
 				}
 			}
@@ -141,16 +145,19 @@ public class Database {
 
 		try {
 			stmt = c.createStatement();
-			String sql = "SELECT player_id, name, score, level, last_saved FROM player ORDER BY last_saved DESC";
+			String sql = "SELECT playersave_id, name, score, level, last_saved, rockets, lives, emp, player_id FROM playersave ORDER BY last_saved DESC";
 			ResultSet result = stmt.executeQuery(sql);
 			while(result.next()) {
 				tempSave = new PlayerSave();
+				tempSave.playersave_id = result.getInt("playersave_id");
 				tempSave.player_id = result.getInt("player_id");
 				tempSave.name = result.getString("name");
 				tempSave.score = result.getInt("score");
 				tempSave.level = result.getInt("level");
 				tempSave.date.setTime(df.parse(result.getString("last_saved")));
-
+				tempSave.rockets = result.getInt("rockets");
+				tempSave.emp = result.getInt("emp");
+				tempSave.lives = result.getInt("lives");
 				playerSaves.add(tempSave);
 			}
 		}

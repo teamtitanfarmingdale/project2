@@ -22,7 +22,11 @@ public class ShooterGame extends Game {
 	public static float MUSIC_VOLUME = 0f;
 	public static float SFX_VOLUME = .5f;
 	
-	public static Sound bgMusic;
+	public static int MUSIC_INDEX = 0;
+	public static int GAME_MUSIC_INDEX = 1;
+	public static int MENU_MUSIC_INDEX = 0;
+	
+	public static Sound[] bgMusic;
 	
 	public static int PLAYER_SCORE = 0;
 	public static int PREVIOUS_SCORE = 0;
@@ -38,7 +42,7 @@ public class ShooterGame extends Game {
 	public static PlayerSave PLAYER_SAVE = null;
 	public Database db;
 	
-	public static long soundID;
+	public static long[] soundID;
 	
 	public AssetManager assetManager;
 	
@@ -70,10 +74,20 @@ public class ShooterGame extends Game {
 		
 		defaultSkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 		
-		bgMusic = Gdx.audio.newSound(Gdx.files
-				.internal("sounds/action.wav"));
-		soundID = bgMusic.loop(ShooterGame.MUSIC_VOLUME);
+		bgMusic = new Sound[2];
 		
+		bgMusic[0] = Gdx.audio.newSound(Gdx.files
+				.internal("sounds/menu_victory.wav"));
+		
+		bgMusic[1] = Gdx.audio.newSound(Gdx.files
+				.internal("sounds/action.wav"));
+		
+		
+		soundID = new long[2];
+		soundID[0] = bgMusic[0].loop(ShooterGame.MUSIC_VOLUME);
+		
+		soundID[1] = bgMusic[1].loop(0);
+		bgMusic[1].pause();
 		
 		currentScreen = new MainMenuScreen(this);
 		
@@ -95,15 +109,17 @@ public class ShooterGame extends Game {
 				currentScreen = new MainMenuScreen(this);
 				CURRENT_LEVEL = 0;
 				PLAYER_SCORE = 0;
+				MUSIC_INDEX = 0;
 				this.setScreen(currentScreen);
 				break;
 			case PLAY_MENU:
+				MUSIC_INDEX = 0;
 				currentScreen.dispose();
 				currentScreen = new PlayMenu(this);
 				this.setScreen(currentScreen);
 				break;
 			case GAME:
-				
+				MUSIC_INDEX = 1;
 				CURRENT_LEVEL++;
 			case LOADED_GAME:
 				currentScreen.dispose();
@@ -112,11 +128,13 @@ public class ShooterGame extends Game {
 				this.setScreen(currentScreen);
 				break;
 			case VICTORY:
+				MUSIC_INDEX = 0;
 				currentScreen.dispose();
 				currentScreen = new VictoryScreen(this);
 				this.setScreen(currentScreen);
 				break;
 			case GAME_OVER:
+				MUSIC_INDEX = 1;
 				currentScreen.dispose();
 				currentScreen = new GameOverScreen(this);
 				this.setScreen(currentScreen);
@@ -125,11 +143,17 @@ public class ShooterGame extends Game {
 		
 		loginDialog.setParentStage(currentScreen.getStage());
 		
+		setBGMusicVolume(MUSIC_VOLUME);
 	}
 	
 	public static void setBGMusicVolume(float volume) {
 		MUSIC_VOLUME = volume;
-		bgMusic.setVolume(soundID, volume);
+		bgMusic[MUSIC_INDEX].resume();
+		bgMusic[MUSIC_INDEX].setVolume(soundID[MUSIC_INDEX], volume);
+		
+		int mutedIndex = MUSIC_INDEX == 0 ? 1 : 0;
+		bgMusic[mutedIndex].setVolume(soundID[mutedIndex], 0);
+		bgMusic[mutedIndex].pause();
 	}
 	
 	public Screen getCurrentScreen() {
