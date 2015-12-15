@@ -15,5 +15,10 @@ public class IceLevel extends Level {
 	public Boss getBoss() {
 		return new IceBoss(this, bossSpriteFile);
 	}
+	
+	@Override
+	public void initLevelID() {
+		level_id = 2;
+	}
 
 }

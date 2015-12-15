@@ -21,9 +21,12 @@ public class NewGameDialog extends PopupDialog {
 	boolean error = false;
 
 	LabelHelper labelHelper;
-		
+	
+	LabelHelper controlsLabelHelper;
+	
 	ButtonHelper startButtonHelper;
-
+	ButtonHelper controlsButtonHelper;
+	
 	Sprite errorBorder;
 	LabelHelper messageLabelHelper;
 	Label messageLabel;
@@ -35,10 +38,10 @@ public class NewGameDialog extends PopupDialog {
 		super(parentStage, menu.game);
 
 		// Enter Name Label
-		labelHelper = new LabelHelper("Enter your name:", 16, Color.WHITE, "opensans.ttf", menu.game); 
+		labelHelper = new LabelHelper("Enter your name to begin!", 16, Color.WHITE, "opensans.ttf", menu.game); 
 		Label enterNameLabel = labelHelper.getLabel();
 		enterNameLabel.setAlignment(Align.bottomLeft);
-		enterNameLabel.setPosition(dialogSprite.getX()+50, dialogSprite.getY()+dialogSprite.getHeight()-125);
+		enterNameLabel.setPosition(dialogSprite.getX()+50, dialogSprite.getY()+dialogSprite.getHeight()-75);
 		
 		// Enter Name Textbox
 		tfHelper = new TextFieldHelper((int) (dialogSprite.getWidth()-100), 35, game);
@@ -53,14 +56,20 @@ public class NewGameDialog extends PopupDialog {
 		startButtonHelper.setDisabledTexture("menu/start-button-disabled.png");
 		
 		ImageButton startButton = startButtonHelper.getButton();
-		startButton.setPosition((stage.getWidth()/2)-(startButton.getWidth()/2), dialogSprite.getY()+50);
+		startButton.setPosition((stage.getWidth()/2)-(startButton.getWidth()/2), dialogSprite.getY()+100);
 		startButton.setDisabled(true);
 		
+		
+		// Controls Button
+		controlsButtonHelper = new ButtonHelper("menu/controls-button.png", 204, 63, 0, 0, 0, 63, game); 
+		ImageButton controlsButton = controlsButtonHelper.getButton();
+		controlsButton.setPosition(startButton.getX(), startButton.getY()-startButton.getHeight()-5);
+		
 		stage.addActor(startButton);
+		stage.addActor(controlsButton);
 		stage.addActor(enterNameLabel);
 		stage.addActor(nameText);
-		
-		
+
 		// Button Listener
 		
 		startButton.addListener(new ClickListener() {
@@ -71,7 +80,8 @@ public class NewGameDialog extends PopupDialog {
 					PlayerSave save = new PlayerSave();
 					save.name = nameText.getText();
 					save.score = 0;
-					save.level = 1;
+					save.level_id = 1;
+					save.wave_reached = 1;
 					save.lives = 3;
 					save.rockets = 3;
 					save.emp = 3;
@@ -82,6 +92,14 @@ public class NewGameDialog extends PopupDialog {
 				}
 			}
 		});
+		
+		controlsButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				menu.controlsDialog.show();
+			}
+		});
+		
 		
 		
 	}

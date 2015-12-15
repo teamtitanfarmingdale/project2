@@ -11,6 +11,11 @@ public class EMPSlot extends WeaponSlot {
 		ammoLabel.setPosition(x, this.getY()-(ammoLabel.getHeight()+5));
 		labelBG.setPosition(ammoLabel.getX(), ammoLabel.getY());
 		ammoCount = l.ship.totalEMP;
+		
+		if(ammoCount == 0) {
+			disable();
+		}
+		
 		ammoLabel.setText(""+ammoCount);
 		deselect();
 	}

@@ -11,7 +11,8 @@ public class PlayerSave {
 	public int player_id = 0;
 	public String name = "";
 	public int score = 0;
-	public int level = 0;
+	public int level_id = 0;
+	public int wave_reached = 0;
 	public int lives = 0;
 	public int rockets = 0;
 	public int emp = 0;
@@ -66,7 +67,8 @@ public class PlayerSave {
 		returnString += "Player ID: "+player_id;
 		returnString += "\nName: "+name;
 		returnString += "\nScore: "+score;
-		returnString += "\nLevel: "+level;
+		returnString += "\nLevelID: "+level_id;
+		returnString += "\nLevel: "+wave_reached;
 		returnString += "\nDate: "+date.toString();
 		
 		return returnString;

@@ -11,6 +11,11 @@ public class RocketSlot extends WeaponSlot {
 		ammoLabel.setPosition(x, this.getY()-(ammoLabel.getHeight()+5));
 		labelBG.setPosition(ammoLabel.getX(), ammoLabel.getY());
 		ammoLabel.setText(""+ammoCount);
+		
+		if(ammoCount == 0) {
+			disable();
+		}
+		
 		deselect();
 	}
 

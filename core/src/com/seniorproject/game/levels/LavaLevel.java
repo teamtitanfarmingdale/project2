@@ -15,4 +15,9 @@ public class LavaLevel extends Level {
 		return new LavaBoss(this, bossSpriteFile);
 	}
 
+	@Override
+	public void initLevelID() {
+		level_id = 3;
+	}
+	
 }

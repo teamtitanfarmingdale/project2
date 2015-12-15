@@ -37,6 +37,8 @@ public class Level extends Stage {
 
 	public static float WORLD_STEP = (1/300f);
 	
+	protected int level_id;
+	
 	public Ship ship;
 	public LevelBackground background;
 	public EnemySpawner enemySpawner;
@@ -76,6 +78,7 @@ public class Level extends Stage {
 	public Level(ShooterGame g, String enemyFile, String asteroidFile, String bossFile, String levelFile) {
 		super(new ScreenViewport());	
 
+		initLevelID();
 		enemySpriteFile = enemyFile;
 		asteroidSpriteFile = asteroidFile;
 		bossSpriteFile = bossFile;
@@ -197,6 +200,14 @@ public class Level extends Stage {
 	
 	public Boss getBoss() {
 		return new Boss(this, bossSpriteFile);
+	}
+	
+	public void initLevelID() {
+		level_id = 1;
+	}
+	
+	public int getLevelID() {
+		return level_id;
 	}
 	
 	public void addGameObject(Actor actor) {

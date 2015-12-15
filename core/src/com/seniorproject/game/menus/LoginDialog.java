@@ -46,7 +46,7 @@ public class LoginDialog extends PopupDialog {
 		int componentOffset = 35;
 		
 		// Labels
-		LabelHelper emailLabelHelper = new LabelHelper("E-mail:", 14, Color.WHITE, "opensans.ttf", g);
+		LabelHelper emailLabelHelper = new LabelHelper("Username:", 14, Color.WHITE, "opensans.ttf", g);
 		LabelHelper passwordLabelHelper = new LabelHelper("Password:", 14, Color.WHITE, "opensans.ttf", g);
 		LabelHelper titleLabelHelper = new LabelHelper("Login", 25, Color.WHITE, "opensans.ttf", g);
 		LabelHelper signUpMessageLabelHelper = new LabelHelper("- Don't have an account?", 14, Color.WHITE, "opensans.ttf", g);

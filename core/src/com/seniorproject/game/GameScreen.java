@@ -28,7 +28,7 @@ public class GameScreen extends BaseScreen {
 	
 	public void create() {
 		
-		switch(ShooterGame.CURRENT_LEVEL) {
+		switch(ShooterGame.NEXT_LEVEL_ID) {
 			case 2:
 				stage = new IceLevel(game);
 				break;
@@ -117,5 +117,7 @@ public class GameScreen extends BaseScreen {
 		
 		pauseMenu.dispose();
 	}
+	
+
 
 }

@@ -26,6 +26,7 @@ public class PauseMenu {
 	
 	ButtonHelper resumeButtonHelper;
 	ButtonHelper quitButtonHelper;
+	ButtonHelper controlsButtonHelper;
 	
 	SliderHelper sfxSliderHelper;
 	SliderHelper musicSliderHelper;
@@ -35,21 +36,32 @@ public class PauseMenu {
 	SpriteBatch batch;
 	Stage stage;
 	
+	ControlsDialog controlsDialog;
+	
+	
 	public PauseMenu(final GameScreen s) {
 
 		int topButtonOffset = 40;
-		int buttonOffset = 20;
+		int buttonOffset = 5;
 
 		stage = new Stage();
+		
+		controlsDialog = new ControlsDialog(stage, s.game);
 		
 		// BUTTONS
 		resumeButtonHelper = new ButtonHelper("menu/resume-button.png", 204, 63, 0, 0, 0, 63, s.game);
 		ImageButton resumeButton = resumeButtonHelper.getButton();
 		resumeButton.setPosition((stage.getWidth()/2)-(resumeButton.getWidth()/2), (stage.getHeight()/2)+topButtonOffset);
 		
+		controlsButtonHelper = new ButtonHelper("menu/controls-button.png", 204, 63, 0, 0, 0, 63, s.game); 
+		ImageButton controlsButton = controlsButtonHelper.getButton();
+		controlsButton.setPosition((stage.getWidth()/2)-(controlsButton.getWidth()/2), resumeButton.getY()-controlsButton.getHeight()-buttonOffset);
+		
 		quitButtonHelper = new ButtonHelper("menu/quit-button.png", 204, 63, 0, 0, 0, 63, s.game);
 		ImageButton quitButton = quitButtonHelper.getButton();
-		quitButton.setPosition((stage.getWidth()/2)-(quitButton.getWidth()/2), resumeButton.getY()-quitButton.getHeight()-buttonOffset);
+		quitButton.setPosition((stage.getWidth()/2)-(quitButton.getWidth()/2), controlsButton.getY()-quitButton.getHeight()-buttonOffset);
+		
+		
 		
 		// SLIDERS
 		Texture sfxTextTexture = s.game.assetManager.getTexture("menu/sfx-text.png");
@@ -58,7 +70,7 @@ public class PauseMenu {
 		Texture musicTextTexture = s.game.assetManager.getTexture("menu/music-text.png");
 		musicTextSprite = new Sprite(musicTextTexture);
 		
-		sfxTextSprite.setPosition((stage.getWidth()/2)-(sfxTextSprite.getWidth()/2), quitButton.getY()-sfxTextSprite.getHeight()-buttonOffset);
+		sfxTextSprite.setPosition((stage.getWidth()/2)-(sfxTextSprite.getWidth()/2), quitButton.getY()-sfxTextSprite.getHeight()-(buttonOffset*3));
 		
 		sfxSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png", s.game);
 		musicSliderHelper = new SliderHelper("menu/sliderbar.png", "menu/slider-mark.png", s.game);
@@ -99,6 +111,13 @@ public class PauseMenu {
 			}
 		});
 		
+		controlsButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				controlsDialog.show();
+			}
+		});
+		
 		quitButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -128,9 +147,11 @@ public class PauseMenu {
 		});
 		
 		stage.addActor(resumeButton);
+		stage.addActor(controlsButton);
 		stage.addActor(quitButton);
 		stage.addActor(sfxSlider);
 		stage.addActor(musicSlider);
+		
 	}
 	
 	
@@ -140,13 +161,25 @@ public class PauseMenu {
 		this.stage.act(Gdx.graphics.getDeltaTime());
 
 		batch.begin();
-		fadedBG.draw(batch);
+		
+		if(!controlsDialog.isVisible()) {
+			fadedBG.draw(batch);
+		}
+		
 		menuBorder.draw(batch);
 		sfxTextSprite.draw(batch);
 		musicTextSprite.draw(batch);
+		controlsDialog.draw(batch);
 		batch.end();
+		
 
-		this.stage.draw();
+		if(controlsDialog.isVisible()) {
+			controlsDialog.getStage().act(Gdx.graphics.getDeltaTime());
+			controlsDialog.getStage().draw();
+		}
+		else {
+			this.stage.draw();
+		}
 		
 	}
 

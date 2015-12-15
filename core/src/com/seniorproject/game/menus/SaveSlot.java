@@ -29,7 +29,7 @@ public class SaveSlot extends Slot {
 		middleLabel = middleLabelHelper.getLabel();
 		middleLabel.setPosition(0, topLabel.getY()-topLabel.getHeight()+8);
 		
-		bottomLabelHelper = new LabelHelper(GeneralHelper.formatScore(save.score)+" Points - Level: "+save.level, 12, Color.WHITE, menu.game);
+		bottomLabelHelper = new LabelHelper(GeneralHelper.formatScore(save.score)+" Points - Level: "+save.wave_reached, 12, Color.WHITE, menu.game);
 		bottomLabel = bottomLabelHelper.getLabel();
 		bottomLabel.setPosition(0, middleLabel.getY()-middleLabel.getHeight()+8);
 		

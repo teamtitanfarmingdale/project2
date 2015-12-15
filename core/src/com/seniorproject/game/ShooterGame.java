@@ -35,6 +35,8 @@ public class ShooterGame extends Game {
 	
 	public static int CURRENT_LEVEL = 0;
 	
+	public static int NEXT_LEVEL_ID = 1;
+	
 	public static Ship PLAYER_SHIP;
 	
 	public static final int MAX_LIVES = 10;

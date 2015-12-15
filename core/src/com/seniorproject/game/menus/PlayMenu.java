@@ -31,6 +31,7 @@ public class PlayMenu extends BaseMenu {
 	Image playSavedGameDisabled;
 	
 	NewGameDialog dialog;
+	ControlsDialog controlsDialog;
 	
 	Slot selectedSave;
 	
@@ -59,15 +60,6 @@ public class PlayMenu extends BaseMenu {
 		int buttonOffset = 20;
 		
 		init("menu/mainmenu.png", borderOffset);
-	
-		
-		PlayerSave tempSave = new PlayerSave();
-		tempSave.name = "LeooLeooLeooLeoo";
-		tempSave.score = 1005000;
-		tempSave.level = 1;
-		tempSave.player_id = 2;
-		//game.db.savePlayer(tempSave);
-		
 		
 		// LOGO
 		Texture logoTexture = game.assetManager.getTexture("logo-small.png");
@@ -77,6 +69,9 @@ public class PlayMenu extends BaseMenu {
 		
 		
 		dialog = new NewGameDialog(stage, this);
+		
+		
+		controlsDialog = new ControlsDialog(dialog.getStage(), game);
 		
 		// Get all game saves
 		saveSlots = new ArrayList<Slot>();
@@ -177,7 +172,8 @@ public class PlayMenu extends BaseMenu {
 					}
 					else {
 						// Load Game
-						ShooterGame.CURRENT_LEVEL = selectedSave.getPlayerSave().level;
+						ShooterGame.CURRENT_LEVEL = selectedSave.getPlayerSave().wave_reached;
+						ShooterGame.NEXT_LEVEL_ID = selectedSave.getPlayerSave().level_id;
 						ShooterGame.PLAYER_SCORE = selectedSave.getPlayerSave().score;
 						ShooterGame.PLAYER_SAVE = selectedSave.getPlayerSave();
 						game.switchScreen(ShooterGame.LOADED_GAME);
@@ -220,12 +216,22 @@ public class PlayMenu extends BaseMenu {
 		this.batch.begin();
 		this.menuBorder.draw(batch);
 		this.logo.draw(batch);
-		this.dialog.draw(batch);
+		
+		if(!controlsDialog.isVisible()) {
+			this.dialog.draw(batch);
+		}
+		
+		this.controlsDialog.draw(batch);
 		this.batch.end();
 		
-		if(dialog.isVisible()) {
+		if(dialog.isVisible() && !controlsDialog.isVisible()) {
 			dialog.getStage().act(Gdx.graphics.getDeltaTime());
 			dialog.getStage().draw();
+		}
+		
+		if(controlsDialog.isVisible()) {
+			controlsDialog.getStage().act(Gdx.graphics.getDeltaTime());
+			controlsDialog.getStage().draw();
 		}
 		
 	}

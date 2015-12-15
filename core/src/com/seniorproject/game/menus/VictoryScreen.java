@@ -13,6 +13,9 @@ import com.badlogic.gdx.utils.Align;
 import com.seniorproject.game.ShooterGame;
 import com.seniorproject.game.helpers.ButtonHelper;
 import com.seniorproject.game.helpers.LabelHelper;
+import com.seniorproject.game.levels.IceLevel;
+import com.seniorproject.game.levels.LavaLevel;
+import com.seniorproject.game.levels.Level;
 
 public class VictoryScreen extends BaseMenu implements Screen {
 
@@ -111,7 +114,14 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		// Save Game
 		if(ShooterGame.PLAYER_SAVE != null) {
 		
-			ShooterGame.PLAYER_SAVE.level = ShooterGame.CURRENT_LEVEL+1;
+			if(ShooterGame.CURRENT_LEVEL >= 3) {
+				ShooterGame.NEXT_LEVEL_ID = determineNextLevelID();
+			}
+			else {
+				ShooterGame.NEXT_LEVEL_ID = ShooterGame.CURRENT_LEVEL+1;
+			}
+			
+			ShooterGame.PLAYER_SAVE.wave_reached = ShooterGame.CURRENT_LEVEL+1;
 			ShooterGame.PLAYER_SAVE.score = ShooterGame.PLAYER_SCORE + calculatedBonus;
 			ShooterGame.PLAYER_SAVE.player_id = ShooterGame.PLAYER_ID;
 			ShooterGame.PLAYER_SAVE.lives = livesRemaining;
@@ -225,6 +235,20 @@ public class VictoryScreen extends BaseMenu implements Screen {
 		
 		
 	}
+	
+	public int determineNextLevelID() {
+		int nextLevelID = (int) Math.ceil(Math.random()*3);
+		
+		if(nextLevelID > 3) {
+			nextLevelID = 3;
+		}
+		else if(nextLevelID < 1) {
+			nextLevelID = 1;
+		}
+		
+		return nextLevelID;
+	}
+	
 	
 	public void dispose() {
 		super.dispose();

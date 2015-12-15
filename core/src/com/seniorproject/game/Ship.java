@@ -274,7 +274,7 @@ public class Ship extends GameActor {
 			if(upKeyPressed || level.levelFinished) {
 				//gasSprite.setPosition(getSprite().getX()+(gasSprite.getWidth()/2)-4, getSprite().getY()-8);
 				//gasSprite.draw(batch);
-				gasParticle.start(getSprite().getX()+28, getSprite().getY()+15);
+				gasParticle.start(getSprite().getX()+32, getSprite().getY()+18);
 			}
 			else {
 				gasParticle.reset();
